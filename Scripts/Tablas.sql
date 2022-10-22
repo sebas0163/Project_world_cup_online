@@ -1,27 +1,29 @@
 CREATE TABLE TORNEO (
 					Id VARCHAR(6) NOT NULL,
-					Nombre VARCHAR(30) NOT NULL,
-					Fecha_inicio DATE NOT NULL,
-					Fecha_final DATE NOT NULL,
-					Descripción VARCHAR(1000),
-					Tipo VARCHAR (50)
+					[Name] VARCHAR(30) NOT NULL,
+					StartDate DATE NOT NULL,
+					EndDate DATE NOT NULL,
+					Rules VARCHAR(1000),
+					[Type] VARCHAR (50)
 
 );
 CREATE TABLE FASE(
 					Id VARCHAR (6) NOT NULL,
-					Nombre VARCHAR (30) NOT NULL,
-					Fecha_inicio DATE NOT NULL,
-					Fecha_final DATE NOT NULL,
+					[Name] VARCHAR (30) NOT NULL,
+					StartDate DATE NOT NULL,
+					EndDate DATE NOT NULL,
 					Torneo_ID VARCHAR(6) NOT NULL
 );
 CREATE TABLE PARTIDO(
 					Id INT IDENTITY(1,1) NOT NULL,
-					Estadio VARCHAR (50) NOT NULL,
-					Equipo_1 VARCHAR (50) NOT NULL,
-					Equipo_2 VARCHAR (50) NOT NULL,
-					Fecha_ini DATE NOT NULL, 
+					Stadium VARCHAR (50) NOT NULL,
+					Team1 VARCHAR (50) NOT NULL,
+					Team2 VARCHAR (50) NOT NULL,
+					StartDateTime DATE NOT NULL, 
 					Torneo_ID VARCHAR(6) NOT NULL,
-					Fase_ID VARCHAR(6) NOT NULL
+					Fase_ID VARCHAR(6) NOT NULL,
+					[State] VARCHAR(5) NOT NULL,
+					score VARCHAR (10) NOT NULL
 );
 
 ALTER TABLE TORNEO
