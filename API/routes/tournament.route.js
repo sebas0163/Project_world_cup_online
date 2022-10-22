@@ -1,9 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const tournamentController = require('../controllers/tournament.controller');
+const TournamentController = require('../controllers/tournament.controller');
 
 router
     .route('/')
-    .get(tournamentController.getTournaments);
+    .get(TournamentController.getTournaments)
+    .post(TournamentController.createTournament)
+
+router
+    .route('/:id')
+    .get(TournamentController.getTournamentById)
 
 module.exports = router;
