@@ -4,6 +4,7 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const corsOptions = require("./config/corsOptions");
 const matchRoute = require("./routes/match.route");
+const tournamentRoute = require("./routes/tournament.route");
 
 const app = express();
 const apiString = "/api/v1/";
@@ -15,6 +16,7 @@ app.use(cors(corsOptions))
 app.use(express.json())
 
 app.use(apiString + "match", matchRoute);
+app.use(apiString + "tournament", tournamentRoute);
 app.use("*", (req, res) => res.status(404).json({ error: "not found" }))
 
 module.exports = (app);
