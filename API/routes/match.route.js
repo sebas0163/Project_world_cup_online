@@ -1,9 +1,15 @@
 const express = require('express');
 const router = express.Router();
-const matchController = require('../controllers/match.controller');
+const MatchController = require('../controllers/match.controller');
 
 router
     .route('/')
-    .get(matchController.getMatches);
+    .get(MatchController.getMatches)
+    .post(MatchController.createMatch)
+
+router
+    .route('/:id')
+    .get(MatchController.getMatchById)
+
 
 module.exports = router;
