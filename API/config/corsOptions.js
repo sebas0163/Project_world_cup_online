@@ -1,4 +1,6 @@
 var allowedOrigins = require('./allowedOrigins');
+
+/* A function that checks if the origin is allowed. */
 const corsOptions = {
     origin: (origin, callback) => {
         if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
