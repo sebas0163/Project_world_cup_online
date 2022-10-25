@@ -1,7 +1,8 @@
 import React, {useState, useEffect} from 'react'
 import axios from "axios";
+import Select from 'react-select'
 function ViewMatches(){
-    const [matchData, setData] = useState({
+    const [tourneyData, setData] = useState({
         Stadium: "",
         Team1: "",
         Team2: "",
@@ -12,7 +13,6 @@ function ViewMatches(){
         Stage_ID: ""
     })
     const [tourneysData, setTourneysData] = useState([])
-    const [tourneyID, setTourneIDsData] = useState()
 
     const client = axios.create({
         baseURL: "http://localhost:5000/api/v1/"   
@@ -25,12 +25,15 @@ function ViewMatches(){
     }, []);
 
     function handle(e){
-        setTourneIDsData(e.target.value)
-        console.log(tourneyID)
-        client.get("match/"+tourneyID).then((response) => {
-            setData(response.data[0]);
-        });
-        console.log(matchData);
+        
+        
+        // client.get("match/"+tourneyID).then((response) => {
+        //     setData(response.data[0]);
+        // });
+        const newData = {...tourneyData}
+        newData[e.target.id] = e.target.value
+        setData(newData)
+        console.log(tourneyData)
 
     }
     return(
@@ -38,13 +41,14 @@ function ViewMatches(){
             <h1>Ver partidos</h1>
             <div></div>
                 <label>Torneo: </label>
-                <select onChange = {(e)=>handle(e)} id = "tourneyID" value = {tourneyID}> 
+                <select onChange = {(e)=>handle(e)} id = "Tournament_ID" value = {tourneyData.Tournament_ID}>
+                    <option value = ""> --Escoja un torneo--</option> 
                     {tourneysData.map((option, index) => (
                     <option key={index} value={option.Id}>
                         {option.Name}
                     </option>
                     ))}
-            </select>
+                </select>
         </div>
     );
 }

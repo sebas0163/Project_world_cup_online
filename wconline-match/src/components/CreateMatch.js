@@ -40,12 +40,32 @@ function CreateMatch(){
         Tournament_ID: "",
         Stage_ID: ""
     })
+    const [tournamentData, setTournamentData] = useState({
+        Id : "",
+        Name : "",
+        StartDate : "",
+        EndDate : "",
+        Rules : "",
+        Type : ""
+    })
+    var currentTournament = {}
     
-
+    async function updateTournament(e){
+        const newData = {...matchData}
+        newData[e.target.id] = e.target.value
+        setData(newData)
+        console.log(newData)
+        const res = await client.get('tournament/'+newData.Tournament_ID);
+        setTournamentData(res.data[0])
+        console.log(tournamentData)
+        console.log(res.data[0][0].Id);
+       
+    }
     function submit(e){
         e.preventDefault();
         
         console.log(matchData)
+        console.log(tournamentData)
         client.post('match', {
             Stadium: matchData.Stadium,
             Team1: matchData.Team1,
@@ -65,6 +85,7 @@ function CreateMatch(){
         newData[e.target.id] = e.target.value
         setData(newData)
         console.log(newData)
+        
     }
     return(
         <div>
@@ -77,7 +98,8 @@ function CreateMatch(){
                 
                 <div></div>
                 <label>Torneo: </label>
-                <select onChange = {(e)=>handle(e)} id = "Tournament_ID" value = {matchData.Tournament_ID}> 
+                <select onChange = {(e)=>updateTournament(e)} id = "Tournament_ID" value = {matchData.Tournament_ID}> 
+                    <option value = ""> --Escoja un torneo--</option>
                     {tourneysData.map((option, index) => (
                     <option key={index} value={option.Id}>
                         {option.Name}
