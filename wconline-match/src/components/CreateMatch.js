@@ -2,7 +2,7 @@ import React, {useState, useEffect} from "react";
 import axios from "axios";
 import Select from 'react-select';
 
-function MatchForm(){
+function CreateMatch(){
     const [stageData, setStageData] = useState([])
     const [teamsData, setTeamsData] = useState([])
     const [tourneysData, setTourneysData] = useState([])
@@ -29,6 +29,7 @@ function MatchForm(){
     });
 
     }, []);      
+    
     const [matchData, setData] = useState({
         Stadium: "",
         Team1: "",
@@ -121,4 +122,4 @@ function MatchForm(){
         </div>
     );
 }
-export default MatchForm;
+export default CreateMatch;

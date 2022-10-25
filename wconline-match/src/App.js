@@ -2,11 +2,13 @@
 import './App.css';
 import{BrowserRouter as Router, Switch, Route} from 'react-router-dom'
 import CreateMatch from './components/CreateMatch';
+import ViewMatches from './components/ViewMatches';
 function App() {
   return (
     <div className="App">
-        <h1>Hihihi</h1>
+        <h1>World Cup Online</h1>
         <CreateMatch />
+        <ViewMatches />
     </div>
   );
 }
