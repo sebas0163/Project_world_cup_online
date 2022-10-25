@@ -20,7 +20,7 @@ class StageController {
             let id = req.params.id || {}
             let pool = await sql.connect(config);
             let stage = await pool.request()
-                .input('input_parameter', sql.VarChar, id)
+                .input('input_parameter', sql.Int, +id)
                 .query("SELECT * FROM STAGE WHERE Id = @input_parameter");
             res.status(200).json(stage.recordsets);
             return stage.recordsets;
@@ -29,18 +29,30 @@ class StageController {
         }
     }
 
+    static async getStageByTournamentId(req, res) {
+        try {
+            let id = req.params.id || {}
+            let pool = await sql.connect(config);
+            let stage = await pool.request()
+                .input('input_parameter', sql.VarChar, id)
+                .query("SELECT * FROM STAGE WHERE Tournament_ID = @input_parameter");
+            res.status(200).json(stage.recordsets);
+            return stage.recordsets;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+
     static async createStage(req, res) {
         try {
-            const { Id, Name, StartDate, EndDate, Tournament_ID } = req.body;
+            const { Name, Tournament_ID } = req.body;
             //console.log(newStage);
             let pool = await sql.connect(config);
             let stage = await pool.request()
-                .input('Id', sql.VarChar, Id)
                 .input('Name', sql.VarChar, Name)
-                .input('StartDate', sql.Date, StartDate)
-                .input('EndDate', sql.Date, EndDate)
                 .input('Tournament_ID', sql.VarChar, Tournament_ID)
-                .query("INSERT INTO Stage (Id, Name, StartDate, EndDate, Tournament_ID) VALUES (@Id, @Name, @StartDate, @EndDate, @Tournament_ID)");
+                .query("INSERT INTO Stage (Name, Tournament_ID) VALUES (@Name, @Tournament_ID)");
             res.status(200).json("Stage " + Name + " created");
         } catch (error) {
             console.log(error);
