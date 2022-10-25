@@ -13,7 +13,7 @@ router
 
 router
     .route('/tournament/:id')
-    .get(StageController.getStageByTournamentId)
+    .get(StageController.getStagesByTournamentId)
 
 
 module.exports = router;
