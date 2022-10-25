@@ -1,7 +1,8 @@
 class Tournament {
     constructor(
-        Id, Name, StartDate, EndDate, Rules, Type) {
+        Id, CodeTournament, Name, StartDate, EndDate, Rules, Type) {
         this.Id = Id;
+        this.CodeTournament = CodeTournament;
         this.Name = Name;
         this.StartDate = StartDate;
         this.EndDate = EndDate;
