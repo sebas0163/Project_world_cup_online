@@ -67,36 +67,15 @@ function MatchForm(){
     }
     return(
         <div>
+            <h1>Crear un partido</h1>
+            <h4>Llene toda la información sobre el partido</h4>
+            
             <form onSubmit={(e)=>submit(e)}>
-            <input onChange = {(e)=>handle(e)} id = "StartDateTime" value = {matchData.StartDateTime} placeholder ="StartDateTime" type="datetime-local"></input>
-            {/* <input onChange = {(e)=>handle(e)} id = "Stage_ID" value = {matchData.Stage_ID} placeholder ="Stage_ID" type="text"></input> */}
-            <input onChange = {(e)=>handle(e)} id = "Stadium" value = {matchData.Stadium} placeholder ="Stadium" type="text"></input>
-            <div>
-                <select onChange = {(e)=>handle(e)} id = "Team1" value = {matchData.Team1}> 
-                    {teams.map((option, index) => (
-                    <option key={index} value={option.value}>
-                        {option.text}
-                    </option>
-                    ))}
-                </select>
-                <select onChange = {(e)=>handle(e)} id = "Team2" value = {matchData.Team2}> 
-                    {teams.map((option, index) => (
-                    <option key={index} value={option.value}>
-                        {option.text}
-                    </option>
-                    ))}
-                </select>
-            </div>
-            <div>
-                <select onChange = {(e)=>handle(e)} id = "Stage_ID" value = {matchData.Stage_ID}> 
-                    {stageData.map((option, index) => (
-                    <option key={index} value={option.Id}>
-                        {option.Name}
-                    </option>
-                    ))}
-                </select>
-            </div>
-            <div>
+                <label>Fecha y hora: </label>
+                <input onChange = {(e)=>handle(e)} id = "StartDateTime" value = {matchData.StartDateTime} placeholder ="StartDateTime" type="datetime-local"></input>
+                
+                <div></div>
+                <label>Torneo: </label>
                 <select onChange = {(e)=>handle(e)} id = "Tournament_ID" value = {matchData.Tournament_ID}> 
                     {tourneysData.map((option, index) => (
                     <option key={index} value={option.Id}>
@@ -104,8 +83,40 @@ function MatchForm(){
                     </option>
                     ))}
                 </select>
-            </div>
-            <button type = "submit"> Crear partido</button>
+
+                <div></div>
+                <label>Fase: </label>
+                <select onChange = {(e)=>handle(e)} id = "Stage_ID" value = {matchData.Stage_ID}> 
+                    {stageData.map((option, index) => (
+                    <option key={index} value={option.Id}>
+                        {option.Name}
+                    </option>
+                    ))}
+                </select>
+
+                <div></div>
+                <select onChange = {(e)=>handle(e)} id = "Team1" value = {matchData.Team1}> 
+                    {teams.map((option, index) => (
+                    <option key={index} value={option.value}>
+                        {option.text}
+                    </option>
+                    ))}
+                </select>
+                <label> vs </label>
+                <select onChange = {(e)=>handle(e)} id = "Team2" value = {matchData.Team2}> 
+                    {teams.map((option, index) => (
+                    <option key={index} value={option.value}>
+                        {option.text}
+                    </option>
+                    ))}
+                </select>
+                
+                <div></div>
+                <label>Sede: </label>
+                <input onChange = {(e)=>handle(e)} id = "Stadium" value = {matchData.Stadium} placeholder ="Stadium" type="text"></input>
+                
+                <div></div>
+                <button type = "submit"> Crear partido</button>
             </form>
         </div>
     );
