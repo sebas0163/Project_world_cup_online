@@ -68,7 +68,7 @@ class MatchController {
      * @param res - the response object
      * @returns An array of objects(matches).
      */
-    static async getMatchByStageId(req, res) {
+    static async getMatchesByStageId(req, res) {
         try {
             let id = req.params.id || {}
             let pool = await sql.connect(config);

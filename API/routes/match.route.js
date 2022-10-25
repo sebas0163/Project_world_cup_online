@@ -17,6 +17,6 @@ router
 
 router
     .route('/stage/:id')
-    .get(MatchController.getMatchByStageId)
+    .get(MatchController.getMatchesByStageId)
 
 module.exports = router;
