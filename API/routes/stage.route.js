@@ -11,4 +11,9 @@ router
     .route('/:id')
     .get(StageController.getStageById)
 
+router
+    .route('/tournament/:id')
+    .get(StageController.getStagesByTournamentId)
+
+
 module.exports = router;
