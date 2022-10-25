@@ -11,5 +11,12 @@ router
     .route('/:id')
     .get(MatchController.getMatchById)
 
+router
+    .route('/tournament/:id')
+    .get(MatchController.getMatchesByTournamentId)
+
+router
+    .route('/stage/:id')
+    .get(MatchController.getMatchesByStageId)
 
 module.exports = router;
