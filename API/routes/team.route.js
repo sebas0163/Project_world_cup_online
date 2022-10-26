@@ -11,4 +11,8 @@ router
     .route('/:id')
     .get(TeamController.getTeamsByTournamentId)
 
+router
+    .route('/type/:type')
+    .get(TeamController.getTeamsByType)
+
 module.exports = router;

@@ -115,6 +115,26 @@ class MatchController {
         }
 
     }
+
+    static async addTeamToMatch(req, res) {
+        try {
+            const { Id_Team, Id_Match } = req.body;
+            let pool = await sql.connect(config);
+            if (Id_Team == null || Id_Match == null) {
+                res.status(400).send("Please fill all the fields");
+            } else {
+                let match = await pool.request()
+                    .input('Id_Team', sql.Int, +Id_Team)
+                    .input('Id_Match', sql.Int, +Id_Match)
+                    .query("INSERT INTO TEAM_MATCH (Id_Team, Id_Match) VALUES"
+                        + " (@Id_Team, @Id_Match);");
+                res.status(200).json("Team added to match");
+            }
+        } catch (error) {
+            console.log(error);
+
+        }
+    }
 }
 
 module.exports = MatchController;
