@@ -9,7 +9,8 @@ import CreateMatch from './components/CreateMatch';
 import CreateTournament from './components/CreateTournament';
 import Home from './components/home';
 import ViewMatches from './components/ViewMatches';
-import TournamentDisplays from './components/TournamentDisplay';
+import TournamentDisplay from './components/TournamentDisplay';
+import CreateStage from './components/CreateStage';
 
 function App() {
   return (
@@ -45,7 +46,9 @@ function App() {
           </Route>
           <Route path='/view-match' element={<ViewMatches />}>
           </Route>
-          <Route path='/tournament-display' element={<TournamentDisplays />}>
+          <Route path='/tournament-display' element={<TournamentDisplay />}>
+          </Route>
+          <Route path='/create-stage' element={<CreateStage />}>
           </Route>
         </Routes>
       </div>
