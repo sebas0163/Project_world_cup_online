@@ -3,7 +3,9 @@ import axios from "axios";
 import Table from 'react-bootstrap/Table';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Select from 'react-select'
+import { useNavigate } from "react-router-dom";
 function ViewMatches(){
+    const navigate = useNavigate();
     const [tourneysData, setTourneysData] = useState([])
     const [tournamentData, setTournamentData] = useState({
         Id : "",
@@ -59,6 +61,9 @@ function ViewMatches(){
         <div>
             <h1>Ver partidos</h1>
             <div></div>
+                <div className="col-6">
+                        <button className="btn btn-primary" onClick={() => navigate("/create-match")}>Crear nuevo partido</button>
+                </div>
                 <h3>Torneo: </h3>
                 <select onChange = {(e)=>handle(e)} id = "Tournament_ID" value = {tournamentData.Tournament_ID}> 
                     <option value = ""> --Escoja un torneo--</option>
