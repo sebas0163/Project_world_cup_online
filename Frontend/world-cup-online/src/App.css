@@ -32,7 +32,14 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
+}
+
+.navbar,
+.navbar-default {
+  background-color: #56042C !important;
+  /* override background image gradient w/ flat color */
 }

@@ -20,13 +20,13 @@ const Home = props => {
                 <br></br><br></br>
                 <div className="row">
                     <div className="col-6">
-                        <button className="btn btn-primary" onClick={() => navigate("/view-match")}>Dasboard de partidos</button>
+                        <button id="goldBtn" className="btn btn-warning" onClick={() => navigate("/view-match")}>Dasboard de partidos</button>
                     </div>
                 </div>
                 <br></br><br></br>
                 <div className="row">
                     <div className="col-6">
-                        <button className="btn btn-primary" onClick={() => navigate("/tournament-display")}>Dashboard de torneos</button>
+                        <button id="goldBtn" className="btn btn-warning" onClick={() => navigate("/tournament-display")}>Dashboard de torneos</button>
                     </div>
                 </div>
 
