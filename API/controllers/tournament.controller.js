@@ -31,8 +31,8 @@ class TournamentController {
             let id = req.params.id || {}
             let pool = await sql.connect(config);
             let tournament = await pool.request()
-                .input('input_parameter', sql.Int, +id)
-                .query("SELECT * FROM TOURNAMENT WHERE Id = @input_parameter");
+                .input('input_parameter', sql.VarChar, id)
+                .query("SELECT * FROM TOURNAMENT WHERE CodeTournament = @input_parameter");
             res.status(200).json(tournament.recordsets);
             return tournament.recordsets;
         } catch (error) {
