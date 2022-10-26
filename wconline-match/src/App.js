@@ -1,4 +1,8 @@
 
+//<CreateMatch />
+//<ViewMatches />
+//<CreateTournament/>
+//<TournamentDisplays/>
 import './App.css';
 import { Link, Routes, Route } from 'react-router-dom';
 import CreateMatch from './components/CreateMatch';
@@ -6,6 +10,8 @@ import ViewMatches from './components/ViewMatches';
 import CreateTournament from './components/CreateTournament';
 import Home from './components/home';
 
+import ViewMatches from './components/ViewMatches';
+import TournamentDisplays from './components/TournamentDisplay';
 function App() {
   return (
     <div className="App">
