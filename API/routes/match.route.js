@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const MatchController = require('../controllers/match.controller');
+const { route } = require('./team.route');
 
 router
     .route('/')
@@ -18,5 +19,9 @@ router
 router
     .route('/stage/:id')
     .get(MatchController.getMatchesByStageId)
+
+router
+    .route('/add')
+    .post(MatchController.addTeamToMatch)
 
 module.exports = router;
