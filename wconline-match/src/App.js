@@ -2,6 +2,7 @@
 import './App.css';
 import { Link, Routes, Route } from 'react-router-dom';
 import CreateMatch from './components/CreateMatch';
+import ViewMatches from './components/ViewMatches';
 import CreateTournament from './components/CreateTournament';
 import Home from './components/home';
 
@@ -23,7 +24,7 @@ function App() {
                 <Link class="nav-link" to="/create-tournament">Tournament</Link>
               </li>
               <li class="nav-item">
-                <Link class="nav-link" to="/create-match">Match</Link>
+                <Link class="nav-link" to="/view-match">Match</Link>
               </li>
             </ul>
           </div>
@@ -36,6 +37,8 @@ function App() {
           <Route path="/create-match" element={<CreateMatch />}>
           </Route>
           <Route path='/create-tournament' element={<CreateTournament />}>
+          </Route>
+          <Route path='/view-match' element={<ViewMatches />}>
           </Route>
         </Routes>
       </div>
