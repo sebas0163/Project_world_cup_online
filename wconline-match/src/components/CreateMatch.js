@@ -1,11 +1,18 @@
 import React, {useState, useEffect} from "react";
 import axios from "axios";
 import Select from 'react-select';
+import DateTimePicker from 'react-datetime-picker';
+import 'react-datepicker/dist/react-datepicker.css'
 
 function CreateMatch(){
     const [stageData, setStageData] = useState([])
-    const [teamsData, setTeamsData] = useState([])
+    const [date, setDate] = useState(new Date());
+    // var minDate="";
+    // var maxDate = "";
+    const [minDate, setminDate] = useState("")
+    const [maxDate, setmaxDate] = useState("")
     const [tourneysData, setTourneysData] = useState([])
+
 
     const url = "http://localhost:5000/api/v1/match/"
     const url2 = "http://localhost:5000/api/v1/stage/"
@@ -48,7 +55,7 @@ function CreateMatch(){
         Rules : "",
         Type : ""
     })
-    var currentTournament = {}
+    
     
     async function updateTournament(e){
         const newData = {...matchData}
@@ -57,10 +64,15 @@ function CreateMatch(){
         console.log(newData)
         const tournament_response = await client.get('tournament/'+newData.Tournament_ID);
         setTournamentData(tournament_response.data[0])
-        console.log(tournamentData)
+        console.log("tournament_response.data[0]",tournament_response.data[0])
+        setminDate(tournament_response.data[0][0].StartDate.split("T")[0])
+        setmaxDate(tournament_response.data[0][0].EndDate.split("T")[0])
+        setDate('');
+        console.log(minDate);
         const stage_response = await client.get('stage/tournament/'+newData.Tournament_ID);
         setStageData(stage_response.data[0])
-        console.log(newData.Tournament_ID);
+        
+        console.log("newData.Tournament_ID",newData.Tournament_ID);
        
     }
 
@@ -111,6 +123,15 @@ function CreateMatch(){
         console.log(newData)
         
     }
+    function handleDate(e){
+        const newData = {...matchData}
+        newData["StartDateTime"] = e.toISOString()
+        setData(newData)
+        console.log(newData)
+        setDate(e)
+        
+        console.log(e.toISOString())
+    }
     return(
         <div>
             <h1>Crear un partido</h1>
@@ -118,8 +139,16 @@ function CreateMatch(){
             
             <form onSubmit={(e)=>submit(e)}>
                 <label>Fecha y hora: </label>
-                <input onChange = {(e)=>handle(e)} id = "StartDateTime" value = {matchData.StartDateTime} placeholder ="StartDateTime" type="datetime-local"
-                min = "2022/10/1" max = "2022/11/1"></input>
+                <DateTimePicker
+                name = "StartDateTime"
+                value = {date}
+                onChange={(e)=>handleDate(e)}
+                minDate={new Date(minDate)}
+                maxDate={new Date(maxDate)}
+                placeholderText="Select a date"
+                />
+                {/* <input onChange = {(e)=>handle(e)} id = "StartDateTime" value = {matchData.StartDateTime} placeholder ="StartDateTime" type="datetime-local"
+                min = "2022-10-01" max ="2022-11-01"></input> */}
                 
                 <div></div>
                 <label>Torneo: </label>
