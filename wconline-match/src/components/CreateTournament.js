@@ -45,9 +45,11 @@ function TourneyForm() {
     return(
         <div>
             <form onSubmit={(e)=>submit(e)}>
+            <h1>Creacion de torneos</h1>
             <input onChange = {(e)=>handle(e)} id = "StartDate" value = {tourneyData.StartDate} placeholder ="StartDate" type="date"></input>
             <input onChange = {(e)=>handle(e)} id = "EndDate" value = {tourneyData.EndDate} placeholder ="EndDate" type="date"></input>
             <input onChange = {(e)=>handle(e)} id = "Name" value = {tourneyData.Name} placeholder ="Name" type="text"></input>
+            <h6>Describa las reglas del torneo</h6>
             <textarea onChange = {(e)=>handle(e)} id = "Rules" value = {tourneyData.Rules} placeholder ="Rules" type="text"></textarea>
             <div>
                 <select onChange = {(e)=>handle(e)} id = "Type" value = {tourneyData.Type}> 
@@ -58,6 +60,7 @@ function TourneyForm() {
                     ))}
                 </select>
             </div>
+            <br></br>
             <button type = "submit"> Crear torneo</button>
             </form>
         </div>
