@@ -14,16 +14,7 @@ function ViewMatches(){
         Rules : "",
         Type : ""
     })
-    const [matchesInTournaments, setmatchesInTournamentsData] = useState({
-        Stadium: "",
-        Team1: "",
-        Team2: "",
-        StartDateTime: "",
-        State: "Pendiente",
-        Score: "0-0",
-        Tournament_ID: "",
-        Stage_ID: ""
-    })
+    
     const [matchesInTournaments2, setmatchesInTournamentsData2] = useState([])
     const client = axios.create({
         baseURL: "http://localhost:5000/api/v1/"   
