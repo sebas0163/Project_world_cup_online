@@ -6,12 +6,11 @@
 import './App.css';
 import { Link, Routes, Route } from 'react-router-dom';
 import CreateMatch from './components/CreateMatch';
-import ViewMatches from './components/ViewMatches';
 import CreateTournament from './components/CreateTournament';
 import Home from './components/home';
-
 import ViewMatches from './components/ViewMatches';
 import TournamentDisplays from './components/TournamentDisplay';
+
 function App() {
   return (
     <div className="App">
@@ -27,7 +26,7 @@ function App() {
                 <Link class="nav-link active" aria-current="page" to="/">Home</Link>
               </li>
               <li class="nav-item">
-                <Link class="nav-link" to="/create-tournament">Tournament</Link>
+                <Link class="nav-link" to="/tournament-display">Tournament</Link>
               </li>
               <li class="nav-item">
                 <Link class="nav-link" to="/view-match">Match</Link>
@@ -45,6 +44,8 @@ function App() {
           <Route path='/create-tournament' element={<CreateTournament />}>
           </Route>
           <Route path='/view-match' element={<ViewMatches />}>
+          </Route>
+          <Route path='/tournament-display' element={<TournamentDisplays />}>
           </Route>
         </Routes>
       </div>

@@ -26,7 +26,7 @@ const Home = props => {
                 <br></br><br></br>
                 <div className="row">
                     <div className="col-6">
-                        <button className="btn btn-primary" onClick={() => navigate("/create-match")}>Dashboard de torneos</button>
+                        <button className="btn btn-primary" onClick={() => navigate("/tournament-display")}>Dashboard de torneos</button>
                     </div>
                 </div>
 
