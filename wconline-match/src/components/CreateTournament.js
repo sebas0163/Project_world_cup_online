@@ -1,17 +1,17 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import axios from "axios";
 
 
-function TourneyForm(){
+function TourneyForm() {
     const url = "http://localhost:5000/api/v1/tournament/"
     const type = [
         { value: '', text: 'Escoja el tipo de torneo' },
         { value: 'Selecciones', text: 'Selecciones' },
         { value: 'Local', text: 'Equipos Locales' }
-      ];
+    ];
 
     const [tourneyData, setData] = useState({
-        
+
         Id: "",
         Name: "",
         StartDate: "",
@@ -20,7 +20,7 @@ function TourneyForm(){
         Type: ""
     })
 
-    function submit(e){
+    function submit(e) {
         e.preventDefault();
         console.log(url)
         axios.post(url, {
@@ -31,13 +31,13 @@ function TourneyForm(){
             Rules: tourneyData.Rules,
             Type: tourneyData.Type
         })
-        .then(response =>{
-            console.log(response.tourneyData)
-        })
+            .then(response => {
+                console.log(response.tourneyData)
+            })
     }
 
-    function handle(e){
-        const newData = {...tourneyData}
+    function handle(e) {
+        const newData = { ...tourneyData }
         newData[e.target.id] = e.target.value
         setData(newData)
         console.log(newData)
