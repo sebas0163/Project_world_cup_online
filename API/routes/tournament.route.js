@@ -11,4 +11,8 @@ router
     .route('/:id')
     .get(TournamentController.getTournamentById)
 
+router
+    .route('/compete')
+    .post(TournamentController.addTeamToTournament)
+
 module.exports = router;

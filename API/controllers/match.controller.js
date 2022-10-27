@@ -54,7 +54,7 @@ class MatchController {
             let pool = await sql.connect(config);
             let match = await pool.request()
                 .input('input_parameter', sql.VarChar, id)
-                .query("SELECT * FROM Match WHERE Tournament_ID = @input_parameter");
+                .query("SELECT * FROM Match WHERE Tournament_ID = @input_parameter ORDER BY StartDateTime ASC");
             res.status(200).json(match.recordsets);
             return match.recordsets;
         } catch (error) {
@@ -74,7 +74,7 @@ class MatchController {
             let pool = await sql.connect(config);
             let match = await pool.request()
                 .input('input_parameter', sql.Int, +id)
-                .query("SELECT * FROM Match WHERE Stage_ID = @input_parameter");
+                .query("SELECT * FROM Match WHERE Stage_ID = @input_parameter ORDER BY StartDateTime ASC");
             res.status(200).json(match.recordsets);
             return match.recordsets;
         } catch (error) {
@@ -89,30 +89,51 @@ class MatchController {
      */
     static async createMatch(req, res) {
         try {
-            const { Stadium, Team1, Team2, StartDateTime,
+            const { Stadium, StartDateTime,
                 State, Score, Tournament_ID, Stage_ID } = req.body;
             let pool = await sql.connect(config);
-            if (Stadium == null || Team1 == null || Team2 == null || StartDateTime == null ||
+            if (Stadium == null || StartDateTime == null ||
                 State == null || Score == null || Tournament_ID == null || Stage_ID == null) {
                 res.status(400).send("Please fill all the fields");
             } else {
                 let match = await pool.request()
                     .input('Stadium', sql.VarChar, Stadium)
-                    .input('Team1', sql.VarChar, Team1)
-                    .input('Team2', sql.VarChar, Team2)
                     .input('StartDateTime', sql.DateTime, StartDateTime)
                     .input('State', sql.VarChar, State)
                     .input('Score', sql.VarChar, Score)
                     .input('Tournament_ID', sql.VarChar, Tournament_ID)
                     .input('Stage_ID', sql.VarChar, Stage_ID)
-                    .query("INSERT INTO Match (Stadium, Team1, Team2, StartDateTime, State, Score, Tournament_ID, Stage_ID) VALUES (@Stadium, @Team1, @Team2, @StartDateTime, @State, @Score, @Tournament_ID, @Stage_ID)");
-                res.status(200).json("Match created -> " + Team1 + " vs " + Team2);
+                    .query("INSERT INTO Match (Stadium, StartDateTime, State, Score, Tournament_ID, Stage_ID) VALUES"
+                        + " (@Stadium, @StartDateTime, @State, @Score, @Tournament_ID, @Stage_ID);" +
+                        " SELECT SCOPE_IDENTITY() AS id;");
+                res.status(200).json(match.recordsets[0][0].id);
+                //return match.recordsets.Id
             }
         } catch (error) {
             console.log(error);
 
         }
 
+    }
+
+    static async addTeamToMatch(req, res) {
+        try {
+            const { Id_Team, Id_Match } = req.body;
+            let pool = await sql.connect(config);
+            if (Id_Team == null || Id_Match == null) {
+                res.status(400).send("Please fill all the fields");
+            } else {
+                let match = await pool.request()
+                    .input('Id_Team', sql.Int, +Id_Team)
+                    .input('Id_Match', sql.Int, +Id_Match)
+                    .query("INSERT INTO TEAM_MATCH (Id_Team, Id_Match) VALUES"
+                        + " (@Id_Team, @Id_Match);");
+                res.status(200).json("Team added to match");
+            }
+        } catch (error) {
+            console.log(error);
+
+        }
     }
 }
 
