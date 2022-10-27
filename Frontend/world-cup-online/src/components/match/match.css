@@ -33,3 +33,12 @@ tbody {
     background-color: white;
     color: black;
 }
+
+#titleLeft {
+    text-align: left;
+}
+
+#matchImage {
+    width: 90%;
+    height: 90%;
+}

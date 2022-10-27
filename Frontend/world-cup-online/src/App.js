@@ -18,13 +18,13 @@ function App() {
           <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
               <li class="nav-item">
-                <Link class="nav-link active" aria-current="page" to="/">Home</Link>
+                <Link class="nav-link active" aria-current="page" to="/">Inicio</Link>
               </li>
               <li class="nav-item">
-                <Link class="nav-link" to="/tournament-display">Tournament</Link>
+                <Link class="nav-link" to="/tournament-display">Torneos</Link>
               </li>
               <li class="nav-item">
-                <Link class="nav-link" to="/view-match">Match</Link>
+                <Link class="nav-link" to="/view-match">Partidos</Link>
               </li>
             </ul>
           </div>
