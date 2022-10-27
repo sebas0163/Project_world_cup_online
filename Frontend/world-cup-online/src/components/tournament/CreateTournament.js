@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
-
+import tournamentImage from "../../assets/images/tournament.jpg";
+import './tournament.css';
 
 function TourneyForm() {
     const url = "http://localhost:5000/api/v1/tournament/"
@@ -42,27 +43,77 @@ function TourneyForm() {
         setData(newData)
         console.log(newData)
     }
-    return(
+    return (
         <div>
-            <form onSubmit={(e)=>submit(e)}>
-            <h1>Creacion de torneos</h1>
-            <input onChange = {(e)=>handle(e)} id = "StartDate" value = {tourneyData.StartDate} placeholder ="StartDate" type="date"></input>
-            <input onChange = {(e)=>handle(e)} id = "EndDate" value = {tourneyData.EndDate} placeholder ="EndDate" type="date"></input>
-            <input onChange = {(e)=>handle(e)} id = "Name" value = {tourneyData.Name} placeholder ="Name" type="text"></input>
-            <h6>Describa las reglas del torneo</h6>
-            <textarea onChange = {(e)=>handle(e)} id = "Rules" value = {tourneyData.Rules} placeholder ="Rules" type="text"></textarea>
-            <div>
-                <select onChange = {(e)=>handle(e)} id = "Type" value = {tourneyData.Type}> 
-                    {type.map((option, index) => (
-                    <option key={index} value={option.value}>
-                        {option.text}
-                    </option>
-                    ))}
-                </select>
+            <div className="row">
+                <div className="col-auto">
+                    <form onSubmit={(e) => submit(e)}>
+                        <h1>Creacion de torneos</h1>
+                        <br />
+                        <div className="row">
+                            <div className="col-auto">
+                                <label><strong>Fecha de incio: </strong></label>
+                            </div>
+                            <div className="col-auto">
+                                <input onChange={(e) => handle(e)} id="StartDate" value={tourneyData.StartDate} placeholder="StartDate" type="date"></input>
+                            </div>
+                        </div>
+
+                        <div className="row">
+                            <div className="col-auto">
+                                <label><strong>Fecha final: </strong></label>
+                            </div>
+                            <div className="col-auto">
+                                <input onChange={(e) => handle(e)} id="EndDate" value={tourneyData.EndDate} placeholder="EndDate" type="date"></input>
+                            </div>
+                        </div>
+                        <br />
+
+                        <div className="row">
+                            <div className="col-auto">
+                                <label><strong>Nombre: </strong></label>
+                            </div>
+                            <div className="col-auto">
+                                <input onChange={(e) => handle(e)} id="Name" value={tourneyData.Name} placeholder="Name" type="text"></input>
+                            </div>
+                        </div>
+                        <br />
+                        <div className="row">
+                            <div className="col-auto">
+                                <label><strong>Describa las reglas del torneo </strong></label>
+                            </div>
+                        </div>
+                        <br />
+                        <div className="row">
+                            <div className="col-auto">
+                                <textarea onChange={(e) => handle(e)} id="Rules" value={tourneyData.Rules} placeholder="Rules" type="text"></textarea>
+                            </div>
+                        </div>
+                        <br />
+                        <div>
+                            <div className="row">
+                                <div className="col-auto">
+                                    <label><strong>Tipo: </strong></label>
+                                </div>
+                                <div className="col-auto">
+                                    <select onChange={(e) => handle(e)} id="Type" value={tourneyData.Type}>
+                                        {type.map((option, index) => (
+                                            <option key={index} value={option.value}>
+                                                {option.text}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <button id="goldBtn" className="btn btn-warning" type="submit"> Crear torneo</button>
+                    </form>
+                </div>
+                <div className="col">
+                    <img src={tournamentImage} alt="tournament" id="tournamentImage" />
+                </div>
             </div>
-            <br></br>
-            <button type = "submit"> Crear torneo</button>
-            </form>
         </div>
     );
 }
