@@ -9,7 +9,7 @@ import TournamentDisplays from './components/tournament/TournamentDisplay';
 function App() {
   return (
     <div className="App">
-      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id='navbar'>
         <div class="container-fluid">
           <Link class="navbar-brand" to="/">World Cup Online</Link>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -18,13 +18,13 @@ function App() {
           <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
               <li class="nav-item">
-                <Link class="nav-link active" aria-current="page" to="/">Home</Link>
+                <Link class="nav-link active" aria-current="page" to="/">Inicio</Link>
               </li>
               <li class="nav-item">
-                <Link class="nav-link" to="/tournament-display">Tournament</Link>
+                <Link class="nav-link" to="/tournament-display">Torneos</Link>
               </li>
               <li class="nav-item">
-                <Link class="nav-link" to="/view-match">Match</Link>
+                <Link class="nav-link" to="/view-match">Partidos</Link>
               </li>
             </ul>
           </div>
