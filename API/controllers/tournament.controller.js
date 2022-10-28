@@ -68,6 +68,25 @@ class TournamentController {
         }
     }
 
+    static async addTeamToTournament(req, res) {
+        try {
+            const { Id_Team, TournamentCode } = req.body;
+            let pool = await sql.connect(config);
+            if (Id_Team == null || TournamentCode == null) {
+                res.status(400).json({ message: "Bad request, missing parameters" });
+            } else {
+                let tournament = await pool.request()
+                    .input('Id_Team', sql.Int, Id_Team)
+                    .input('TournamentCode', sql.VarChar, TournamentCode)
+                    .query("INSERT INTO COMPETE (Id_Team, TournamentCode) VALUES (@Id_Team, @TournamentCode)");
+                res.status(200).json("Team added to tournament");
+            }
+        }
+        catch (error) {
+            console.log(error);
+        }
+    }
+
 }
 
 module.exports = TournamentController;

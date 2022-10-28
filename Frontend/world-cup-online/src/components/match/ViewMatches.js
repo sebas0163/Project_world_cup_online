@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react'
 import axios from "axios";
 import Table from 'react-bootstrap/Table';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './match.css';
 import Select from 'react-select'
 import { useNavigate } from "react-router-dom";
-import plusLGIcon from '../assets/icons/plus-lg.svg';
+import './match.css';
+import plusLGIcon from '../../assets/icons/plus-lg.svg';
+import { Link } from 'react-router-dom';
 
 function ViewMatches() {
     const navigate = useNavigate();
@@ -63,33 +64,39 @@ function ViewMatches() {
     return (
         <div>
             <h1>Ver partidos</h1>
+            <br /><br />
             <div></div>
-            <div className="row">
-                <div className="col-3">
-                    <image src={plusLGIcon} id="icon" alt="plus" />
-                </div>
-            </div>
-            <div className="col-6">
-                <button className="btn btn-primary" onClick={() => navigate("/create-match")}>Crear nuevo partido</button>
-            </div>
-            <a href="#" class="float">
+            <a href='/create-match' class="float" title='Create a new match'>
                 <i class="fa fa-plus my-float">
-
+                    <img src={plusLGIcon} alt="plus icon" id="icon" />
                 </i>
             </a>
-
-            <h3>Torneo: </h3>
-            <select onChange={(e) => handle(e)} id="Tournament_ID" value={tournamentData.Tournament_ID}>
-                <option value=""> --Escoja un torneo--</option>
-                {tourneysData.map((option, index) => (
-                    <option key={index} value={option.CodeTournament}>
-                        {option.CodeTournament + " - " + option.Name}
-                    </option>
-                ))}
-            </select>
+            <div className="row">
+                <div className="col-auto">
+                    <h4>Torneo: </h4>
+                </div>
+                <div className="col-auto">
+                    <select onChange={(e) => handle(e)} id="Tournament_ID" value={tournamentData.Tournament_ID}>
+                        <option value=""> --Escoja un torneo--</option>
+                        {tourneysData.map((option, index) => (
+                            <option key={index} value={option.CodeTournament}>
+                                {option.CodeTournament + " - " + option.Name}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+            </div>
+            <br />
             <div>
-                <h3>Partidos:</h3>
-                <Table hover>
+                <div className='row'>
+                    <div className='col-auto'>
+                        <h3>Partidos</h3>
+                    </div>
+                    <div className='col-auto'>
+                    </div>
+                </div>
+                <br />
+                <Table hover id='gamesTable'>
                     <thead>
                         <tr>
                             <th> Id</th>
@@ -108,7 +115,6 @@ function ViewMatches() {
                     </tbody>
                 </Table>
                 <br /><br /><br /><br />
-
             </div>
         </div>
     );
