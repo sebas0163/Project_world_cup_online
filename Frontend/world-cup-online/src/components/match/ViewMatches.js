@@ -23,7 +23,7 @@ function ViewMatches() {
         Type: ""
     })
 
-    const [matchesInTournaments2, setmatchesInTournamentsData2] = useState([])
+    const [matchesInTournaments, setmatchesInTournamentsData2] = useState([])
     const client = axios.create({
         baseURL: "http://localhost:5000/api/v1/"
     });
@@ -46,11 +46,11 @@ function ViewMatches() {
         console.log(newData)
         const tournament_response = await client.get('match/tournament/' + newData.Tournament_ID);
         setmatchesInTournamentsData2(tournament_response.data[0])
-        console.log(tournament_response.data[0])
+        console.log("matches",tournament_response.data[0])
 
     }
     /* Creating a table row for each element in the array. */
-    const tableRows = matchesInTournaments2.map(
+    const tableRows = matchesInTournaments.map(
         (element) => {
             return (
 
