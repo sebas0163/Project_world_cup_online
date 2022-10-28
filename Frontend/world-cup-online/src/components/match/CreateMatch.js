@@ -13,6 +13,8 @@ function CreateMatch() {
     const [minDate, setminDate] = useState("")
     const [maxDate, setmaxDate] = useState("")
     const [tourneysData, setTourneysData] = useState([])
+    const [team1Data, setTeam1Data] = useState([])
+    const [team2Data, setTeam2Data] = useState([])
 
 
     const url = "http://localhost:5000/api/v1/match/"
@@ -69,9 +71,16 @@ function CreateMatch() {
         setminDate(tournament_response.data[0][0].StartDate.split("T")[0])
         setmaxDate(tournament_response.data[0][0].EndDate.split("T")[0])
         setDate('');
-        console.log(minDate);
+        setTeam1Data([]);
+        setTeam2Data([]);
+        setStageData([]);
+        
         const stage_response = await client.get('stage/tournament/' + newData.Tournament_ID);
         setStageData(stage_response.data[0])
+
+        const teams_response = await client.get('team/' + newData.Tournament_ID);
+        setTeam1Data(teams_response.data)
+        console.log("teams response", teams_response.data)
 
         console.log("newData.Tournament_ID", newData.Tournament_ID);
 
@@ -131,6 +140,16 @@ function CreateMatch() {
         setDate(e)
 
         console.log(e.toISOString())
+    }
+    function handleTeams(e) {
+        const newData = { ...matchData }
+        newData[e.target.id] = e.target.value
+        setData(newData)
+        const filtered_teams = team1Data.filter(function(el) { return el.Id != e.target.value; })
+        setTeam2Data(filtered_teams)
+        console.log("team2data",filtered_teams);
+        console.log(newData)
+
     }
     return (
         <div>
@@ -198,11 +217,11 @@ function CreateMatch() {
                         <div></div>
                         <div className="row">
                             <div className="col-auto">
-                                <select onChange={(e) => handle(e)} id="Team1" value={matchData.Team1}>
+                                <select onChange={(e) => handleTeams(e)} id="Team1" value={matchData.Team1}>
                                     <option value=""> --Escoja el equipo 1--</option>
-                                    {teams.map((option, index) => (
-                                        <option key={index} value={option.value}>
-                                            {option.text}
+                                    {team1Data.map((option, index) => (
+                                        <option key={index} value={option.Id}>
+                                            {option.Name}
                                         </option>
                                     ))}
                                 </select>
@@ -212,9 +231,9 @@ function CreateMatch() {
                             <div className="col-auto">
                                 <select onChange={(e) => handle(e)} id="Team2" value={matchData.Team2}>
                                     <option value=""> --Escoja el equipo 2--</option>
-                                    {teams.map((option, index) => (
-                                        <option key={index} value={option.value}>
-                                            {option.text}
+                                    {team2Data.map((option, index) => (
+                                        <option key={index} value={option.Id}>
+                                            {option.Name}
                                         </option>
                                     ))}
                                 </select>
