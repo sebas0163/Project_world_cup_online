@@ -78,6 +78,9 @@ function ViewTourneys() {
                 </tbody>
             </Table>
             <br /><br /><br /><br />
+            <button id="goldBtn" className="btn btn-warning" onClick={() => navigate("/create-stage")}>Crear etapas</button>
+            <br /><br />
+            <button id="goldBtn" className="btn btn-warning" onClick={() => navigate("/assignment")}>Asignar equipos</button>
         </div>
 
 
