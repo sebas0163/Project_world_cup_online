@@ -32,7 +32,13 @@ function StageForm() {
 
     }, []);
 
-    function submit2(e) {
+    /**
+     * I'm trying to send a post request to the server with the data from the stageData object. 
+     * The post request is for the Stage creation
+     * </code>
+     * @param e - the event that is being triggered
+     */
+    function submitStage(e) {
         e.preventDefault();
         console.log(url2)
         axios.post(url2, {
@@ -48,14 +54,19 @@ function StageForm() {
         alert("Fase creada con éxito")
     }
 
-    function handle2(e) {
+    /**
+     * It takes the current state of the stageData object, creates a new object with the same
+     * properties, and then updates the property that was changed by the user.
+     * @param e - the event object
+     */
+    function handleStageInput(e) {
         const newData = { ...stageData }
         newData[e.target.id] = e.target.value
         setData2(newData)
         console.log(newData)
     }
     return (
-        <form onSubmit={(e) => submit2(e)}>
+        <form onSubmit={(e) => submitStage(e)}>
             <h1 id="titleLeft">Creacion de fases</h1>
             <br /><br />
             <div className="row">
@@ -63,7 +74,7 @@ function StageForm() {
                     <h5><strong>Torneo: </strong></h5>
                 </div>
                 <div className="col-auto">
-                    <select onChange={(e) => handle2(e)} id="Tournament_ID" value={tournamentData.Tournament_ID}>
+                    <select onChange={(e) => handleStageInput(e)} id="Tournament_ID" value={tournamentData.Tournament_ID}>
                         <option value=""> --Escoja un torneo--</option>
                         {tourneysData.map((option, index) => (
                             <option key={index} value={option.CodeTournament}>
@@ -73,7 +84,7 @@ function StageForm() {
                     </select>
                 </div>
                 <div className="col-auto">
-                    <input onChange={(e) => handle2(e)} id="Name" value={stageData.Name} placeholder="Nombre de la fase" type="text"></input>
+                    <input onChange={(e) => handleStageInput(e)} id="Name" value={stageData.Name} placeholder="Nombre de la fase" type="text"></input>
                 </div>
                 <div className="col-auto">
                     <button className="btn btn-warning" id="goldBtn" type="cstage"> Crear fase</button>

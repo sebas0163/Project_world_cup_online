@@ -29,7 +29,12 @@ function ViewTourneys() {
 
     }, []);
 
-    function handle(e) {
+   /**
+    * It takes the current state of the tourneyData object, creates a new object with the same
+    * properties, and then updates the property that was changed by the user.
+    * @param e - the event object
+    */
+    function handleTourney(e) {
         const newData = { ...tourneyData }
         newData[e.target.id] = e.target.value
         setData(newData)
