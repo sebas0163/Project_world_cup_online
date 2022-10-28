@@ -8,6 +8,7 @@ import TournamentDisplays from './components/tournament/TournamentDisplay';
 import CreateStage from './components/tournament/CreateStage'
 import PositionsTable from './components/PositionsTable'
 import ParticipantTeams from './components/tournament/ParticipantTeams'
+
 function App() {
   return (
     <div className="App">
