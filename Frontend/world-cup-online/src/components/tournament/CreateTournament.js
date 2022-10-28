@@ -46,7 +46,7 @@ function TourneyForm() {
     * the object that matches the id of the input field.
     * @param e - the event object
     */
-    function handle(e) {
+    function handleTourneyData(e) {
         const newData = { ...tourneyData }
         newData[e.target.id] = e.target.value
         setData(newData)
@@ -64,7 +64,7 @@ function TourneyForm() {
                                 <label><strong>Fecha de incio: </strong></label>
                             </div>
                             <div className="col-auto">
-                                <input onChange={(e) => handle(e)} id="StartDate" value={tourneyData.StartDate} placeholder="StartDate" type="date"></input>
+                                <input onChange={(e) => handleTourneyData(e)} id="StartDate" value={tourneyData.StartDate} placeholder="StartDate" type="date"></input>
                             </div>
                         </div>
 
@@ -73,7 +73,7 @@ function TourneyForm() {
                                 <label><strong>Fecha final: </strong></label>
                             </div>
                             <div className="col-auto">
-                                <input onChange={(e) => handle(e)} id="EndDate" value={tourneyData.EndDate} placeholder="EndDate" type="date"></input>
+                                <input onChange={(e) => handleTourneyData(e)} id="EndDate" value={tourneyData.EndDate} placeholder="EndDate" type="date"></input>
                             </div>
                         </div>
                         <br />
@@ -83,7 +83,7 @@ function TourneyForm() {
                                 <label><strong>Nombre: </strong></label>
                             </div>
                             <div className="col-auto">
-                                <input onChange={(e) => handle(e)} id="Name" value={tourneyData.Name} placeholder="Name" type="text"></input>
+                                <input onChange={(e) => handleTourneyData(e)} id="Name" value={tourneyData.Name} placeholder="Name" type="text"></input>
                             </div>
                         </div>
                         <br />
@@ -95,7 +95,7 @@ function TourneyForm() {
                         <br />
                         <div className="row">
                             <div className="col-auto">
-                                <textarea onChange={(e) => handle(e)} id="Rules" value={tourneyData.Rules} placeholder="Rules" type="text"></textarea>
+                                <textarea onChange={(e) => handleTourneyData(e)} id="Rules" value={tourneyData.Rules} placeholder="Rules" type="text"></textarea>
                             </div>
                         </div>
                         <br />
@@ -105,7 +105,7 @@ function TourneyForm() {
                                     <label><strong>Tipo: </strong></label>
                                 </div>
                                 <div className="col-auto">
-                                    <select onChange={(e) => handle(e)} id="Type" value={tourneyData.Type}>
+                                    <select onChange={(e) => handleTourneyData(e)} id="Type" value={tourneyData.Type}>
                                         {type.map((option, index) => (
                                             <option key={index} value={option.value}>
                                                 {option.text}
