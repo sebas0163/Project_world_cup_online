@@ -10,7 +10,9 @@ import { Link } from 'react-router-dom';
 
 function ViewMatches() {
     const navigate = useNavigate();
+    /* All tournaments */
     const [tourneysData, setTourneysData] = useState([])
+    /* Selected tournament */  
     const [tournamentData, setTournamentData] = useState({
         Id: "",
         CodeTournament: "",
@@ -25,6 +27,7 @@ function ViewMatches() {
     const client = axios.create({
         baseURL: "http://localhost:5000/api/v1/"
     });
+    /* Getting the tournament data from the API */
     useEffect(() => {
         client.get('tournament/').then((response) => {
             setTourneysData(response.data[0]);
@@ -32,6 +35,10 @@ function ViewMatches() {
 
     }, []);
 
+    /**
+     * Updates information shown when the user picks a tournament.
+     * @param e - the event
+     */
     async function handle(e) {
         const newData = { ...tournamentData }
         newData[e.target.id] = e.target.value
@@ -42,6 +49,7 @@ function ViewMatches() {
         console.log(tournament_response.data[0])
 
     }
+    /* Creating a table row for each element in the array. */
     const tableRows = matchesInTournaments2.map(
         (element) => {
             return (
