@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-function StageForm() {
-    const url2 = "http://localhost:5000/api/v1/stage/"
+function Assignment() {
+    const url2 = "http://localhost:5000/api/v1/tournament/compete/"
+    const [tourneysData, setTourneysData] = useState([])
+    const [teamsData, setTeamsData] = useState([])
 
-    const [stageData, setData2] = useState({
+    const [teamData, setData2] = useState({
 
         Id: "",
         Name: "",
-        StartDate: "",
-        EndDate: "",
-        Tournament_ID: ""
+        Type: ""
     })
-    const [tourneysData, setTourneysData] = useState([])
     const [tournamentData, setTournamentData] = useState({
         Id: "",
         CodeTournament: "",
@@ -21,6 +20,10 @@ function StageForm() {
         EndDate: "",
         Rules: "",
         Type: ""
+    })
+    const [assignmentdata, setAssignmentdata] = useState({
+        Id_Team: "",
+        TournamentCode: ""
     })
     const client = axios.create({
         baseURL: "http://localhost:5000/api/v1/"
@@ -32,31 +35,37 @@ function StageForm() {
 
     }, []);
 
+    const client2 = axios.create({
+        baseURL: "http://localhost:5000/api/v1/"
+    });
+    useEffect(() => {
+        client2.get('team/').then((response) => {
+            setTeamsData(response.data);
+        });
+
+    }, []);
+
     function submit2(e) {
         e.preventDefault();
         console.log(url2)
         axios.post(url2, {
-            Id: stageData.Id,
-            Name: stageData.Name,
-            StartDate: stageData.StartDate,
-            EndDate: stageData.EndDate,
-            Tournament_ID: stageData.Tournament_ID
+            Id_Team: assignmentdata.Id_Team,
+            TournamentCode: assignmentdata.TournamentCode
         })
             .then(response => {
                 console.log(response.tourneyData)
             })
-        alert("Fase creada con éxito")
     }
 
     function handle2(e) {
-        const newData = { ...stageData }
+        const newData = { ...assignmentdata }
         newData[e.target.id] = e.target.value
         setData2(newData)
         console.log(newData)
     }
     return (
         <form onSubmit={(e) => submit2(e)}>
-            <h1 id="titleLeft">Creacion de fases</h1>
+            <h1 id="titleLeft">Asignacion de equipos</h1>
             <br /><br />
             <div className="row">
                 <div className="col-auto">
@@ -73,14 +82,24 @@ function StageForm() {
                     </select>
                 </div>
                 <div className="col-auto">
-                    <input onChange={(e) => handle2(e)} id="Name" value={stageData.Name} placeholder="Nombre de la fase" type="text"></input>
+                    <h5><strong>Equipo: </strong></h5>
                 </div>
                 <div className="col-auto">
-                    <button className="btn btn-warning" id="goldBtn" type="cstage"> Crear fase</button>
+                    <select onChange={(e) => handle2(e)} id="ID_Team" value={teamData.Id}>
+                        <option value=""> --Escoja un equipo--</option>
+                        {teamsData.map((option, index) => (
+                            <option key={index} value={option.Id}>
+                                {option.Id + " - " + option.Name}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+                <div className="col-auto">
+                    <button className="btn btn-warning" id="goldBtn" type="cstage"> Inscribir equipo</button>
                 </div>
             </div>
         </form>
     );
 
 }
-export default StageForm;
+export default Assignment;
