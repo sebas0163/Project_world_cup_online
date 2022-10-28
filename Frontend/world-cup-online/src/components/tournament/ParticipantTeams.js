@@ -45,7 +45,12 @@ function Assignment() {
 
     }, []);
 
-    function submit2(e) {
+    /**
+     * I'm trying to submit a form that will send the data to the database.
+     * This post is for the participant team
+     * @param e - the event
+     */
+    function submitParticipantTeam(e) {
         e.preventDefault();
         console.log(url2)
         axios.post(url2, {
@@ -57,14 +62,19 @@ function Assignment() {
             })
     }
 
-    function handle2(e) {
+    /**
+     * It takes the current state of the assignmentdata object, creates a new object with the same
+     * properties, and then updates the property that was changed by the user.
+     * @param e - the event object
+     */
+    function handleAssignment(e) {
         const newData = { ...assignmentdata }
         newData[e.target.id] = e.target.value
         setData2(newData)
         console.log(newData)
     }
     return (
-        <form onSubmit={(e) => submit2(e)}>
+        <form onSubmit={(e) => submitParticipantTeam(e)}>
             <h1 id="titleLeft">Asignacion de equipos</h1>
             <br /><br />
             <div className="row">
@@ -72,7 +82,7 @@ function Assignment() {
                     <h5><strong>Torneo: </strong></h5>
                 </div>
                 <div className="col-auto">
-                    <select onChange={(e) => handle2(e)} id="Tournament_ID" value={tournamentData.Tournament_ID}>
+                    <select onChange={(e) => handleAssignment(e)} id="Tournament_ID" value={tournamentData.Tournament_ID}>
                         <option value=""> --Escoja un torneo--</option>
                         {tourneysData.map((option, index) => (
                             <option key={index} value={option.CodeTournament}>
@@ -85,7 +95,7 @@ function Assignment() {
                     <h5><strong>Equipo: </strong></h5>
                 </div>
                 <div className="col-auto">
-                    <select onChange={(e) => handle2(e)} id="ID_Team" value={teamData.Id}>
+                    <select onChange={(e) => handleAssignment(e)} id="ID_Team" value={teamData.Id}>
                         <option value=""> --Escoja un equipo--</option>
                         {teamsData.map((option, index) => (
                             <option key={index} value={option.Id}>

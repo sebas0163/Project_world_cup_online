@@ -21,7 +21,11 @@ function TourneyForm() {
         Type: ""
     })
 
-    function submit(e) {
+    /**
+     * Submits the tournament data to the database.
+     * @param e - the event object
+     */
+    function submitTournament(e) {
         e.preventDefault();
         console.log(url)
         axios.post(url, {
@@ -37,6 +41,11 @@ function TourneyForm() {
             })
     }
 
+   /**
+    * When the user types in the input field, the value of the input field is assigned to the key of
+    * the object that matches the id of the input field.
+    * @param e - the event object
+    */
     function handle(e) {
         const newData = { ...tourneyData }
         newData[e.target.id] = e.target.value
@@ -47,7 +56,7 @@ function TourneyForm() {
         <div>
             <div className="row">
                 <div className="col-auto">
-                    <form onSubmit={(e) => submit(e)}>
+                    <form onSubmit={(e) => submitTournament(e)}>
                         <h1>Creacion de torneos</h1>
                         <br />
                         <div className="row">
