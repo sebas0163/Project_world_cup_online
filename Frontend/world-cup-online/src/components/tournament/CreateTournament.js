@@ -5,7 +5,6 @@ import './tournament.css';
 import DateTime from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css'
 
-function TourneyForm() {
     const [minEndDate, setMinEndDate] = useState("");
     const url = "http://localhost:5000/api/v1/tournament/"
     const type = [
@@ -44,17 +43,18 @@ function TourneyForm() {
             })
     }
 
-   /**
-    * When the user types in the input field, the value of the input field is assigned to the key of
-    * the object that matches the id of the input field.
-    * @param e - the event object
-    */
+    /**
+     * When the user types in the input field, the value of the input field is assigned to the key of
+     * the object that matches the id of the input field.
+     * @param e - the event object
+     */
     function handleTourneyData(e) {
         const newData = { ...tourneyData }
         newData[e.target.id] = e.target.value
         setData(newData)
         console.log(newData)
     }
+
     function handleDate(e) {
         setMinEndDate("")
         const newData = { ...tourneyData }

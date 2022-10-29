@@ -1,4 +1,5 @@
 import './App.css';
+import React from "react";
 import { Link, Routes, Route } from 'react-router-dom';
 import CreateMatch from './components/match/CreateMatch';
 import CreateTournament from './components/tournament/CreateTournament';
@@ -10,6 +11,17 @@ import PositionsTable from './components/PositionsTable'
 import ParticipantTeams from './components/tournament/ParticipantTeams'
 
 function App() {
+
+  const [tournament, setTournament] = React.useState(null);
+
+  /**
+   * When the user clicks on a tournament, set the tournament to the one that was clicked on.
+   * @param [tournament=null] - The tournament object that was selected.
+   */
+  async function selectTournament(tournament = null) {
+    setTournament(tournament);
+  }
+
   return (
     <div className="App">
       <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id='navbar'>
@@ -29,9 +41,6 @@ function App() {
               <li class="nav-item">
                 <Link class="nav-link" to="/view-match">Partidos</Link>
               </li>
-              <li class="nav-item">
-                <Link class="nav-link" to="/scoreboard">Tabla de posiciones</Link>
-              </li>
             </ul>
           </div>
         </div>
@@ -46,7 +55,7 @@ function App() {
           </Route>
           <Route path='/view-match' element={<ViewMatches />}>
           </Route>
-          <Route path='/tournament-display' element={<TournamentDisplays />}>
+          <Route path='/tournament-display' element={<TournamentDisplays select={selectTournament} />}>
           </Route>
           <Route path='/create-stage' element={<CreateStage />}>
           </Route>
