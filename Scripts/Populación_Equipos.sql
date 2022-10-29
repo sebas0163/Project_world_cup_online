@@ -3,7 +3,7 @@ INSERT INTO TEAM VALUES ('Selección', 'Alemania'), ('Selección', 'Costa Rica'),(
 
 -- POBLACIÓN DE EQUIPOS LOCALES
  INSERT INTO TEAM VALUES ('Local', 'Club Sport Cartaginés'),('Local', 'Deportivo Saprissa'),('Local', 'Club Sport Herediano'),('Local', 'Liga Deportiva Alajuelense');
-
+ 
  -- Población jugadores Alemania
 -- CREACIÓN DE JUGADOR
 INSERT INTO PLAYER VALUES ('Oliver Baumann','1990-05-12',32,'Portero'),('Antonio Rüdiger','1993-12-27',29,'Defensa central'),('Niklas Süle','1995-04-28',27,'Denfensa Central'),('Kevin Trapp','1990-01-12',32,'Portero'),('Thilo Kherer','1996-10-05',26,'Defensa Central'),('Matthias Ginter','1994-02-14',28,'Defensa Central'),('Ilkay Gündogan','1990-11-19',32,'Mediocentro'),('Steve Hendrich','1997-05-12',25,'pivote'),('Albert Smith','1992-07-12',29,'Mediocentro'),('Michael Red','1999-09-25',23,'Interior izquierdo'),
