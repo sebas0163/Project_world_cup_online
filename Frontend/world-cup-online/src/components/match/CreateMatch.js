@@ -85,7 +85,7 @@ function CreateMatch() {
      * @returns a boolean value.
      */
     function validateMatch() {
-        const newData = { ...matchData }
+        
         if (matchData.Stadium.length == 0 ||
             matchData.Team1.length == 0 ||
             matchData.Team2.length == 0 ||
