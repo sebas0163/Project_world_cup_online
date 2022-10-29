@@ -2,8 +2,11 @@ import React, { useState } from "react";
 import axios from "axios";
 import tournamentImage from "../../assets/images/tournament.jpg";
 import './tournament.css';
+import { useNavigate } from "react-router-dom";
 
-function TourneyForm() {
+const TourneyForm = props => {
+
+    let navigate = useNavigate();
     const url = "http://localhost:5000/api/v1/tournament/"
     const type = [
         { value: '', text: 'Escoja el tipo de torneo' },
@@ -41,17 +44,18 @@ function TourneyForm() {
             })
     }
 
-   /**
-    * When the user types in the input field, the value of the input field is assigned to the key of
-    * the object that matches the id of the input field.
-    * @param e - the event object
-    */
+    /**
+     * When the user types in the input field, the value of the input field is assigned to the key of
+     * the object that matches the id of the input field.
+     * @param e - the event object
+     */
     function handleTourneyData(e) {
         const newData = { ...tourneyData }
         newData[e.target.id] = e.target.value
         setData(newData)
         console.log(newData)
     }
+
     return (
         <div>
             <div className="row">
