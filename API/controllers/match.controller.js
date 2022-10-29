@@ -55,6 +55,8 @@ class MatchController {
             let match = await pool.request()
                 .input('input_parameter', sql.VarChar, id)
                 .query("SELECT * FROM Match WHERE Tournament_ID = @input_parameter ORDER BY StartDateTime ASC");
+            // .query("SELECT * FROM Team JOIN Compete ON Compete.Id_Team" +
+            //     " = Team.Id WHERE Compete.TournamentCode = @input_parameter");
             res.status(200).json(match.recordsets);
             return match.recordsets;
         } catch (error) {
@@ -90,10 +92,10 @@ class MatchController {
     static async createMatch(req, res) {
         try {
             const { Stadium, StartDateTime,
-                State, Score, Tournament_ID, Stage_ID } = req.body;
+                State, Score, Tournament_ID, Stage_ID, HomeId, VisitId } = req.body;
             let pool = await sql.connect(config);
             if (Stadium == null || StartDateTime == null ||
-                State == null || Score == null || Tournament_ID == null || Stage_ID == null) {
+                State == null || HomeId == null || VisitId == null || Score == null || Tournament_ID == null || Stage_ID == null) {
                 res.status(400).send("Please fill all the fields");
             } else {
                 let match = await pool.request()
@@ -103,11 +105,17 @@ class MatchController {
                     .input('Score', sql.VarChar, Score)
                     .input('Tournament_ID', sql.VarChar, Tournament_ID)
                     .input('Stage_ID', sql.VarChar, Stage_ID)
-                    .query("INSERT INTO Match (Stadium, StartDateTime, State, Score, Tournament_ID, Stage_ID) VALUES"
-                        + " (@Stadium, @StartDateTime, @State, @Score, @Tournament_ID, @Stage_ID);" +
+                    .input('HomeId', sql.Int, +HomeId)
+                    .input('VisitId', sql.Int, +VisitId)
+                    .query("INSERT INTO Match (Stadium, StartDateTime, State, Score, Tournament_ID, Stage_ID, HomeId, VisitId) VALUES"
+                        + " (@Stadium, @StartDateTime, @State, @Score, @Tournament_ID, @Stage_ID, @HomeId, @VisitId);" +
                         " SELECT SCOPE_IDENTITY() AS id;");
                 res.status(200).json(match.recordsets[0][0].id);
+                // console.log(Team1);
+                // console.log(Team2);
                 //return match.recordsets.Id
+                // addTeamToMatch(Team1, match.recordsets[0][0].id);
+                // addTeamToMatch(Team2, match.recordsets[0][0].id);
             }
         } catch (error) {
             console.log(error);
@@ -116,12 +124,19 @@ class MatchController {
 
     }
 
+    /**
+     * It takes the Id_Team and Id_Match from the body of the request and inserts them into the
+     * TEAM_MATCH table. In other words, adds a team to a match.
+     * @param req - the request object
+     * @param res - the response object
+     */
     static async addTeamToMatch(req, res) {
         try {
             const { Id_Team, Id_Match } = req.body;
             let pool = await sql.connect(config);
             if (Id_Team == null || Id_Match == null) {
                 res.status(400).send("Please fill all the fields");
+                //console.log("Please fill all the fields");
             } else {
                 let match = await pool.request()
                     .input('Id_Team', sql.Int, +Id_Team)
@@ -129,6 +144,7 @@ class MatchController {
                     .query("INSERT INTO TEAM_MATCH (Id_Team, Id_Match) VALUES"
                         + " (@Id_Team, @Id_Match);");
                 res.status(200).json("Team added to match");
+                //console.log("Team added to match");
             }
         } catch (error) {
             console.log(error);

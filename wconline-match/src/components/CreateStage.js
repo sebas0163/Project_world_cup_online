@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import axios from "axios";
 
 function StageForm(){
@@ -12,6 +12,25 @@ function StageForm(){
         EndDate: "",
         Tournament_ID: ""
     })
+    const [tourneysData, setTourneysData] = useState([])
+    const [tournamentData, setTournamentData] = useState({
+        Id : "",
+        CodeTournament : "",
+        Name : "",
+        StartDate : "",
+        EndDate : "",
+        Rules : "",
+        Type : ""
+    })
+    const client = axios.create({
+        baseURL: "http://localhost:5000/api/v1/"   
+    });
+    useEffect(() => {
+        client.get('tournament/').then((response) => {
+            setTourneysData(response.data[0]);
+        });
+    
+    }, []);
 
     function submit2(e){
         e.preventDefault();
@@ -36,11 +55,22 @@ function StageForm(){
     }
     return(
         <form onSubmit={(e)=>submit2(e)}>
-            <input onChange = {(e)=>handle2(e)} id = "StartDate" value = {stageData.StartDate} placeholder ="StartDate" type="date"></input>
-            <input onChange = {(e)=>handle2(e)} id = "EndDate" value = {stageData.EndDate} placeholder ="EndDate" type="date"></input>
-            <input onChange = {(e)=>handle2(e)} id = "Name" value = {stageData.Name} placeholder ="Stage_name" type="text"></input>
+            <h1>Creacion de fases</h1>
+            <div></div>
+                <h6>Torneo: </h6>
+                <select onChange = {(e)=>handle2(e)} id = "Tournament_ID" value = {tournamentData.Tournament_ID}> 
+                    <option value = ""> --Escoja un torneo--</option>
+                    {tourneysData.map((option, index) => (
+                    <option key={index} value={option.CodeTournament}>
+                        {option.CodeTournament + " - " + option.Name}
+                    </option>
+                    ))}
+                </select>
+            <div></div>
+            <input onChange = {(e)=>handle2(e)} id = "Name" value = {stageData.Name} placeholder ="Nombre de la fase" type="text"></input>
             <button type = "cstage"> Crear fase</button>
             </form>
     );
 
 }
+export default StageForm;

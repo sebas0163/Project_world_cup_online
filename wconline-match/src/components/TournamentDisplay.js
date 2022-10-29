@@ -1,7 +1,11 @@
 import React, {useState, useEffect} from 'react'
 import axios from "axios";
 import Select from 'react-select'
-function ViewMatches(){
+import Table from 'react-bootstrap/Table';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { useNavigate } from "react-router-dom";
+function ViewTourneys(){
+    const navigate = useNavigate();
     const [tourneyData, setData] = useState({
         Id: "",
         CodeTournament: "",
@@ -24,31 +28,53 @@ function ViewMatches(){
     }, []);
 
     function handle(e){
-        
-        
-        // client.get("match/"+tourneyID).then((response) => {
-        //     setData(response.data[0]);
-        // });
         const newData = {...tourneyData}
         newData[e.target.id] = e.target.value
         setData(newData)
         console.log(tourneyData)
 
     }
+    const tableRows=tourneysData.map(
+        (element)=>{
+            return( 
+                
+              <tr>
+                <td>{element.Id}</td>
+                <td>{element.CodeTournament}</td>
+                <td>{element.Name}</td>
+                <td>{element.StartDate}</td>
+                <td>{element.EndDate}</td>
+                <td>{element.Rules}</td>
+                <td>{element.Type}</td>
+              </tr>
+            )
+        }
+    )
     return(
         <div>
-            <h1>Lista de torneos</h1>
-            <div></div>
-                <label>Torneo: </label>
-                <select onChange = {(e)=>handle(e)} id = "Tournament_ID" value = {tourneyData.Tournament_ID}>
-                    <option value = ""> --Escoja un torneo--</option> 
-                    {tourneysData.map((option, index) => (
-                    <option key={index} value={option.Id}>
-                        {option.Name}
-                    </option>
-                    ))}
-                </select>
+            <h3>Torneos:</h3>
+            <Table hover>
+                <thead>
+                <tr>    
+                    <th>Id</th>
+                    <th>CodeTournament</th>
+                    <th>Name</th>
+                    <th>StartDate</th>
+                    <th>EndDate</th>
+                    <th>Rules</th>
+                    <th>Type</th>
+                </tr>
+                </thead>
+                <tbody>
+                {tableRows}
+                </tbody>
+            </Table>
+            <button className="btn btn-primary" onClick={() => navigate("/create-tournament")}>Crear torneo</button>
+            <br></br><br></br>
+            <button className="btn btn-primary" onClick={() => navigate("/create-stage")}>Crear fases</button>
         </div>
+            
+            
     );
 }
-export default ViewMatches;
+export default ViewTourneys;

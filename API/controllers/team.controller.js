@@ -31,7 +31,7 @@ class TeamController {
         try {
             let id = req.params.id || {}
             let pool = await sql.connect(config);
-            console.log("Before query, id: " + id);
+            // console.log("Before query, id: " + id);
             let team = await pool.request()
                 .input('input_parameter', sql.VarChar, id)
                 .query("SELECT * FROM Team JOIN Compete ON Compete.Id_Team" +
