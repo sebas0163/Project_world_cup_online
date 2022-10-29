@@ -6,8 +6,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { useNavigate } from "react-router-dom";
 import plusLGIcon from '../../assets/icons/plus-lg.svg';
 
-function ViewTourneys() {
-    const navigate = useNavigate();
+const ViewTourneys = props => {
+
+    let navigate = useNavigate();
     const [tourneyData, setData] = useState({
         Id: "",
         CodeTournament: "",
@@ -29,11 +30,11 @@ function ViewTourneys() {
 
     }, []);
 
-   /**
-    * It takes the current state of the tourneyData object, creates a new object with the same
-    * properties, and then updates the property that was changed by the user.
-    * @param e - the event object
-    */
+    /**
+     * It takes the current state of the tourneyData object, creates a new object with the same
+     * properties, and then updates the property that was changed by the user.
+     * @param e - the event object
+     */
     function handleTourney(e) {
         const newData = { ...tourneyData }
         newData[e.target.id] = e.target.value
@@ -41,11 +42,22 @@ function ViewTourneys() {
         console.log(tourneyData)
 
     }
+
+    const hoverStyle = {
+        cursor: "pointer"
+    }
+
+    const selectTournament = async (e, tournament) => {
+        e.preventDefault();
+        props.select(tournament);
+        navigate("/scoreboard");
+    }
+
     const tableRows = tourneysData.map(
-        (element) => {
+        (element, key) => {
             return (
 
-                <tr>
+                <tr style={hoverStyle} onClick={(e) => selectTournament(e, element)}>
                     <td>{element.Id}</td>
                     <td>{element.CodeTournament}</td>
                     <td>{element.Name}</td>

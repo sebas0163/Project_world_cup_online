@@ -49,7 +49,7 @@ class TournamentController {
         try {
             const { Name, StartDate, EndDate, Rules, Type } = req.body;
             let pool = await sql.connect(config);
-            if (Name == null || StartDate == null || EndDate == null || Rules == null || Type == null) {
+            if (Name == null || StartDate == null || EndDate == null || Type == null) {
                 res.status(400).json({ message: "Bad request, missing parameters" });
             } else {
                 //create a new tournament
@@ -68,6 +68,12 @@ class TournamentController {
         }
     }
 
+    /**
+     * It takes the Id_Team and TournamentCode from the body of the request, and inserts them into the
+     * COMPETE table. In other words, adds the team to the tournament.
+     * @param req - {
+     * @param res - the response object
+     */
     static async addTeamToTournament(req, res) {
         try {
             const { Id_Team, TournamentCode } = req.body;

@@ -2,8 +2,11 @@ import React, { useState } from "react";
 import axios from "axios";
 import tournamentImage from "../../assets/images/tournament.jpg";
 import './tournament.css';
+import DateTime from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css'
 
-function TourneyForm() {
+function TourneyForm(){
+    const [minEndDate, setMinEndDate] = useState("");
     const url = "http://localhost:5000/api/v1/tournament/"
     const type = [
         { value: '', text: 'Escoja el tipo de torneo' },
@@ -41,16 +44,39 @@ function TourneyForm() {
             })
     }
 
-   /**
-    * When the user types in the input field, the value of the input field is assigned to the key of
-    * the object that matches the id of the input field.
-    * @param e - the event object
-    */
+    /**
+     * When the user types in the input field, the value of the input field is assigned to the key of
+     * the object that matches the id of the input field.
+     * @param e - the event object
+     */
     function handleTourneyData(e) {
         const newData = { ...tourneyData }
         newData[e.target.id] = e.target.value
         setData(newData)
         console.log(newData)
+    }
+
+    function handleDate(e) {
+        setMinEndDate("")
+        const newData = { ...tourneyData }
+        newData["StartDate"] = e.toISOString()
+        newData["EndDate"] = ""
+        setData(newData)
+        console.log(newData)
+        var nextDay = new Date(e.toISOString())
+        nextDay.setDate(nextDay.getDate()+1)
+        console.log("tomorrow", nextDay)
+        setMinEndDate(nextDay)
+        
+        console.log(e.toISOString())
+    }
+    function handleEndDate(e) {
+        setMinEndDate("")
+        const newData = { ...tourneyData }
+        newData["EndDate"] = e.toISOString()
+        setData(newData)
+        console.log(newData)
+        console.log(e.toISOString())
     }
     return (
         <div>
@@ -63,8 +89,15 @@ function TourneyForm() {
                             <div className="col-auto">
                                 <label><strong>Fecha de incio: </strong></label>
                             </div>
-                            <div className="col-auto">
-                                <input onChange={(e) => handleTourneyData(e)} id="StartDate" value={tourneyData.StartDate} placeholder="StartDate" type="date"></input>
+                            
+                            <div className="col-3">
+                                <DateTime
+                                    name="StartDateTime"
+                                    value={tourneyData.StartDate.split("T")[0]}
+                                    onChange={(e) => handleDate(e)}
+                                    minDate={new Date()}
+                                    placeholderText="Select a date"
+                                />
                             </div>
                         </div>
 
@@ -72,8 +105,15 @@ function TourneyForm() {
                             <div className="col-auto">
                                 <label><strong>Fecha final: </strong></label>
                             </div>
-                            <div className="col-auto">
-                                <input onChange={(e) => handleTourneyData(e)} id="EndDate" value={tourneyData.EndDate} placeholder="EndDate" type="date"></input>
+                            
+                            <div className="col-3">
+                                <DateTime
+                                    name="EndDateTime"
+                                    value={tourneyData.EndDate.split("T")[0]}
+                                    onChange={(e) => handleEndDate(e)}
+                                    minDate={new Date(minEndDate)}
+                                    placeholderText="Select a date"
+                                />
                             </div>
                         </div>
                         <br />

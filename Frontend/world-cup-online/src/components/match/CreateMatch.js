@@ -8,31 +8,19 @@ import matchImage from '../../assets/images/match.jpg';
 function CreateMatch() {
     const [stageData, setStageData] = useState([])
     const [date, setDate] = useState(new Date());
-    // var minDate="";
-    // var maxDate = "";
     const [minDate, setminDate] = useState("")
     const [maxDate, setmaxDate] = useState("")
     const [tourneysData, setTourneysData] = useState([])
     const [team1Data, setTeam1Data] = useState([])
     const [team2Data, setTeam2Data] = useState([])
 
-
-    const url = "http://localhost:5000/api/v1/match/"
-    const url2 = "http://localhost:5000/api/v1/stage/"
-    const teams = [
-        { value: 'team1', text: 'Teaam1' },
-        { value: 'team2', text: 'Team2' },
-        { value: 'team3', text: 'Team3' }
-    ];
-
     const client = axios.create({
         baseURL: "http://localhost:5000/api/v1/"
     });
-    useEffect(() => {
-        client.get('stage/').then((response) => {
-            setStageData(response.data[0]);
-        });
 
+    /* Getting the tournament data from the API */
+    useEffect(() => {
+        
         client.get('tournament/').then((response) => {
             setTourneysData(response.data[0]);
         });
@@ -60,6 +48,12 @@ function CreateMatch() {
     })
 
 
+    /**
+     * When the user selects a tournament from the dropdown, the function gets the tournament data,
+     * sets the min and max date for the date picker, clears the date picker, clears the team
+     * dropdowns, and gets the stage and team data.
+     * @param e - the event
+     */
     async function updateTournament(e) {
         const newData = { ...matchData }
         newData[e.target.id] = e.target.value
@@ -74,7 +68,7 @@ function CreateMatch() {
         setTeam1Data([]);
         setTeam2Data([]);
         setStageData([]);
-        
+
         const stage_response = await client.get('stage/tournament/' + newData.Tournament_ID);
         setStageData(stage_response.data[0])
 
@@ -86,8 +80,12 @@ function CreateMatch() {
 
     }
 
+    /**
+     * If any of the fields are empty, return false. Otherwise, return true.
+     * @returns a boolean value.
+     */
     function validateMatch() {
-        const newData = { ...matchData }
+        
         if (matchData.Stadium.length == 0 ||
             matchData.Team1.length == 0 ||
             matchData.Team2.length == 0 ||
@@ -100,6 +98,11 @@ function CreateMatch() {
         }
         return true
     }
+    /**
+     * When the user presses the submit button, it takes the current data from the form and sends it to the server.
+     * Sends error alert if a field is empty
+     * @param e - the event object
+     */
     function submit(e) {
         e.preventDefault();
         if (validateMatch()) {
@@ -117,6 +120,15 @@ function CreateMatch() {
             })
                 .then(response => {
                     console.log(response.status)
+                    console.log(response.data)
+                    client.post('match/add', {
+                        Id_Team: matchData.Team1,
+                        Id_Match: response.data
+                    })
+                    client.post('match/add', {
+                        Id_Team: matchData.Team2,
+                        Id_Match: response.data
+                    })
                 })
             alert(`Partido creado correctamente`)
         }
@@ -125,6 +137,11 @@ function CreateMatch() {
         }
 
     }
+    /**
+     * Updates the match values except for the date, teams and tournament. When the user types in the input field, 
+     * the value of the input field is assigned to the key of the object that matches the id of the input field. 
+     * @param e - the event object
+     */
     function handle(e) {
         const newData = { ...matchData }
         newData[e.target.id] = e.target.value
@@ -132,6 +149,10 @@ function CreateMatch() {
         console.log(newData)
 
     }
+    /**
+     * It updates the state of the datepicker component with the new date that is selected.
+     * @param e - the date object
+     */
     function handleDate(e) {
         const newData = { ...matchData }
         newData["StartDateTime"] = e.toISOString()
@@ -141,13 +162,19 @@ function CreateMatch() {
 
         console.log(e.toISOString())
     }
+    /**
+     * When the user selects a team from the first dropdown, the second dropdown is updated to show the
+     * remaining teams.
+     * @param e - the event object
+     * @returns The filtered_teams array is being returned.
+     */
     function handleTeams(e) {
         const newData = { ...matchData }
         newData[e.target.id] = e.target.value
         setData(newData)
-        const filtered_teams = team1Data.filter(function(el) { return el.Id != e.target.value; })
+        const filtered_teams = team1Data.filter(function (el) { return el.Id != e.target.value; })
         setTeam2Data(filtered_teams)
-        console.log("team2data",filtered_teams);
+        console.log("team2data", filtered_teams);
         console.log(newData)
 
     }

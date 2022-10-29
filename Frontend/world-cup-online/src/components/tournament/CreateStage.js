@@ -31,7 +31,15 @@ function StageForm() {
         });
 
     }, []);
+    function validateStage() {
+        if (stageData.Name.length == 0 ||
+            stageData.Tournament_ID.length == 0) {
 
+            return false
+
+        }
+        return true
+    }
     /**
      * I'm trying to send a post request to the server with the data from the stageData object. 
      * The post request is for the Stage creation
@@ -40,18 +48,23 @@ function StageForm() {
      */
     function submitStage(e) {
         e.preventDefault();
-        console.log(url2)
-        axios.post(url2, {
-            Id: stageData.Id,
-            Name: stageData.Name,
-            StartDate: stageData.StartDate,
-            EndDate: stageData.EndDate,
-            Tournament_ID: stageData.Tournament_ID
-        })
-            .then(response => {
-                console.log(response.tourneyData)
+        if(validateStage()){
+            console.log(url2)
+            axios.post(url2, {
+                Id: stageData.Id,
+                Name: stageData.Name,
+                StartDate: stageData.StartDate,
+                EndDate: stageData.EndDate,
+                Tournament_ID: stageData.Tournament_ID
             })
-        alert("Fase creada con éxito")
+                .then(response => {
+                    console.log(response.tourneyData)
+                })
+            alert("Fase creada con éxito")
+        }
+        else{
+            alert(`Por favor llene todos los espacios`)
+        }
     }
 
     /**
