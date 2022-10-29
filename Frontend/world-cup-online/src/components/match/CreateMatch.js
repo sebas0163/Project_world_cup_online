@@ -29,8 +29,8 @@ function CreateMatch() {
 
     const [matchData, setData] = useState({
         Stadium: "",
-        Team1: "",
-        Team2: "",
+        HomeId: "",
+        VisitId: "",
         StartDateTime: "",
         State: "Pendiente",
         Score: "0-0",
@@ -87,8 +87,8 @@ function CreateMatch() {
     function validateMatch() {
         
         if (matchData.Stadium.length == 0 ||
-            matchData.Team1.length == 0 ||
-            matchData.Team2.length == 0 ||
+            matchData.HomeId.length == 0 ||
+            matchData.VisitId.length == 0 ||
             matchData.StartDateTime.length == 0 ||
             matchData.Tournament_ID.length == 0 ||
             matchData.Stage_ID == 0) {
@@ -110,8 +110,8 @@ function CreateMatch() {
             console.log(tournamentData)
             client.post('match', {
                 Stadium: matchData.Stadium,
-                Team1: matchData.Team1,
-                Team2: matchData.Team2,
+                HomeId: matchData.HomeId,
+                VisitId: matchData.VisitId,
                 StartDateTime: matchData.StartDateTime,
                 State: matchData.State,
                 Score: matchData.Score,

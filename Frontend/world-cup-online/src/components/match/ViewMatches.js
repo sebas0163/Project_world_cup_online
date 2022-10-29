@@ -57,8 +57,8 @@ function ViewMatches() {
                 <tr>
                     <td>{element.Id}</td>
                     <td>{element.Stadium}</td>
-                    <td>{element.Team1}</td>
-                    <td>{element.Team2}</td>
+                    <td>{element.HomeId}</td>
+                    <td>{element.VisitId}</td>
                     <td>{element.StartDateTime}</td>
                     <td>{element.Tournament_ID}</td>
                     <td>{element.Stage_ID}</td>
