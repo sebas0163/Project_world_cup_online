@@ -68,7 +68,7 @@ function CreateMatch() {
         setTeam1Data([]);
         setTeam2Data([]);
         setStageData([]);
-        
+
         const stage_response = await client.get('stage/tournament/' + newData.Tournament_ID);
         setStageData(stage_response.data[0])
 
@@ -120,6 +120,15 @@ function CreateMatch() {
             })
                 .then(response => {
                     console.log(response.status)
+                    console.log(response.data)
+                    client.post('match/add', {
+                        Id_Team: matchData.Team1,
+                        Id_Match: response.data
+                    })
+                    client.post('match/add', {
+                        Id_Team: matchData.Team2,
+                        Id_Match: response.data
+                    })
                 })
             alert(`Partido creado correctamente`)
         }
@@ -163,9 +172,9 @@ function CreateMatch() {
         const newData = { ...matchData }
         newData[e.target.id] = e.target.value
         setData(newData)
-        const filtered_teams = team1Data.filter(function(el) { return el.Id != e.target.value; })
+        const filtered_teams = team1Data.filter(function (el) { return el.Id != e.target.value; })
         setTeam2Data(filtered_teams)
-        console.log("team2data",filtered_teams);
+        console.log("team2data", filtered_teams);
         console.log(newData)
 
     }
