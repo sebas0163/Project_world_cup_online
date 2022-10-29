@@ -12,7 +12,7 @@ function ViewMatches() {
     const navigate = useNavigate();
     /* All tournaments */
     const [tourneysData, setTourneysData] = useState([])
-    /* Selected tournament */  
+    /* Selected tournament */
     const [tournamentData, setTournamentData] = useState({
         Id: "",
         CodeTournament: "",
@@ -35,6 +35,14 @@ function ViewMatches() {
 
     }, []);
 
+    const getTeamName = (id) => {
+        let teamName = "";
+        client.get('team/single' + id).then((response) => {
+            teamName = response.data[0].Name;
+        });
+        return teamName;
+    }
+
     /**
      * Updates information shown when the user picks a tournament.
      * @param e - the event
@@ -46,7 +54,7 @@ function ViewMatches() {
         console.log(newData)
         const tournament_response = await client.get('match/tournament/' + newData.Tournament_ID);
         setmatchesInTournamentsData2(tournament_response.data[0])
-        console.log("matches",tournament_response.data[0])
+        console.log("matches", tournament_response.data[0])
 
     }
     /* Creating a table row for each element in the array. */
