@@ -5,6 +5,8 @@ import './tournament.css';
 import DateTime from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css'
 
+function TourneyForm() {
+
     const [minEndDate, setMinEndDate] = useState("");
     const url = "http://localhost:5000/api/v1/tournament/"
     const type = [
@@ -63,10 +65,10 @@ import 'react-datepicker/dist/react-datepicker.css'
         setData(newData)
         console.log(newData)
         var nextDay = new Date(e.toISOString())
-        nextDay.setDate(nextDay.getDate()+1)
+        nextDay.setDate(nextDay.getDate() + 1)
         console.log("tomorrow", nextDay)
         setMinEndDate(nextDay)
-        
+
         console.log(e.toISOString())
     }
     function handleEndDate(e) {
@@ -88,7 +90,7 @@ import 'react-datepicker/dist/react-datepicker.css'
                             <div className="col-auto">
                                 <label><strong>Fecha de incio: </strong></label>
                             </div>
-                            
+
                             <div className="col-3">
                                 <DateTime
                                     name="StartDateTime"
@@ -104,7 +106,7 @@ import 'react-datepicker/dist/react-datepicker.css'
                             <div className="col-auto">
                                 <label><strong>Fecha final: </strong></label>
                             </div>
-                            
+
                             <div className="col-3">
                                 <DateTime
                                     name="EndDateTime"
