@@ -94,6 +94,25 @@ class TeamController {
             console.log(error);
         }
     }
+
+    /**
+     * It's a function that takes a request(id of team), and returns a team object from the
+     * database.
+     * @param req - The request object.
+     * @param res - The response object.
+     */
+    static async getTeamById(req, res) {
+        try {
+            let id = req.params.id || {}
+            let pool = await sql.connect(config);
+            let team = await pool.request()
+                .input('input_parameter', sql.Int, +id)
+                .query("SELECT * FROM Team WHERE Id = @input_parameter");
+            res.status(200).json(team.recordsets[0]);
+        } catch (error) {
+            console.log(error);
+        }
+    }
 }
 
 module.exports = TeamController;

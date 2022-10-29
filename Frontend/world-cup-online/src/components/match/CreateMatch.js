@@ -20,7 +20,7 @@ function CreateMatch() {
 
     /* Getting the tournament data from the API */
     useEffect(() => {
-        
+
         client.get('tournament/').then((response) => {
             setTourneysData(response.data[0]);
         });
@@ -85,7 +85,7 @@ function CreateMatch() {
      * @returns a boolean value.
      */
     function validateMatch() {
-        
+
         if (matchData.Stadium.length == 0 ||
             matchData.HomeId.length == 0 ||
             matchData.VisitId.length == 0 ||
@@ -121,14 +121,14 @@ function CreateMatch() {
                 .then(response => {
                     console.log(response.status)
                     console.log(response.data)
-                    client.post('match/add', {
-                        Id_Team: matchData.Team1,
-                        Id_Match: response.data
-                    })
-                    client.post('match/add', {
-                        Id_Team: matchData.Team2,
-                        Id_Match: response.data
-                    })
+                    // client.post('match/add', {
+                    //     Id_Team: matchData.Team1,
+                    //     Id_Match: response.data
+                    // })
+                    // client.post('match/add', {
+                    //     Id_Team: matchData.Team2,
+                    //     Id_Match: response.data
+                    // })
                 })
             alert(`Partido creado correctamente`)
         }
@@ -244,7 +244,7 @@ function CreateMatch() {
                         <div></div>
                         <div className="row">
                             <div className="col-auto">
-                                <select onChange={(e) => handleTeams(e)} id="Team1" value={matchData.Team1}>
+                                <select onChange={(e) => handleTeams(e)} id="HomeId" value={matchData.HomeId}>
                                     <option value=""> --Escoja el equipo 1--</option>
                                     {team1Data.map((option, index) => (
                                         <option key={index} value={option.Id}>
@@ -256,7 +256,7 @@ function CreateMatch() {
                             </div>
                             <div className="col-auto"><label> vs </label></div>
                             <div className="col-auto">
-                                <select onChange={(e) => handle(e)} id="Team2" value={matchData.Team2}>
+                                <select onChange={(e) => handle(e)} id="VisitId" value={matchData.VisitId}>
                                     <option value=""> --Escoja el equipo 2--</option>
                                     {team2Data.map((option, index) => (
                                         <option key={index} value={option.Id}>

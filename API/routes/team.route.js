@@ -12,6 +12,10 @@ router
     .get(TeamController.getTeamsByTournamentId)
 
 router
+    .route('/single/:id')
+    .get(TeamController.getTeamById)
+
+router
     .route('/type/:type')
     .get(TeamController.getTeamsByType)
 

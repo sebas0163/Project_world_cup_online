@@ -54,7 +54,14 @@ class MatchController {
             let pool = await sql.connect(config);
             let match = await pool.request()
                 .input('input_parameter', sql.VarChar, id)
-                .query("SELECT * FROM Match WHERE Tournament_ID = @input_parameter ORDER BY StartDateTime ASC");
+                //.query("SELECT * FROM Match WHERE Tournament_ID = @input_parameter ORDER BY StartDateTime ASC");
+                .query("SELECT" +
+                    " s.Id, s.Stadium, s.StartDateTime, s.Tournament_ID, s.Stage_ID, s.[State], s.Score," +
+                    " t.[Name] as 'HomeId'," +
+                    " t1.[Name] as 'VisitId'" +
+                    " FROM MATCH as s" +
+                    " JOIN TEAM t on t.Id = s.HomeId" +
+                    " JOIN TEAM t1 on t1.Id = s.VisitId")
             // .query("SELECT * FROM Team JOIN Compete ON Compete.Id_Team" +
             //     " = Team.Id WHERE Compete.TournamentCode = @input_parameter");
             res.status(200).json(match.recordsets);
