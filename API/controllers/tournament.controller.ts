@@ -1,5 +1,5 @@
-var config = require('../config/dbconfig');
-const sql = require('mssql');
+import config from '../config/dbconfig';
+import * as sql from 'mssql';
 
 class TournamentController {
 
@@ -9,7 +9,7 @@ class TournamentController {
      * @param res - The response object.
      * @returns An array of objects(tournaments).
      */
-    static async getTournaments(req, res) {
+    static async getTournaments(req: any, res: any) {
         try {
             let pool = await sql.connect(config);
             let tournaments = await pool.request().query("SELECT * FROM TOURNAMENT");
@@ -26,7 +26,7 @@ class TournamentController {
      * @param res - the response object
      * @returns A tournament.
      */
-    static async getTournamentById(req, res) {
+    static async getTournamentById(req: any, res: any) {
         try {
             let id = req.params.id || {}
             let pool = await sql.connect(config);
@@ -45,7 +45,7 @@ class TournamentController {
      * @param req - the request object
      * @param res - the response object
      */
-    static async createTournament(req, res) {
+    static async createTournament(req: any, res: any) {
         try {
             const { Name, StartDate, EndDate, Rules, Type } = req.body;
             let pool = await sql.connect(config);
@@ -74,7 +74,7 @@ class TournamentController {
      * @param req - {
      * @param res - the response object
      */
-    static async addTeamToTournament(req, res) {
+    static async addTeamToTournament(req: any, res: any) {
         try {
             const { Id_Team, TournamentCode } = req.body;
             let pool = await sql.connect(config);
@@ -95,4 +95,4 @@ class TournamentController {
 
 }
 
-module.exports = TournamentController;
+export default TournamentController;

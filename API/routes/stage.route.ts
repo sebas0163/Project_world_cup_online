@@ -1,6 +1,6 @@
-const express = require('express');
+import * as express from 'express';
 const router = express.Router();
-const StageController = require('../controllers/stage.controller');
+import StageController from '../controllers/stage.controller';
 
 router
     .route('/')
@@ -16,4 +16,4 @@ router
     .get(StageController.getStagesByTournamentId)
 
 
-module.exports = router;
+export default router;

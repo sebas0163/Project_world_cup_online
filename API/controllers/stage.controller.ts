@@ -1,6 +1,6 @@
-var config = require('../config/dbconfig');
-const sql = require('mssql');
-const Stage = require('../models/stage');
+import config from '../config/dbconfig';
+import * as sql from 'mssql';
+import Stage from '../models/stage';
 
 class StageController {
 
@@ -10,7 +10,7 @@ class StageController {
      * @param res - The response object.
      * @returns An array of objects(stages).
      */
-    static async getStages(req, res) {
+    static async getStages(req: any, res: any) {
         try {
             let pool = await sql.connect(config);
             let stages = await pool.request().query("SELECT * FROM STAGE");
@@ -27,7 +27,7 @@ class StageController {
      * @param res - the response object
      * @returns An stage.
      */
-    static async getStageById(req, res) {
+    static async getStageById(req: any, res: any) {
         try {
             let id = req.params.id || {}
             let pool = await sql.connect(config);
@@ -47,7 +47,7 @@ class StageController {
      * @param res - the response object
      * @returns An array of objects(stages).
      */
-    static async getStagesByTournamentId(req, res) {
+    static async getStagesByTournamentId(req: any, res: any) {
         try {
             let id = req.params.id || {}
             let pool = await sql.connect(config);
@@ -68,7 +68,7 @@ class StageController {
      * @param req - request
      * @param res - response
      */
-    static async createStage(req, res) {
+    static async createStage(req: any, res: any) {
         try {
             const { Name, Tournament_ID } = req.body;
             //console.log(newStage);
@@ -89,4 +89,4 @@ class StageController {
 
 }
 
-module.exports = StageController;
+export default StageController;

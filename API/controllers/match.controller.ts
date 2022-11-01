@@ -1,6 +1,6 @@
-var config = require('../config/dbconfig');
-const sql = require('mssql');
-const Match = require('../models/match');
+import config from '../config/dbconfig';
+import * as sql from 'mssql';
+import Match from '../models/match';
 
 class MatchController {
 
@@ -10,7 +10,7 @@ class MatchController {
      * @param res - The response object.
      * @returns All Matches.
      */
-    static async getMatches(req, res) {
+    static async getMatches(req: Request, res: any) {
         try {
             let pool = await sql.connect(config);
             let matches = await pool.request().query("SELECT * FROM Match");
@@ -27,7 +27,7 @@ class MatchController {
      * @param res - the response object
      * @returns A match.
      */
-    static async getMatchById(req, res) {
+    static async getMatchById(req: any, res: any) {
         try {
             let id = req.params.id || {}
             let pool = await sql.connect(config);
@@ -48,7 +48,7 @@ class MatchController {
      * @param res - the response object
      * @returns An array of objects(matches).
      */
-    static async getMatchesByTournamentId(req, res) {
+    static async getMatchesByTournamentId(req: any, res: any) {
         try {
             let id = req.params.id || {}
             let pool = await sql.connect(config);
@@ -78,7 +78,7 @@ class MatchController {
      * @param res - the response object
      * @returns An array of objects(matches).
      */
-    static async getMatchesByStageId(req, res) {
+    static async getMatchesByStageId(req: any, res: any) {
         try {
             let id = req.params.id || {}
             let pool = await sql.connect(config);
@@ -97,7 +97,7 @@ class MatchController {
      * @param req - The request object.
      * @param res - the response object
      */
-    static async createMatch(req, res) {
+    static async createMatch(req: any, res: any) {
         try {
             const { Stadium, StartDateTime,
                 State, Score, Tournament_ID, Stage_ID, HomeId, VisitId } = req.body;
@@ -118,7 +118,8 @@ class MatchController {
                     .query("INSERT INTO Match (Stadium, StartDateTime, State, Score, Tournament_ID, Stage_ID, HomeId, VisitId) VALUES"
                         + " (@Stadium, @StartDateTime, @State, @Score, @Tournament_ID, @Stage_ID, @HomeId, @VisitId);" +
                         " SELECT SCOPE_IDENTITY() AS id;");
-                res.status(200).json(match.recordsets[0][0].id);
+                //res.status(200).json(match.recordsets[0][0].id);
+                res.status(200).json(match.recordsets);
                 // console.log(Team1);
                 // console.log(Team2);
                 //return match.recordsets.Id
@@ -138,7 +139,7 @@ class MatchController {
      * @param req - the request object
      * @param res - the response object
      */
-    static async addTeamToMatch(req, res) {
+    static async addTeamToMatch(req: any, res: any) {
         try {
             const { Id_Team, Id_Match } = req.body;
             let pool = await sql.connect(config);
@@ -161,4 +162,4 @@ class MatchController {
     }
 }
 
-module.exports = MatchController;
+export default MatchController;

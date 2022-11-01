@@ -1,5 +1,5 @@
-var config = require('../config/dbconfig');
-const sql = require('mssql');
+import config from '../config/dbconfig';
+import * as sql from 'mssql';
 
 class TeamController {
 
@@ -9,11 +9,12 @@ class TeamController {
     * @param res - The response object.
     * @returns All Teams.
     */
-    static async getTeams(req, res) {
+    static async getTeams(req: any, res: any) {
         try {
             let pool = await sql.connect(config);
             let teams = await pool.request().query("SELECT * FROM Team");
-            res.status(200).json(teams.recordsets[0]);
+            //res.status(200).json(teams.recordsets[0]);
+            res.status(200).json(teams.recordsets);
             //return teams.recordsets;
         } catch (error) {
             console.log(error);
@@ -27,7 +28,7 @@ class TeamController {
      * @param res - the response object
      * @returns An array of objects(teams).
      */
-    static async getTeamsByTournamentId(req, res) {
+    static async getTeamsByTournamentId(req: any, res: any) {
         try {
             let id = req.params.id || {}
             let pool = await sql.connect(config);
@@ -36,7 +37,8 @@ class TeamController {
                 .input('input_parameter', sql.VarChar, id)
                 .query("SELECT * FROM Team JOIN Compete ON Compete.Id_Team" +
                     " = Team.Id WHERE Compete.TournamentCode = @input_parameter");
-            res.status(200).json(team.recordsets[0]);
+            //res.status(200).json(team.recordsets[0]);
+            res.status(200).json(team.recordsets);
         } catch (error) {
             console.log(error);
         }
@@ -58,7 +60,7 @@ class TeamController {
      * @param req - The request object.
      * @param res - The response object.
      */
-    static async createTeam(req, res) {
+    static async createTeam(req: any, res: any) {
         try {
             const { Name, Type } = req.body;
             let pool = await sql.connect(config);
@@ -82,14 +84,15 @@ class TeamController {
      * @param req - The request object.
      * @param res - The response object.
      */
-    static async getTeamsByType(req, res) {
+    static async getTeamsByType(req: any, res: any) {
         try {
             let type = req.params.type || {}
             let pool = await sql.connect(config);
             let team = await pool.request()
                 .input('input_parameter', sql.VarChar, type)
                 .query("SELECT * FROM Team WHERE Type = @input_parameter");
-            res.status(200).json(team.recordsets[0]);
+            //res.status(200).json(team.recordsets[0]);
+            res.status(200).json(team.recordsets);
         } catch (error) {
             console.log(error);
         }
@@ -101,18 +104,19 @@ class TeamController {
      * @param req - The request object.
      * @param res - The response object.
      */
-    static async getTeamById(req, res) {
+    static async getTeamById(req: any, res: any) {
         try {
             let id = req.params.id || {}
             let pool = await sql.connect(config);
             let team = await pool.request()
                 .input('input_parameter', sql.Int, +id)
                 .query("SELECT * FROM Team WHERE Id = @input_parameter");
-            res.status(200).json(team.recordsets[0]);
+            //res.status(200).json(team.recordsets[0]);
+            res.status(200).json(team.recordsets);
         } catch (error) {
             console.log(error);
         }
     }
 }
 
-module.exports = TeamController;
+export default TeamController;

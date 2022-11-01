@@ -1,6 +1,6 @@
-const express = require('express');
+import * as express from 'express';
 const router = express.Router();
-const TournamentController = require('../controllers/tournament.controller');
+import TournamentController from '../controllers/tournament.controller';
 
 router
     .route('/')
@@ -15,4 +15,4 @@ router
     .route('/compete')
     .post(TournamentController.addTeamToTournament)
 
-module.exports = router;
+export default router;
