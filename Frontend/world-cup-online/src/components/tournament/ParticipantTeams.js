@@ -5,8 +5,9 @@ function Assignment() {
     const url2 = "http://localhost:5000/api/v1/tournament/compete/"
     const [tourneysData, setTourneysData] = useState([])
     const [teamsData, setTeamsData] = useState([])
+    const [tournamentType, setType] = useState("")
 
-    const [teamData, setData2] = useState({
+    const [teamData, setTeamData] = useState({
 
         Id: "",
         Name: "",
@@ -25,6 +26,7 @@ function Assignment() {
         Id_Team: "",
         TournamentCode: ""
     })
+
     const client = axios.create({
         baseURL: "http://localhost:5000/api/v1/"
     });
@@ -36,10 +38,11 @@ function Assignment() {
     }, []);
 
     const client2 = axios.create({
-        baseURL: "http://localhost:5000/api/v1/"
+        baseURL: "http://localhost:5000/api/v1/team/"
     });
+
     useEffect(() => {
-        client2.get('team/').then((response) => {
+        client2.get('type/').then((response) => {
             setTeamsData(response.data);
         });
 
@@ -52,7 +55,8 @@ function Assignment() {
      */
     function submitParticipantTeam(e) {
         e.preventDefault();
-        console.log(url2)
+            console.log(url2)
+        console.log(assignmentdata)
         axios.post(url2, {
             Id_Team: assignmentdata.Id_Team,
             TournamentCode: assignmentdata.TournamentCode
@@ -60,6 +64,7 @@ function Assignment() {
             .then(response => {
                 console.log(response.tourneyData)
             })
+        alert('Equipo asignado con exito')
     }
 
     /**
@@ -70,9 +75,24 @@ function Assignment() {
     function handleAssignment(e) {
         const newData = { ...assignmentdata }
         newData[e.target.id] = e.target.value
-        setData2(newData)
+        setAssignmentdata(newData)
         console.log(newData)
     }
+
+    async function handleTeams(e) {
+        const newData = { ...assignmentdata }
+        newData[e.target.id] = e.target.value
+        setAssignmentdata(newData)
+        console.log(newData)
+        const tournamentResponse = await client.get('tournament/' + newData.TournamentCode);
+        setTournamentData(tournamentResponse.data[0])
+        console.log('Type',tournamentResponse.data[0][0].Type)
+        const teamResponse = await client2.get('type/' + tournamentResponse.data[0][0].Type);
+
+        setTeamsData(teamResponse.data)
+        console.log('Teams response: ' , teamResponse.data)
+    }
+
     return (
         <form onSubmit={(e) => submitParticipantTeam(e)}>
             <h1 id="titleLeft">Asignacion de equipos</h1>
@@ -82,7 +102,7 @@ function Assignment() {
                     <h5><strong>Torneo: </strong></h5>
                 </div>
                 <div className="col-auto">
-                    <select onChange={(e) => handleAssignment(e)} id="Tournament_ID" value={tournamentData.Tournament_ID}>
+                    <select onChange={(e) => handleTeams(e)} id="TournamentCode" value={assignmentdata.TournamentCode}>
                         <option value=""> --Escoja un torneo--</option>
                         {tourneysData.map((option, index) => (
                             <option key={index} value={option.CodeTournament}>
@@ -95,7 +115,7 @@ function Assignment() {
                     <h5><strong>Equipo: </strong></h5>
                 </div>
                 <div className="col-auto">
-                    <select onChange={(e) => handleAssignment(e)} id="ID_Team" value={teamData.Id}>
+                    <select onChange={(e) => handleAssignment(e)} id="Id_Team" value={assignmentdata.Id_Team}>
                         <option value=""> --Escoja un equipo--</option>
                         {teamsData.map((option, index) => (
                             <option key={index} value={option.Id}>

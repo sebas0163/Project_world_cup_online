@@ -61,7 +61,8 @@ class MatchController {
                     " t1.[Name] as 'VisitId'" +
                     " FROM MATCH as s" +
                     " JOIN TEAM t on t.Id = s.HomeId" +
-                    " JOIN TEAM t1 on t1.Id = s.VisitId")
+                    " JOIN TEAM t1 on t1.Id = s.VisitId" +
+                    " WHERE Tournament_ID = @input_parameter ORDER BY StartDateTime ASC")
             // .query("SELECT * FROM Team JOIN Compete ON Compete.Id_Team" +
             //     " = Team.Id WHERE Compete.TournamentCode = @input_parameter");
             res.status(200).json(match.recordsets);

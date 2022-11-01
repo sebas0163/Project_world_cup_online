@@ -11,7 +11,7 @@ function TourneyForm() {
     const url = "http://localhost:5000/api/v1/tournament/"
     const type = [
         { value: '', text: 'Escoja el tipo de torneo' },
-        { value: 'Selecciones', text: 'Selecciones' },
+        { value: 'Selección', text: 'Selecciones' },
         { value: 'Local', text: 'Equipos Locales' }
     ];
 
@@ -26,23 +26,46 @@ function TourneyForm() {
     })
 
     /**
+     * If any of the properties of the tourneyData object are empty, return false. Otherwise, return
+     * true.
+     * @returns a boolean value.
+     */
+    function validateTournament() {
+        
+        if (tourneyData.Name.length == 0 ||
+            tourneyData.StartDate.length == 0 ||
+            tourneyData.EndDate.length == 0 ||
+            tourneyData.Type.length == 0) {
+
+            return false
+
+        }
+        return true
+    }
+
+    /**
      * Submits the tournament data to the database.
      * @param e - the event object
      */
     function submitTournament(e) {
         e.preventDefault();
-        console.log(url)
-        axios.post(url, {
-            Id: tourneyData.Id,
-            Name: tourneyData.Name,
-            StartDate: tourneyData.StartDate,
-            EndDate: tourneyData.EndDate,
-            Rules: tourneyData.Rules,
-            Type: tourneyData.Type
-        })
+        if(validateTournament()){
+            console.log(url)
+            axios.post(url, {
+                Id: tourneyData.Id,
+                Name: tourneyData.Name,
+                StartDate: tourneyData.StartDate,
+                EndDate: tourneyData.EndDate,
+                Rules: tourneyData.Rules,
+                Type: tourneyData.Type
+            })
             .then(response => {
                 console.log(response.tourneyData)
             })
+            alert(`Torneo creado correctamente`)
+        }else{
+            alert(`Por favor llene todos los espacios`)
+        }
     }
 
     /**
