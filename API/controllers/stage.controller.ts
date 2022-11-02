@@ -1,22 +1,23 @@
-import config from '../config/dbconfig';
-import sql from 'mssql';
-import Stage from '../models/stage';
+import { poolPromise } from '../loaders/db';
+import { StageRepository } from '../repositories/stage.repository';
+import { IStageRepository } from '../repositories/interfaces/stage.interface';
 
 class StageController {
 
+
     /**
-     * It connects to the database, queries the database looking for all the stages, and returns the results.
-     * @param req - The request object.
-     * @param res - The response object.
-     * @returns An array of objects(stages).
+     * Get all stages from the database and return them as a JSON object.
+     * @param {any} req - any - the request object
+     * @param {any} res - any - the response object
      */
     static async getStages(req: any, res: any) {
         try {
-            let pool = await sql.connect(config);
-            let stages = await pool.request().query("SELECT * FROM STAGE");
-            res.status(200).json(stages.recordsets);
-            return stages.recordsets;
+            const pool = await poolPromise;
+            const stageRepository: IStageRepository = new StageRepository(pool);
+            const stages = await stageRepository.getStages();
+            res.status(200).json(stages);
         } catch (error) {
+            res.status(500);
             console.log(error);
         }
     }
@@ -30,13 +31,12 @@ class StageController {
     static async getStageById(req: any, res: any) {
         try {
             let id = req.params.id || {}
-            let pool = await sql.connect(config);
-            let stage = await pool.request()
-                .input('input_parameter', sql.Int, +id)
-                .query("SELECT * FROM STAGE WHERE Id = @input_parameter");
-            res.status(200).json(stage.recordsets);
-            return stage.recordsets;
+            const pool = await poolPromise;
+            const stageRepository: IStageRepository = new StageRepository(pool);
+            const stage = await stageRepository.getStageById(+id);
+            res.status(200).json(stage);
         } catch (error) {
+            res.status(500);
             console.log(error);
         }
     }
@@ -47,42 +47,41 @@ class StageController {
      * @param res - the response object
      * @returns An array of objects(stages).
      */
-    static async getStagesByTournamentId(req: any, res: any) {
+    static async getStagesByTournamentCode(req: any, res: any) {
         try {
-            let id = req.params.id || {}
-            let pool = await sql.connect(config);
-            let stage = await pool.request()
-                .input('input_parameter', sql.VarChar, id)
-                .query("SELECT * FROM STAGE WHERE Tournament_ID = @input_parameter");
-            res.status(200).json(stage.recordsets);
-            return stage.recordsets;
+            let code = req.params.id || {}
+            const pool = await poolPromise;
+            const stageRepository: IStageRepository = new StageRepository(pool);
+            const stages = await stageRepository.getStagesByTournamentCode(code);
+            res.status(200).json(stages);
         } catch (error) {
+            res.status(500);
             console.log(error);
         }
     }
 
 
+
     /**
-     * It takes the name and tournament ID from the body of the request, and inserts it into the
-     * database as a new stage.
-     * @param req - request
-     * @param res - response
+     * It creates a stage in the database.
+     * @param {any} req - any, res: any
+     * @param {any} res - any -&gt; the response object
      */
     static async createStage(req: any, res: any) {
         try {
             const { Name, Tournament_ID } = req.body;
-            //console.log(newStage);
-            let pool = await sql.connect(config);
+            const pool = await poolPromise;
+            const stageRepository: IStageRepository = new StageRepository(pool);
             if (Name == null || Tournament_ID == null) {
                 res.status(400).json({ message: "Bad Request, Please fill all the fields" });
             } else {
-                let stage = await pool.request()
-                    .input('Name', sql.VarChar, Name)
-                    .input('Tournament_ID', sql.VarChar, Tournament_ID)
-                    .query("INSERT INTO Stage (Name, Tournament_ID) VALUES (@Name, @Tournament_ID)");
-                res.status(200).json("Stage " + Name + " created");
+                const result = await stageRepository.createStage(Name, Tournament_ID);
+                if (result == 1) {
+                    res.status(200).json("Stage " + Name + " created");
+                }
             }
         } catch (error) {
+            res.status(500);
             console.log(error);
         }
     }

@@ -1,28 +1,28 @@
-import config from '../config/dbconfig';
-import sql from 'mssql';
-import Match from '../models/match';
+import { poolPromise } from '../loaders/db';
+import { IMatchRepository } from '../repositories/interfaces/match.interface';
+import { MatchRepository } from '../repositories/match.repository';
 
 class MatchController {
 
     /**
-     * It connects to the database, queries the database(looking for matches), and returns the results.
-     * @param req - The request object.
-     * @param res - The response object.
-     * @returns All Matches.
+     * It gets all the matches from the database and returns them as a JSON object.
+     * @param {Request} req - Request - this is the request object that is passed to the function.
+     * @param {any} res - any
      */
     static async getMatches(req: Request, res: any) {
         try {
-            let pool = await sql.connect(config);
-            let matches = await pool.request().query("SELECT * FROM Match");
-            res.status(200).json(matches.recordsets);
-            return matches.recordsets;
+            const pool = await poolPromise;
+            const matchRepository: IMatchRepository = new MatchRepository(pool);
+            const matches = await matchRepository.getMatches();
+            res.status(200).json(matches);
         } catch (error) {
+            res.status(500);
             console.log(error);
         }
     }
 
     /**
-     * It takes an id and returns the macth resulted.
+     * It takes an id and returns the match resulted.
      * @param req - The request object.
      * @param res - the response object
      * @returns A match.
@@ -30,13 +30,12 @@ class MatchController {
     static async getMatchById(req: any, res: any) {
         try {
             let id = req.params.id || {}
-            let pool = await sql.connect(config);
-            let match = await pool.request()
-                .input('input_parameter', sql.Int, +id)
-                .query("SELECT * FROM Match WHERE Id = @input_parameter");
-            res.status(200).json(match.recordsets);
-            return match.recordsets;
+            const pool = await poolPromise;
+            const matchRepository: IMatchRepository = new MatchRepository(pool);
+            const match = await matchRepository.getMatchById(+id);
+            res.status(200).json(match);
         } catch (error) {
+            res.status(500);
             console.log(error);
         }
     }
@@ -48,26 +47,15 @@ class MatchController {
      * @param res - the response object
      * @returns An array of objects(matches).
      */
-    static async getMatchesByTournamentId(req: any, res: any) {
+    static async getMatchesByTournamentCode(req: any, res: any) {
         try {
-            let id = req.params.id || {}
-            let pool = await sql.connect(config);
-            let match = await pool.request()
-                .input('input_parameter', sql.VarChar, id)
-                //.query("SELECT * FROM Match WHERE Tournament_ID = @input_parameter ORDER BY StartDateTime ASC");
-                .query("SELECT" +
-                    " s.Id, s.Stadium, s.StartDateTime, s.Tournament_ID, s.Stage_ID, s.[State], s.Score," +
-                    " t.[Name] as 'HomeId'," +
-                    " t1.[Name] as 'VisitId'" +
-                    " FROM MATCH as s" +
-                    " JOIN TEAM t on t.Id = s.HomeId" +
-                    " JOIN TEAM t1 on t1.Id = s.VisitId" +
-                    " WHERE Tournament_ID = @input_parameter ORDER BY StartDateTime ASC")
-            // .query("SELECT * FROM Team JOIN Compete ON Compete.Id_Team" +
-            //     " = Team.Id WHERE Compete.TournamentCode = @input_parameter");
-            res.status(200).json(match.recordsets);
-            return match.recordsets;
+            let code = req.params.id || {}
+            const pool = await poolPromise;
+            const matchRepository: IMatchRepository = new MatchRepository(pool);
+            const matches = await matchRepository.getMatchesByTournamentCode(code);
+            res.status(200).json(matches);
         } catch (error) {
+            res.status(500);
             console.log(error);
         }
     }
@@ -81,13 +69,12 @@ class MatchController {
     static async getMatchesByStageId(req: any, res: any) {
         try {
             let id = req.params.id || {}
-            let pool = await sql.connect(config);
-            let match = await pool.request()
-                .input('input_parameter', sql.Int, +id)
-                .query("SELECT * FROM Match WHERE Stage_ID = @input_parameter ORDER BY StartDateTime ASC");
-            res.status(200).json(match.recordsets);
-            return match.recordsets;
+            const pool = await poolPromise;
+            const matchRepository: IMatchRepository = new MatchRepository(pool);
+            const matches = await matchRepository.getMatchesByStageId(+id);
+            res.status(200).json(matches);
         } catch (error) {
+            res.status(500);
             console.log(error);
         }
     }
@@ -101,61 +88,48 @@ class MatchController {
         try {
             const { Stadium, StartDateTime,
                 State, Score, Tournament_ID, Stage_ID, HomeId, VisitId } = req.body;
-            let pool = await sql.connect(config);
+            const pool = await poolPromise;
+            const matchRepository: IMatchRepository = new MatchRepository(pool);
+
             if (Stadium == null || StartDateTime == null ||
                 State == null || HomeId == null || VisitId == null || Score == null || Tournament_ID == null || Stage_ID == null) {
                 res.status(400).send("Please fill all the fields");
             } else {
-                let match = await pool.request()
-                    .input('Stadium', sql.VarChar, Stadium)
-                    .input('StartDateTime', sql.DateTime, StartDateTime)
-                    .input('State', sql.VarChar, State)
-                    .input('Score', sql.VarChar, Score)
-                    .input('Tournament_ID', sql.VarChar, Tournament_ID)
-                    .input('Stage_ID', sql.VarChar, Stage_ID)
-                    .input('HomeId', sql.Int, +HomeId)
-                    .input('VisitId', sql.Int, +VisitId)
-                    .query("INSERT INTO Match (Stadium, StartDateTime, State, Score, Tournament_ID, Stage_ID, HomeId, VisitId) VALUES"
-                        + " (@Stadium, @StartDateTime, @State, @Score, @Tournament_ID, @Stage_ID, @HomeId, @VisitId);" +
-                        " SELECT SCOPE_IDENTITY() AS id;");
-                //res.status(200).json(match.recordsets[0][0].id);
-                res.status(200).json(match.recordsets);
-                // console.log(Team1);
-                // console.log(Team2);
-                //return match.recordsets.Id
-                // addTeamToMatch(Team1, match.recordsets[0][0].id);
-                // addTeamToMatch(Team2, match.recordsets[0][0].id);
+                const match_id = await matchRepository.createMatch(Stadium, StartDateTime,
+                    State, Score, Tournament_ID, Stage_ID, HomeId, VisitId);
+
+                res.status(200).json(match_id);
             }
         } catch (error) {
+            res.status(500);
             console.log(error);
 
         }
 
     }
 
+
     /**
-     * It takes the Id_Team and Id_Match from the body of the request and inserts them into the
-     * TEAM_MATCH table. In other words, adds a team to a match.
-     * @param req - the request object
-     * @param res - the response object
+     * It takes the Id_Team and Id_Match from the body of the request, creates a new instance of the
+     * MatchRepository class, and then calls the addTeamToMatch function on that instance.
+     * @param {any} req - any, res: any
+     * @param {any} res - any -&gt; the response object
      */
     static async addTeamToMatch(req: any, res: any) {
         try {
             const { Id_Team, Id_Match } = req.body;
-            let pool = await sql.connect(config);
+            const pool = await poolPromise;
+            const matchRepository: IMatchRepository = new MatchRepository(pool);
             if (Id_Team == null || Id_Match == null) {
                 res.status(400).send("Please fill all the fields");
-                //console.log("Please fill all the fields");
             } else {
-                let match = await pool.request()
-                    .input('Id_Team', sql.Int, +Id_Team)
-                    .input('Id_Match', sql.Int, +Id_Match)
-                    .query("INSERT INTO TEAM_MATCH (Id_Team, Id_Match) VALUES"
-                        + " (@Id_Team, @Id_Match);");
-                res.status(200).json("Team added to match");
-                //console.log("Team added to match");
+                const result = await matchRepository.addTeamToMatch(Id_Team, Id_Match);
+                if (result == 1) {
+                    res.status(200).json("Team added to match");
+                }
             }
         } catch (error) {
+            res.status(500);
             console.log(error);
 
         }

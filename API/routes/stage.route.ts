@@ -13,7 +13,7 @@ router
 
 router
     .route('/tournament/:id')
-    .get(StageController.getStagesByTournamentId)
+    .get(StageController.getStagesByTournamentCode)
 
 
 export default router;

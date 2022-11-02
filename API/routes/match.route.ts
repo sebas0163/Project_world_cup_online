@@ -13,7 +13,7 @@ router
 
 router
     .route('/tournament/:id')
-    .get(MatchController.getMatchesByTournamentId)
+    .get(MatchController.getMatchesByTournamentCode)
 
 router
     .route('/stage/:id')

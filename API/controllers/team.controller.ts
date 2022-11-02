@@ -1,19 +1,14 @@
-import config from '../config/dbconfig';
-import sql from 'mssql';
 import { poolPromise } from '../loaders/db';
 import { TeamRepository } from '../repositories/team.repository';
-import { Team } from '../models/team';
 import { ITeamRepository } from '../repositories/interfaces/team.interface';
-//import { TeamService } from '../services/team.service';
 
 class TeamController {
 
     /**
-    * It connects to the database, queries the database(looking for teams), and returns the results.
-    * @param req - The request object.
-    * @param res - The response object.
-    * @returns All Teams.
-    */
+     * Get all teams from the database and return them as a JSON object.
+     * @param {any} req - any - the request object
+     * @param {any} res - any - the response object
+     */
     static async getTeams(req: any, res: any) {
         try {
             const pool = await poolPromise;
@@ -28,25 +23,21 @@ class TeamController {
         }
     }
 
+
     /**
-     * It takes a tournament code as a parameter, and returns all the teams that are participating in
-     * that tournament.
-     * @param req - the request object
-     * @param res - the response object
-     * @returns An array of objects(teams).
+     * It gets all the teams from the database that are associated with a tournament.
+     * @param {any} req - any - the request object
+     * @param {any} res - any - this is the response object that will be sent back to the client.
      */
-    static async getTeamsByTournamentId(req: any, res: any) {
+    static async getTeamsByTournamentCode(req: any, res: any) {
         try {
             let id = req.params.id || {}
-            let pool = await sql.connect(config);
-            // console.log("Before query, id: " + id);
-            let team = await pool.request()
-                .input('input_parameter', sql.VarChar, id)
-                .query("SELECT * FROM Team JOIN Compete ON Compete.Id_Team" +
-                    " = Team.Id WHERE Compete.TournamentCode = @input_parameter");
-            //res.status(200).json(team.recordsets[0]);
-            res.status(200).json(team.recordsets);
+            const pool = await poolPromise;
+            const teamRepository: ITeamRepository = new TeamRepository(pool);
+            const teams = await teamRepository.getTeamsByTournamentCode(id);
+            res.status(200).json(teams);
         } catch (error) {
+            res.status(500);
             console.log(error);
         }
     }
@@ -70,57 +61,57 @@ class TeamController {
     static async createTeam(req: any, res: any) {
         try {
             const { Name, Type } = req.body;
-            let pool = await sql.connect(config);
+            const pool = await poolPromise;
+            const teamRepository: ITeamRepository = new TeamRepository(pool);
             if (Name == null || Type == null) {
                 res.status(400).json({ message: "Please fill all fields" });
             } else {
-                let team = await pool.request()
-                    .input('Name', sql.VarChar, Name)
-                    .input('Type', sql.VarChar, Type)
-                    .query("INSERT INTO Team (Name,Type) VALUES (@Name,@Type)");
-                res.status(200).json({ message: Name + " created successfully" });
+                const result = await teamRepository.createTeam(Name, Type);
+                if (result == 1) {
+                    res.status(200).json({ message: Name + " created successfully" });
+                }
             }
         }
         catch (error) {
+            res.status(500);
             console.log(error);
         }
     }
 
+
     /**
-     * It takes a type, and then uses that type to query the database, then returns all the teams of that type.
-     * @param req - The request object.
-     * @param res - The response object.
+     * It gets a list of teams by type.
+     * @param {any} req - any, res: any
+     * @param {any} res - any - the response object
      */
     static async getTeamsByType(req: any, res: any) {
         try {
             let type = req.params.type || {}
-            let pool = await sql.connect(config);
-            let team = await pool.request()
-                .input('input_parameter', sql.VarChar, type)
-                .query("SELECT * FROM Team WHERE Type = @input_parameter");
-            //res.status(200).json(team.recordsets[0]);
-            res.status(200).json(team.recordsets);
+            const pool = await poolPromise;
+            const teamRepository: ITeamRepository = new TeamRepository(pool);
+            const teams = await teamRepository.getTeamsByType(type);
+            res.status(200).json(teams);
         } catch (error) {
+            res.status(500);
             console.log(error);
         }
     }
 
+
     /**
-     * It's a function that takes a request(id of team), and returns a team object from the
-     * database.
-     * @param req - The request object.
-     * @param res - The response object.
+     * It gets a team by id from the database and returns it to the user.
+     * @param {any} req - any, res: any
+     * @param {any} res - any - the response object
      */
     static async getTeamById(req: any, res: any) {
         try {
             let id = req.params.id || {}
-            let pool = await sql.connect(config);
-            let team = await pool.request()
-                .input('input_parameter', sql.Int, +id)
-                .query("SELECT * FROM Team WHERE Id = @input_parameter");
-            //res.status(200).json(team.recordsets[0]);
-            res.status(200).json(team.recordsets);
+            const pool = await poolPromise;
+            const teamRepository: ITeamRepository = new TeamRepository(pool);
+            const team = await teamRepository.getTeamById(+id);
+            res.status(200).json(team);
         } catch (error) {
+            res.status(500);
             console.log(error);
         }
     }

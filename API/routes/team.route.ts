@@ -9,7 +9,7 @@ router
 
 router
     .route('/:id')
-    .get(TeamController.getTeamsByTournamentId)
+    .get(TeamController.getTeamsByTournamentCode)
 
 router
     .route('/single/:id')
