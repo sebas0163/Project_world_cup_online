@@ -1,5 +1,5 @@
 import config from '../config/dbconfig';
-import * as sql from 'mssql';
+import sql from 'mssql';
 
 class TeamController {
 
@@ -11,9 +11,16 @@ class TeamController {
     */
     static async getTeams(req: any, res: any) {
         try {
+            // let pool = new sql.ConnectionPool(config);
+            // const poolConnect = pool.connect();
+            // pool.on('error', err => {
+            //     // ... error handler
+            // });
+
+            // await poolConnect;
             let pool = await sql.connect(config);
             let teams = await pool.request().query("SELECT * FROM Team");
-            //res.status(200).json(teams.recordsets[0]);
+            //res.status(200).json(teams.recordsets[]);
             res.status(200).json(teams.recordsets);
             //return teams.recordsets;
         } catch (error) {

@@ -1,5 +1,5 @@
 import config from '../config/dbconfig';
-import * as sql from 'mssql';
+import sql from 'mssql';
 
 class TournamentController {
 

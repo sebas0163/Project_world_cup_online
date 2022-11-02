@@ -1,7 +1,7 @@
-import * as express from "express";
+import express from "express";
 import credentials from "./middleware/credentials";
-import * as cors from "cors";
-import * as bodyParser from "body-parser";
+import cors from "cors";
+import bodyParser from "body-parser";
 import corsOptions from "./config/corsOptions";
 import matchRoute from "./routes/match.route";
 import tournamentRoute from "./routes/tournament.route";
