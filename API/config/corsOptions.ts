@@ -1,8 +1,8 @@
-var allowedOrigins = require('./allowedOrigins');
+import allowedOrigins from './allowedOrigins';
 
 /* A function that checks if the origin is allowed. */
 const corsOptions = {
-    origin: (origin, callback) => {
+    origin: (origin: any, callback: any) => {
         if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
             callback(null, true)
         } else {
@@ -12,4 +12,4 @@ const corsOptions = {
     optionsSuccessStatus: 200
 }
 
-module.exports = corsOptions;
+export default corsOptions;

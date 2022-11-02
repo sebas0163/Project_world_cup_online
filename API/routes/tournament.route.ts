@@ -1,6 +1,6 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const TournamentController = require('../controllers/tournament.controller');
+import TournamentController from '../controllers/tournament.controller';
 
 router
     .route('/')
@@ -9,10 +9,10 @@ router
 
 router
     .route('/:id')
-    .get(TournamentController.getTournamentById)
+    .get(TournamentController.getTournamentByCode)
 
 router
     .route('/compete')
     .post(TournamentController.addTeamToTournament)
 
-module.exports = router;
+export default router;
