@@ -1,5 +1,10 @@
 import config from '../config/dbconfig';
 import sql from 'mssql';
+import { poolPromise } from '../loaders/db';
+import { TeamRepository } from '../repositories/team.repository';
+import { Team } from '../models/team';
+import { ITeamRepository } from '../repositories/interfaces/team.interface';
+//import { TeamService } from '../services/team.service';
 
 class TeamController {
 
@@ -11,19 +16,14 @@ class TeamController {
     */
     static async getTeams(req: any, res: any) {
         try {
-            // let pool = new sql.ConnectionPool(config);
-            // const poolConnect = pool.connect();
-            // pool.on('error', err => {
-            //     // ... error handler
-            // });
+            const pool = await poolPromise;
+            const teamRepository: ITeamRepository = new TeamRepository(pool);
+            const teams = await teamRepository.getTeams();
 
-            // await poolConnect;
-            let pool = await sql.connect(config);
-            let teams = await pool.request().query("SELECT * FROM Team");
-            //res.status(200).json(teams.recordsets[]);
-            res.status(200).json(teams.recordsets);
-            //return teams.recordsets;
+            res.status(200).json(teams);
+
         } catch (error) {
+            res.status(500);
             console.log(error);
         }
     }
