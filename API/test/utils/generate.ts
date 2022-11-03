@@ -1,4 +1,5 @@
 import { faker } from '@faker-js/faker';
+import { Match } from '../../models/match';
 import { Stage } from '../../models/stage';
 import { Team } from '../../models/team';
 import { Tournament } from '../../models/tournament';
@@ -45,6 +46,35 @@ export function createRandomStageForTournament(override = {}, Tournament_ID: str
     };
 }
 
+export function createRandomMatch(override = {}): Match {
+    return {
+        Id: faker.datatype.number(),
+        Stadium: faker.address.city(),
+        StartDateTime: faker.date.past().toString(),
+        State: "Pendiente",
+        Score: "0-0",
+        Tournament_ID: "TR0001",
+        Stage_ID: 1,
+        HomeId: faker.datatype.number(),
+        VisitId: faker.datatype.number(),
+        ...override,
+    };
+}
+
+export function generateSingleMatch(): Match {
+    return {
+        Id: faker.datatype.number(),
+        Stadium: faker.address.city(),
+        StartDateTime: faker.date.past().toString(),
+        State: "Pendiente",
+        Score: "0-0",
+        Tournament_ID: "TR0001",
+        Stage_ID: 1,
+        HomeId: 1,
+        VisitId: 2
+    };
+}
+
 export function generateStagesData(n: number = 1, override = {}) {
     return Array.from(
         {
@@ -74,6 +104,17 @@ export function generateTournamentsData(n: number = 1, override = {}) {
         },
         (_, i) => {
             return createRandomTournament({ id: i, ...override });
+        }
+    );
+}
+
+export function generateMatchesData(n: number = 1, override = {}) {
+    return Array.from(
+        {
+            length: n,
+        },
+        (_, i) => {
+            return createRandomMatch({ id: i, ...override });
         }
     );
 }
