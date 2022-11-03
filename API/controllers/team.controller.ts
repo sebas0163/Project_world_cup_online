@@ -16,6 +16,7 @@ class TeamController {
             const teams = await teamRepository.getTeams();
 
             res.status(200).json(teams);
+            return teams
 
         } catch (error) {
             res.status(500);

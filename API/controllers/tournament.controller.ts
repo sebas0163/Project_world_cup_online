@@ -16,7 +16,7 @@ class TournamentController {
             const tournamentRepository: ITournamentRepository = new TournamentRepository(pool);
             const tournaments = await tournamentRepository.getTournaments();
             res.status(200).json(tournaments);
-
+            return tournaments;
         } catch (error) {
             res.status(500);
             console.log(error);
@@ -35,7 +35,8 @@ class TournamentController {
             const pool = await poolPromise
             const tournamentRepository: ITournamentRepository = new TournamentRepository(pool);
             const tournament = await tournamentRepository.getTournamentByCode(code);
-            res.status(200).json(tournament);;
+            res.status(200).json(tournament);
+            return tournament;
         } catch (error) {
             res.status(500);
             console.log(error);
@@ -59,6 +60,7 @@ class TournamentController {
                 const result = await tournamentRepository.createTournament(Name, StartDate, EndDate, Rules, Type);
                 if (result == 1) {
                     res.status(200).json("Tournament " + Name + " created");
+                    return result;
                 }
             }
         }
@@ -85,6 +87,7 @@ class TournamentController {
                 const result = await tournamentRepository.addTeamToTournament(Id_Team, TournamentCode);
                 if (result == 1) {
                     res.status(200).json("Team added to tournament");
+                    return result;
                 }
             }
         }
