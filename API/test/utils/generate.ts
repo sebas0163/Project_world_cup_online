@@ -1,4 +1,5 @@
 import { faker } from '@faker-js/faker';
+import { Stage } from '../../models/stage';
 import { Team } from '../../models/team';
 import { Tournament } from '../../models/tournament';
 
@@ -24,6 +25,46 @@ export function createRandomTournament(override = {}): Tournament {
         Type: "Local" || "Selecciones",
         ...override,
     };
+}
+
+export function createRandomStage(override = {}): Stage {
+    return {
+        Id: faker.datatype.number(),
+        Name: faker.address.city(),
+        Tournament_ID: faker.datatype.string(6),
+        ...override,
+    };
+}
+
+export function createRandomStageForTournament(override = {}, Tournament_ID: string): Stage {
+    return {
+        Id: faker.datatype.number(),
+        Name: faker.address.city(),
+        Tournament_ID: Tournament_ID,
+        ...override,
+    };
+}
+
+export function generateStagesData(n: number = 1, override = {}) {
+    return Array.from(
+        {
+            length: n,
+        },
+        (_, i) => {
+            return createRandomStage({ id: i, ...override });
+        }
+    );
+}
+
+export function generateStagesForTournament(n: number = 1, Tournament_ID: string, override = {}) {
+    return Array.from(
+        {
+            length: n,
+        },
+        (_, i) => {
+            return createRandomStageForTournament({ id: i, ...override }, Tournament_ID);
+        }
+    );
 }
 
 export function generateTournamentsData(n: number = 1, override = {}) {

@@ -16,6 +16,7 @@ class StageController {
             const stageRepository: IStageRepository = new StageRepository(pool);
             const stages = await stageRepository.getStages();
             res.status(200).json(stages);
+            return stages;
         } catch (error) {
             res.status(500);
             console.log(error);
@@ -35,6 +36,7 @@ class StageController {
             const stageRepository: IStageRepository = new StageRepository(pool);
             const stage = await stageRepository.getStageById(+id);
             res.status(200).json(stage);
+            return stage;
         } catch (error) {
             res.status(500);
             console.log(error);
@@ -54,13 +56,12 @@ class StageController {
             const stageRepository: IStageRepository = new StageRepository(pool);
             const stages = await stageRepository.getStagesByTournamentCode(code);
             res.status(200).json(stages);
+            return stages;
         } catch (error) {
             res.status(500);
             console.log(error);
         }
     }
-
-
 
     /**
      * It creates a stage in the database.
