@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import tournamentImage from "../../assets/images/tournament.jpg";
+//import tournamentImage from "../../assets/images/tournament.jpg";
 import './tournament.css';
 import DateTime from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css'
@@ -124,7 +124,7 @@ function TourneyForm() {
                                 />
                             </div>
                         </div>
-
+                        <br />
                         <div className="row">
                             <div className="col-auto">
                                 <label><strong>Fecha final: </strong></label>
@@ -156,7 +156,6 @@ function TourneyForm() {
                                 <label><strong>Describa las reglas del torneo </strong></label>
                             </div>
                         </div>
-                        <br />
                         <div className="row">
                             <div className="col-auto">
                                 <textarea onChange={(e) => handleTourneyData(e)} id="Rules" value={tourneyData.Rules} placeholder="Rules" type="text"></textarea>
@@ -183,8 +182,47 @@ function TourneyForm() {
                         <button id="goldBtn" className="btn btn-warning" type="submit"> Crear torneo</button>
                     </form>
                 </div>
-                <div className="col">
-                    <img src={tournamentImage} alt="tournament" id="tournamentImage" />
+                    <div className="col">
+                        <br />
+                        <div className="row">
+                        <div className="col-auto">
+                                <label><strong>Fase: </strong></label>
+                            </div>
+                            <div className="col-auto">
+                                <input onChange={(e) => handleTourneyData(e)} id="Name" value={tourneyData.Name} placeholder="Nombre de fase" type="text"></input>
+                                <br /><br />
+                                <ul className ="list-group">
+                                    <li className="list-group-item">An item</li>
+                                    <li className="list-group-item">A second item</li>
+                                    <li className="list-group-item">A third item</li>
+                                    <li className="list-group-item">A fourth item</li>
+                                    <li className="list-group-item">And a fifth one</li>
+                                </ul>
+                            </div>
+                            <div className="col-auto">
+                            <button type="button" className="btn btn-primary">+</button>
+                            </div>
+                            <div className="col-auto">
+                                    <label><strong>Equipos: </strong></label>
+                                </div>
+                                <div className="col-auto">
+                                    <select onChange={(e) => handleTourneyData(e)} id="Type" value={tourneyData.Type}>
+                                    <option value=""> --Escoja un equipo--</option>
+                                    </select>
+                                    <br /><br />
+                                    <ul className ="list-group">
+                                    <li className="list-group-item">An item</li>
+                                    <li className="list-group-item">A second item</li>
+                                    <li className="list-group-item">A third item</li>
+                                    <li className="list-group-item">A fourth item</li>
+                                    <li className="list-group-item">And a fifth one</li>
+                                </ul>
+                                </div>
+                                <div className="col-auto">
+                                    <button type="button" className="btn btn-primary">+</button>
+                                </div>
+                        </div>
+                        <br />
                 </div>
             </div>
         </div>
