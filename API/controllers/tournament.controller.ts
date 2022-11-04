@@ -58,10 +58,12 @@ class TournamentController {
             } else {
 
                 const result = await tournamentRepository.createTournament(Name, StartDate, EndDate, Rules, Type);
-                if (result == 1) {
-                    res.status(200).json("Tournament " + Name + " created");
-                    return result;
-                }
+                // if (result == 1) {
+                //     res.status(200).json("Tournament " + Name + " created");
+                //     return result;
+                // }
+                res.status(200).json(result);
+                return result;
             }
         }
         catch (error) {
