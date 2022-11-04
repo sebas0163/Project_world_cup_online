@@ -29,8 +29,9 @@ export class TournamentRepository {
             .input('EndDate', sql.Date, EndDate)
             .input('Rules', sql.VarChar, Rules)
             .input('Type', sql.VarChar, Type)
-            .query("INSERT INTO TOURNAMENT (Name, StartDate, EndDate, Rules, Type) VALUES (@Name, @StartDate, @EndDate, @Rules, @Type)");
-        return new_tournament.rowsAffected[0];
+            .query("INSERT INTO TOURNAMENT (Name, StartDate, EndDate, Rules, Type) VALUES (@Name, @StartDate, @EndDate, @Rules, @Type);"
+                + " SELECT SCOPE_IDENTITY() AS id;");
+        return new_tournament.recordset[0].id;
     }
 
     public async addTeamToTournament(Id_Team: number, TournamentCode: string): Promise<number> {
