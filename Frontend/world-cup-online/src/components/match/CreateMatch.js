@@ -22,7 +22,7 @@ function CreateMatch() {
     useEffect(() => {
 
         client.get('tournament/').then((response) => {
-            setTourneysData(response.data[0]);
+            setTourneysData(response.data);
         });
 
     }, []);
@@ -60,17 +60,17 @@ function CreateMatch() {
         setData(newData)
         console.log(newData)
         const tournament_response = await client.get('tournament/' + newData.Tournament_ID);
-        setTournamentData(tournament_response.data[0])
-        console.log("tournament_response.data[0]", tournament_response.data[0])
-        setminDate(tournament_response.data[0][0].StartDate.split("T")[0])
-        setmaxDate(tournament_response.data[0][0].EndDate.split("T")[0])
+        setTournamentData(tournament_response.data)
+        console.log("tournament_response.data", tournament_response.data)
+        setminDate(tournament_response.data.StartDate.split("T")[0])
+        setmaxDate(tournament_response.data.EndDate.split("T")[0])
         setDate('');
         setTeam1Data([]);
         setTeam2Data([]);
         setStageData([]);
 
         const stage_response = await client.get('stage/tournament/' + newData.Tournament_ID);
-        setStageData(stage_response.data[0])
+        setStageData(stage_response.data)
 
         const teams_response = await client.get('team/' + newData.Tournament_ID);
         setTeam1Data(teams_response.data)
