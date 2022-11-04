@@ -44,7 +44,7 @@ export class MatchRepository {
             .input('State', sql.VarChar, State)
             .input('Score', sql.VarChar, Score)
             .input('Tournament_ID', sql.VarChar, Tournament_ID)
-            .input('Stage_ID', sql.VarChar, Stage_ID)
+            .input('Stage_ID', sql.Int, Stage_ID)
             .input('HomeId', sql.Int, HomeId)
             .input('VisitId', sql.Int, VisitId)
             .query("INSERT INTO Match (Stadium, StartDateTime, State, Score, Tournament_ID, Stage_ID, HomeId, VisitId) VALUES"

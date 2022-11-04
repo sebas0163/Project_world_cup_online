@@ -16,6 +16,7 @@ class TeamController {
             const teams = await teamRepository.getTeams();
 
             res.status(200).json(teams);
+            return teams
 
         } catch (error) {
             res.status(500);
@@ -36,6 +37,7 @@ class TeamController {
             const teamRepository: ITeamRepository = new TeamRepository(pool);
             const teams = await teamRepository.getTeamsByTournamentCode(id);
             res.status(200).json(teams);
+            return teams;
         } catch (error) {
             res.status(500);
             console.log(error);
@@ -91,6 +93,7 @@ class TeamController {
             const teamRepository: ITeamRepository = new TeamRepository(pool);
             const teams = await teamRepository.getTeamsByType(type);
             res.status(200).json(teams);
+            return teams;
         } catch (error) {
             res.status(500);
             console.log(error);
@@ -110,6 +113,7 @@ class TeamController {
             const teamRepository: ITeamRepository = new TeamRepository(pool);
             const team = await teamRepository.getTeamById(+id);
             res.status(200).json(team);
+            return team;
         } catch (error) {
             res.status(500);
             console.log(error);

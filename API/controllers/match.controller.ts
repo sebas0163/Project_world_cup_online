@@ -9,12 +9,13 @@ class MatchController {
      * @param {Request} req - Request - this is the request object that is passed to the function.
      * @param {any} res - any
      */
-    static async getMatches(req: Request, res: any) {
+    static async getMatches(req: any, res: any) {
         try {
             const pool = await poolPromise;
             const matchRepository: IMatchRepository = new MatchRepository(pool);
             const matches = await matchRepository.getMatches();
             res.status(200).json(matches);
+            return matches;
         } catch (error) {
             res.status(500);
             console.log(error);
@@ -34,6 +35,7 @@ class MatchController {
             const matchRepository: IMatchRepository = new MatchRepository(pool);
             const match = await matchRepository.getMatchById(+id);
             res.status(200).json(match);
+            return match;
         } catch (error) {
             res.status(500);
             console.log(error);
@@ -54,6 +56,7 @@ class MatchController {
             const matchRepository: IMatchRepository = new MatchRepository(pool);
             const matches = await matchRepository.getMatchesByTournamentCode(code);
             res.status(200).json(matches);
+            return matches;
         } catch (error) {
             res.status(500);
             console.log(error);
@@ -73,6 +76,7 @@ class MatchController {
             const matchRepository: IMatchRepository = new MatchRepository(pool);
             const matches = await matchRepository.getMatchesByStageId(+id);
             res.status(200).json(matches);
+            return matches;
         } catch (error) {
             res.status(500);
             console.log(error);
