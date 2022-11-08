@@ -99,6 +99,32 @@ class TournamentController {
         }
     }
 
+    /**
+     * It takes a tournament object, and adds it to the database with all the stages and teams.
+     * @param {any} req - any, res: any
+     * @param {any} res - any - the response object
+     * @returns The result of the query. The code of the tournament.
+     */
+    static async addFullTournament(req: any, res: any) {
+        try {
+            const { Name, StartDate, EndDate, Rules, Type, StageList, TeamList } = req.body;
+            const pool = await poolPromise
+            const tournamentRepository: ITournamentRepository = new TournamentRepository(pool);
+            if (Name == null || StartDate == null || EndDate == null || Type == null
+                || StageList == null || TeamList == null) {
+                res.status(400).json({ message: "Bad request, missing parameters" });
+            } else {
+                const result = await tournamentRepository.addFullTournament(Name, StartDate, EndDate, Rules, Type, StageList, TeamList);
+                res.status(200).json(result);
+                return result;
+            }
+        }
+        catch (error) {
+            res.status(500);
+            console.log(error);
+        }
+    }
+
 }
 
 export default TournamentController;
