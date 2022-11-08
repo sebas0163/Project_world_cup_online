@@ -3,6 +3,7 @@ import { Match } from '../../models/match';
 import { Stage } from '../../models/stage';
 import { Team } from '../../models/team';
 import { Tournament } from '../../models/tournament';
+import { User } from '../../models/user';
 
 export const TEAMS: Team[] = [];
 
@@ -59,6 +60,20 @@ export function createRandomMatch(override = {}): Match {
         VisitId: faker.datatype.number(),
         ...override,
     };
+}
+
+export function createRandomUser(override = {}): User {
+    return {
+        Id: faker.datatype.number(),
+        Name: faker.name.firstName(),
+        FirstSurname: faker.name.lastName(),
+        SecondSurname: faker.name.lastName(),
+        Email: faker.internet.email(),
+        Password: faker.internet.password(),
+        Birthdate: faker.date.past().toString(),
+        Nationality: faker.address.country(),
+        ...override,
+    }
 }
 
 export function generateSingleMatch(): Match {
@@ -126,6 +141,17 @@ export function generateTeamsData(n: number = 1, override = {}) {
         },
         (_, i) => {
             return createRandomTeam({ id: i, ...override });
+        }
+    );
+}
+
+export function generateUsersData(n: number = 1, override = {}) {
+    return Array.from(
+        {
+            length: n,
+        },
+        (_, i) => {
+            return createRandomUser({ id: i, ...override });
         }
     );
 }
