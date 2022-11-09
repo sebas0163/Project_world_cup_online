@@ -25,7 +25,7 @@ const ViewTourneys = props => {
     });
     useEffect(() => {
         client.get('tournament/').then((response) => {
-            setTourneysData(response.data[0]);
+            setTourneysData(response.data);
         });
 
     }, []);

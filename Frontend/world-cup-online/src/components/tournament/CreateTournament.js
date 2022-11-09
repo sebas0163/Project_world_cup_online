@@ -1,12 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 //import tournamentImage from "../../assets/images/tournament.jpg";
 import './tournament.css';
 import DateTime from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css'
+import Table from 'react-bootstrap/Table';
 
 function TourneyForm() {
-
+    const [teamSelected, setTeamSelected] = useState("")
+    const [teamsCache, setTeamsCache] = useState([])
+    const [stageCache, setStageCache] = useState([])
+    const [teamsData, setTeamsData] = useState([])
     const [minEndDate, setMinEndDate] = useState("");
     const url = "http://localhost:5000/api/v1/tournament/"
     const type = [
@@ -22,8 +26,26 @@ function TourneyForm() {
         StartDate: "",
         EndDate: "",
         Rules: "",
-        Type: ""
+        Type: "",
+        StageList: [],
+        TeamList: []
     })
+
+    const [assignmentdata, setAssignmentdata] = useState({
+        Id_Team: "",
+        TournamentCode: ""
+    })
+
+    const client2 = axios.create({
+        baseURL: "http://localhost:5000/api/v1/team/"
+    });
+
+    useEffect(() => {
+        client2.get('type/').then((response) => {
+            setTeamsData(response.data);
+        });
+
+    }, []);
 
     /**
      * If any of the properties of the tourneyData object are empty, return false. Otherwise, return
@@ -73,13 +95,34 @@ function TourneyForm() {
      * the object that matches the id of the input field.
      * @param e - the event object
      */
-    function handleTourneyData(e) {
+    async function handleTourneyData(e) {
         const newData = { ...tourneyData }
         newData[e.target.id] = e.target.value
         setData(newData)
-        console.log(newData)
+        console.log(newData.Type)
+        const teamResponse = await client2.get('type/' + newData.Type);
+        setTeamsData(teamResponse.data)
     }
 
+    async function handleTeamList(e){
+        const newData = e.target.value
+        console.log("newData", newData)
+        setTeamSelected(newData)
+        console.log("Teamselected",teamSelected)
+    }
+    
+    useEffect(()=>{},[teamRows,teamsCache,teamSelected])
+
+    function createTeamList(){
+        teamsCache.push(teamSelected)
+        console.log(teamsCache)
+    }
+
+   /**
+    * Function used to limit and set the start date of an event
+    * 
+    * @param e - the date selected by the user
+    */
     function handleDate(e) {
         setMinEndDate("")
         const newData = { ...tourneyData }
@@ -94,6 +137,11 @@ function TourneyForm() {
 
         console.log(e.toISOString())
     }
+    /**
+     * I'm trying to set the value of the EndDate field in the tourneyData object to the value of the
+     * date selected in the DatePicker component.
+     * @param e - the date selected by the user
+     */
     function handleEndDate(e) {
         setMinEndDate("")
         const newData = { ...tourneyData }
@@ -102,6 +150,33 @@ function TourneyForm() {
         console.log(newData)
         console.log(e.toISOString())
     }
+
+    var teamRows = teamsCache.map(
+        (element, key) => {
+            return (
+                <tr>
+                    <td>{element}</td>
+                </tr>
+            )
+        }
+    )
+
+    const stageRows = stageCache.map(
+        (element, key) => {
+            return (
+
+                <tr>
+                    <td>{element.Id}</td>
+                    <td>{element.CodeTournament}</td>
+                    <td>{element.Name}</td>
+                    <td>{element.StartDate}</td>
+                    <td>{element.EndDate}</td>
+                    <td>{element.Rules}</td>
+                    <td>{element.Type}</td>
+                </tr>
+            )
+        }
+    )
     return (
         <div>
             <div className="row">
@@ -191,13 +266,16 @@ function TourneyForm() {
                             <div className="col-auto">
                                 <input onChange={(e) => handleTourneyData(e)} id="Name" value={tourneyData.Name} placeholder="Nombre de fase" type="text"></input>
                                 <br /><br />
-                                <ul className ="list-group">
-                                    <li className="list-group-item">An item</li>
-                                    <li className="list-group-item">A second item</li>
-                                    <li className="list-group-item">A third item</li>
-                                    <li className="list-group-item">A fourth item</li>
-                                    <li className="list-group-item">And a fifth one</li>
-                                </ul>
+                                <Table hover>
+                                    <thead>
+                                        <tr>
+                                            <th>Stages</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {stageRows}
+                                    </tbody>
+                                </Table>
                             </div>
                             <div className="col-auto">
                             <button type="button" className="btn btn-primary">+</button>
@@ -206,20 +284,28 @@ function TourneyForm() {
                                     <label><strong>Equipos: </strong></label>
                                 </div>
                                 <div className="col-auto">
-                                    <select onChange={(e) => handleTourneyData(e)} id="Type" value={tourneyData.Type}>
+                                    <select onChange={(e) => {setTeamSelected(e.target.value);console.log(teamSelected)}} id="Id_Team">
                                     <option value=""> --Escoja un equipo--</option>
+                                        {teamsData.map((option, index) => (
+                                            <option key={index} value={option.Id}>
+                                                {option.Id + " - " + option.Name}
+                                            </option>
+                                        ))}
                                     </select>
                                     <br /><br />
-                                    <ul className ="list-group">
-                                    <li className="list-group-item">An item</li>
-                                    <li className="list-group-item">A second item</li>
-                                    <li className="list-group-item">A third item</li>
-                                    <li className="list-group-item">A fourth item</li>
-                                    <li className="list-group-item">And a fifth one</li>
-                                </ul>
+                                    <Table hover>
+                                        <thead>
+                                            <tr>
+                                                <th>Equipos</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {teamRows}
+                                        </tbody>
+                                    </Table>
                                 </div>
                                 <div className="col-auto">
-                                    <button type="button" className="btn btn-primary">+</button>
+                                    <button type="button" onClick= {() => createTeamList()} className="btn btn-primary">+</button>
                                 </div>
                         </div>
                         <br />
