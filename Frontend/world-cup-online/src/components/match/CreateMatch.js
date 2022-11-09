@@ -204,7 +204,7 @@ function CreateMatch() {
                             </div>
                         </div>
                         {/* <input onChange = {(e)=>handle(e)} id = "StartDateTime" value = {matchData.StartDateTime} placeholder ="StartDateTime" type="datetime-local"
-                min = "2022-10-01" max ="2022-11-01"></input> */}
+                    min = "2022-10-01" max ="2022-11-01"></input> */}
                         <br /><br />
                         <div></div>
                         <div className="row">
@@ -281,9 +281,9 @@ function CreateMatch() {
                         <div></div>
 
                         <div className="row">
-                            <div className="col-auto">
+                           <div className="col-auto">
                                 <button id="goldBtn" className="btn btn-warning" type="submit"> Crear partido</button>
-                            </div></div>
+                            </div></div> 
                     </form>
                 </div>
                 <div className="col">

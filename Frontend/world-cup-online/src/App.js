@@ -9,6 +9,7 @@ import TournamentDisplays from './components/tournament/TournamentDisplay';
 import CreateStage from './components/tournament/CreateStage'
 import PositionsTable from './components/PositionsTable'
 import ParticipantTeams from './components/tournament/ParticipantTeams'
+import CreatePrediction from './components/prediction/CreatePrediction';
 
 function App() {
 
@@ -24,6 +25,7 @@ function App() {
 
   return (
     <div className="App">
+      
       <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id='navbar'>
         <div class="container-fluid">
           <Link class="navbar-brand" to="/">World Cup Online</Link>
@@ -50,6 +52,8 @@ function App() {
           <Route path="/" element={<Home />}>
           </Route>
           <Route path="/create-match" element={<CreateMatch />}>
+          </Route>
+          <Route path="/create-prediction" element={<CreatePrediction />}>
           </Route>
           <Route path='/create-tournament' element={<CreateTournament />}>
           </Route>
