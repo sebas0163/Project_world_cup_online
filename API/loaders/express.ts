@@ -8,6 +8,9 @@ import matchRoute from "../routes/match.route";
 import stageRoute from "../routes/stage.route";
 import teamRoute from "../routes/team.route";
 import tournamentRoute from "../routes/tournament.route";
+import userRoute from "../routes/user.route";
+import predictionRoute from "../routes/prediction.route";
+import playerRoute from "../routes/player.route";
 
 export class ExpressLoader {
     server: any;
@@ -28,6 +31,9 @@ export class ExpressLoader {
         app.use(apiString + "tournament", tournamentRoute);
         app.use(apiString + "stage", stageRoute);
         app.use(apiString + "team", teamRoute);
+        app.use(apiString + "user", userRoute);
+        app.use(apiString + "prediction", predictionRoute);
+        app.use(apiString + "player", playerRoute);
         app.use("*", (req: any, res: any) => res.status(404).json({ error: "not found" }))
 
         this.server = app.listen(port, () => console.log(`Server running on port ${port}`));

@@ -80,10 +80,7 @@ describe('TournamentController', () => {
                 body: tournamentData[0],
             });
             const tournament = await TournamentController.createTournament(request, response);
-            //const result = response._getJSONData();
-            //expect(result).toEqual(tournamentData[);
-            expect(tournament).toEqual(1);
-            //expect(spy).toHaveBeenCalledWith(request.body);
+            expect(tournament).toEqual(tournamentData[0].CodeTournament);
             expect(spy).toHaveBeenCalledTimes(1);
         });
     });

@@ -8,6 +8,10 @@ router
     .post(TournamentController.createTournament)
 
 router
+    .route('/full')
+    .post(TournamentController.addFullTournament)
+
+router
     .route('/:id')
     .get(TournamentController.getTournamentByCode)
 
