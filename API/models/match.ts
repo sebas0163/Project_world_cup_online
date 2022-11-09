@@ -1,5 +1,5 @@
 export type Match = {
-    Id: Number;
+    Id: number;
     Stadium: string;
     StartDateTime: string;
     State: string;
