@@ -34,9 +34,9 @@ export class TournamentRepository {
         }
         if (result == length) {
             return 1;
-        } else {
-            return 0;
         }
+        return 0;
+
     }
 
     private async addTeamsToTournament(TeamList: string[], TournamentCode: string): Promise<number> {
@@ -54,9 +54,8 @@ export class TournamentRepository {
         }
         if (result == length) {
             return 1;
-        } else {
-            return 0;
         }
+        return 0;
     }
 
     private deleteTournament = async (code: string): Promise<number> => {
@@ -80,9 +79,9 @@ export class TournamentRepository {
         }
         if (result == length) {
             return 1;
-        } else {
-            return 0;
         }
+        return 0;
+
     }
 
 

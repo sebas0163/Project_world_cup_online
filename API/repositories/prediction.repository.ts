@@ -27,8 +27,6 @@ export class PredictionRepository {
                 if (add_goal_prediction.rowsAffected[0] == 1) {
                     console.log("Goal prediction added");
                     result++;
-                } else {
-                    return 0;
                 }
             } else {
                 const add_goal_prediction = await this.pool.request()
@@ -39,16 +37,13 @@ export class PredictionRepository {
                 if (add_goal_prediction.rowsAffected[0] == 1) {
                     console.log("Goal prediction added");
                     result++;
-                } else {
-                    return 0;
                 }
             }
         }
         if (result == length) {
             return 1;
-        } else {
-            return 0;
         }
+        return 0;
 
     }
 

@@ -13,7 +13,7 @@ export class PlayerRepository {
         return result.recordset;
     }
 
-    public async getPlayersByTeam(id_team: number): Promise<Player[]> {
+    public async getPlayersByTeam(id_team: number): Promise<{ Id: number, Name: string, Team: string, Rol: string }[]> {
         const result = await this.pool.request()
             .input('id_team', sql.Int, id_team)
             .query("SELECT PLAYER.Id, PLAYER.[Name], TEAM.[Name] AS Team, PLAYER.Rol " +
