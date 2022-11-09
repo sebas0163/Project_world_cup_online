@@ -30,7 +30,8 @@ function ViewMatches() {
     /* Getting the tournament data from the API */
     useEffect(() => {
         client.get('tournament/').then((response) => {
-            setTourneysData(response.data[0]);
+            console.log("resp>",response.data)
+            setTourneysData(response.data);
         });
 
     }, []);
@@ -53,8 +54,8 @@ function ViewMatches() {
         setTournamentData(newData)
         console.log(newData)
         const tournament_response = await client.get('match/tournament/' + newData.Tournament_ID);
-        setmatchesInTournamentsData2(tournament_response.data[0])
-        console.log("matches", tournament_response.data[0])
+        setmatchesInTournamentsData2(tournament_response.data)
+        console.log("matches", tournament_response.data)
 
     }
     /* Creating a table row for each element in the array. */
