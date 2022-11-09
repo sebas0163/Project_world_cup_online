@@ -30,8 +30,8 @@ export function createRandomPlayer(override = {}): Player {
 export function createRandomPrediction(override = {}): Prediction {
     return {
         Id: faker.datatype.number(),
-        Home_Score: faker.datatype.number(),
-        Visit_Score: faker.datatype.number(),
+        Home_Score: faker.datatype.number({ min: 0, max: 3 }),
+        Visit_Score: faker.datatype.number({ min: 0, max: 3 }),
         Best_player: faker.datatype.number(),
         Id_user: faker.datatype.number(),
         Id_match: faker.datatype.number(),
@@ -69,7 +69,7 @@ export function createRandomStage(override = {}): Stage {
     };
 }
 
-export function createRandomStageForTournament(override = {}, Tournament_ID: string): Stage {
+export function createRandomStageForTournament(Tournament_ID: string, override = {}): Stage {
     return {
         Id: faker.datatype.number(),
         Name: faker.address.city(),
@@ -78,15 +78,15 @@ export function createRandomStageForTournament(override = {}, Tournament_ID: str
     };
 }
 
-export function createRandomMatch(override = {}): Match {
+export function createRandomMatch(tournamentId: number, stageId: number, override = {}): Match {
     return {
         Id: faker.datatype.number(),
         Stadium: faker.address.city(),
         StartDateTime: faker.date.past().toString(),
         State: "Pendiente",
         Score: "0-0",
-        Tournament_ID: "TR0001",
-        Stage_ID: 1,
+        Tournament_ID: tournamentId.toString(),
+        Stage_ID: stageId,
         HomeId: faker.datatype.number(),
         VisitId: faker.datatype.number(),
         ...override,
@@ -138,7 +138,7 @@ export function generateStagesForTournament(n: number = 1, Tournament_ID: string
             length: n,
         },
         (_, i) => {
-            return createRandomStageForTournament({ id: i, ...override }, Tournament_ID);
+            return createRandomStageForTournament(Tournament_ID, { id: i, ...override });
         }
     );
 }
@@ -154,13 +154,13 @@ export function generateTournamentsData(n: number = 1, override = {}) {
     );
 }
 
-export function generateMatchesData(n: number = 1, override = {}) {
+export function generateMatchesData(tournamentId: number, stageId: number, n: number = 1, override = {}) {
     return Array.from(
         {
             length: n,
         },
         (_, i) => {
-            return createRandomMatch({ id: i, ...override });
+            return createRandomMatch(tournamentId, stageId, { id: i, ...override });
         }
     );
 }
@@ -211,15 +211,50 @@ export function generatePredictionsData(n: number = 1, override = {}) {
 
 export function generateTeamWithPlayers(team: Team) {
     let teamPlayerList: { Id: number, Name: string, Team: string, Rol: string }[] = [];
-    //let addList:{Id_Team:number,Id_Player:number}[] = [];
     const players = generatePlayersData(11);
-    // const team = createRandomTeam();
-    // players.forEach(player => {
-    //     addList.push({Id_Team:team.Id,Id_Player:player.Id})
-    // });
     teamPlayerList = players.map(player => {
         return { Id: player.Id, Name: player.Name, Team: team.Name, Rol: player.Rol }
     });
 
     return teamPlayerList;
+}
+
+function get_random(list: any) {
+    return list[Math.floor(Math.random() * list.length)];
+}
+
+export function createRandomGoalList(players: Player[], Home_Score: number,
+    Visit_Score: number): { Goal_Scorer: number, Attendee: number }[] {
+
+    let goalList: { Goal_Scorer: number, Attendee: number }[] = [];
+    const goalsQuantity: number = Home_Score + Visit_Score;
+
+
+    for (let i = 0; i < goalsQuantity; i++) {
+        if (players[i + 1] != undefined) {
+            goalList.push({ Goal_Scorer: players[i].Id, Attendee: players[i + 1].Id });
+        }
+    }
+
+    return goalList;
+}
+
+export function generateRandomPrediction() {
+    const randomPrediction = createRandomPrediction();
+    const randomTournament = createRandomTournament();
+    const randomStage = createRandomStageForTournament(randomTournament.Id.toString());
+    const randomMatch = createRandomMatch(randomTournament.Id, randomStage.Id);
+    const randomUser = createRandomUser();
+    const randomPlayersData = generatePlayersData(6);
+    console.log(randomPlayersData);
+    const bestPlayerId = randomPlayersData[faker.datatype.number({ min: 0, max: 5 })].Id;
+    const randomGoalList = createRandomGoalList(randomPlayersData, randomPrediction.Home_Score,
+        randomPrediction.Visit_Score);
+
+    return {
+        Home_Score: randomPrediction.Home_Score, Visit_Score: randomPrediction.Visit_Score,
+        Best_player: bestPlayerId, Id_user: randomUser.Id, Id_match: randomMatch.Id,
+        GoalList: randomGoalList,
+        Id: randomPrediction.Id
+    }
 }

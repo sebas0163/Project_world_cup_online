@@ -98,7 +98,7 @@ export class TournamentRepository {
     }
 
     public async createTournament(Name: string, StartDate: string, EndDate: string,
-        Rules: string, Type: string): Promise<number> {
+        Rules: string, Type: string): Promise<string> {
         const code = this.generateRandomCode(6);
         const new_tournament = await this.pool.request()
             .input('CodeTournament', sql.VarChar, code)
@@ -110,7 +110,7 @@ export class TournamentRepository {
             .query("INSERT INTO TOURNAMENT (CodeTournament, Name, StartDate, EndDate, Rules, Type)" +
                 " OUTPUT Inserted.CodeTournament" +
                 " VALUES (@CodeTournament, @Name, @StartDate, @EndDate, @Rules, @Type);");
-        return new_tournament.recordset[0];
+        return new_tournament.recordset[0].CodeTournament;
     }
 
     public async addTeamToTournament(Id_Team: number, TournamentCode: string): Promise<number> {
