@@ -58,10 +58,6 @@ class TournamentController {
             } else {
 
                 const result = await tournamentRepository.createTournament(Name, StartDate, EndDate, Rules, Type);
-                // if (result == 1) {
-                //     res.status(200).json("Tournament " + Name + " created");
-                //     return result;
-                // }
                 res.status(200).json(result);
                 return result;
             }
@@ -91,6 +87,32 @@ class TournamentController {
                     res.status(200).json("Team added to tournament");
                     return result;
                 }
+            }
+        }
+        catch (error) {
+            res.status(500);
+            console.log(error);
+        }
+    }
+
+    /**
+     * It takes a tournament object, and adds it to the database with all the stages and teams.
+     * @param {any} req - any, res: any
+     * @param {any} res - any - the response object
+     * @returns The result of the query. The code of the tournament.
+     */
+    static async addFullTournament(req: any, res: any) {
+        try {
+            const { Name, StartDate, EndDate, Rules, Type, StageList, TeamList } = req.body;
+            const pool = await poolPromise
+            const tournamentRepository: ITournamentRepository = new TournamentRepository(pool);
+            if (Name == null || StartDate == null || EndDate == null || Type == null
+                || StageList == null || TeamList == null) {
+                res.status(400).json({ message: "Bad request, missing parameters" });
+            } else {
+                const result = await tournamentRepository.addFullTournament(Name, StartDate, EndDate, Rules, Type, StageList, TeamList);
+                res.status(200).json(result);
+                return result;
             }
         }
         catch (error) {

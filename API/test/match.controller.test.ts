@@ -1,7 +1,7 @@
 import { Response, Request } from 'express';
 import MatchController from '../controllers/match.controller';
 import { Match } from '../models/match';
-import { generateMatchesData, generateSingleMatch } from './utils/generate';
+import { createRandomStageForTournament, createRandomTournament, generateMatchesData, generateSingleMatch } from './utils/generate';
 import { MatchRepository } from '../repositories/match.repository';
 import { MockRequest, MockResponse, createResponse, createRequest } from 'node-mocks-http';
 
@@ -14,7 +14,9 @@ describe('MatchController', () => {
     let res: MockResponse<Response>;
     describe('getMatches', () => {
         test('should return a list of matches', async () => {
-            const matchesData: Match[] = generateMatchesData(3);
+            const tournament = createRandomTournament();
+            const stage = createRandomStageForTournament(tournament.Id.toString());
+            const matchesData: Match[] = generateMatchesData(tournament.Id, stage.Id, 3);
             const spy = jest.spyOn(MatchRepository.prototype, 'getMatches').mockResolvedValue(matchesData);
             res = createResponse();
             req = createRequest({
@@ -41,7 +43,9 @@ describe('MatchController', () => {
         });
 
         test('should return a match', async () => {
-            const matchesData: Match[] = generateMatchesData(1);
+            const tournament = createRandomTournament();
+            const stage = createRandomStageForTournament(tournament.Id.toString());
+            const matchesData: Match[] = generateMatchesData(tournament.Id, stage.Id, 1);
             const spy = jest.spyOn(MatchRepository.prototype, 'getMatchById').mockResolvedValue(matchesData[0]);
             const matchId = matchesData[0].Id;
             res = createResponse();
@@ -59,7 +63,9 @@ describe('MatchController', () => {
         );
 
         test('should get a match list by tournament code', async () => {
-            const matchesData: Match[] = generateMatchesData(3);
+            const tournament = createRandomTournament();
+            const stage = createRandomStageForTournament(tournament.Id.toString());
+            const matchesData: Match[] = generateMatchesData(tournament.Id, stage.Id, 3);
             const spy = jest.spyOn(MatchRepository.prototype, 'getMatchesByTournamentCode').mockResolvedValue(matchesData);
             const tournamentCode = matchesData[0].Tournament_ID;
             res = createResponse();
@@ -77,7 +83,9 @@ describe('MatchController', () => {
         });
 
         test('should get a match list by stage id', async () => {
-            const matchesData: Match[] = generateMatchesData(3);
+            const tournament = createRandomTournament();
+            const stage = createRandomStageForTournament(tournament.Id.toString());
+            const matchesData: Match[] = generateMatchesData(tournament.Id, stage.Id, 3);
             const spy = jest.spyOn(MatchRepository.prototype, 'getMatchesByStageId').mockResolvedValue(matchesData);
             const stageId = matchesData[0].Stage_ID;
             res = createResponse();
@@ -94,13 +102,15 @@ describe('MatchController', () => {
         });
 
         test('should return status 200', async () => {
-            const match: Match = generateSingleMatch();
-            const spy = jest.spyOn(MatchRepository.prototype, 'createMatch');
+            const tournament = createRandomTournament();
+            const stage = createRandomStageForTournament(tournament.Id.toString());
+            const matchesData: Match[] = generateMatchesData(tournament.Id, stage.Id, 1);
+            const spy = jest.spyOn(MatchRepository.prototype, 'createMatch').mockResolvedValueOnce(matchesData[0].Id);
             res = createResponse();
             req = createRequest({
                 method: 'POST',
                 url: 'api/v1/match',
-                body: match,
+                body: matchesData[0],
             });
             await MatchController.createMatch(req, res);
             expect(res.statusCode).toBe(200);
