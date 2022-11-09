@@ -20,10 +20,16 @@ export default class PredictionController {
 
     static async createPrediction(req: Request, res: Response) {
         try {
-            const { Home_Score, Visit_Score, Best_player, Id_user, Id_match } = req.body;
+            const { Home_Score, Visit_Score, Best_player, Id_user, Id_match,
+                GoalList } = req.body;
+            if (!Home_Score || !Visit_Score || !Best_player || !Id_user || !Id_match || !GoalList) {
+                res.status(400).json({ msg: 'Please enter all fields' });
+                return;
+            }
             const pool = await poolPromise;
             const predictionRepository: IPredictionRepository = new PredictionRepository(pool);
-            const result = await predictionRepository.createPrediction(Home_Score, Visit_Score, Best_player, Id_user, Id_match);
+            const result = await predictionRepository.createPrediction(+Home_Score, +Visit_Score,
+                +Best_player, +Id_user, +Id_match, GoalList);
             res.status(200).json(result);
         }
         catch (err) {
