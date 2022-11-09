@@ -8,7 +8,8 @@ import ViewMatches from './components/match/ViewMatches';
 import TournamentDisplays from './components/tournament/TournamentDisplay';
 import CreateStage from './components/tournament/CreateStage'
 import PositionsTable from './components/PositionsTable'
-import ParticipantTeams from './components/tournament/ParticipantTeams'
+import ParticipantTeams from './components/tournament/ParticipantTeams';
+import Login from './components/login';
 
 function App() {
 
@@ -47,7 +48,9 @@ function App() {
       </nav>
       <div className="container-fluid">
         <Routes>
-          <Route path="/" element={<Home />}>
+          <Route path="/" element={<Login />}>
+          </Route>
+          <Route path="/home" element={<Home />}>
           </Route>
           <Route path="/create-match" element={<CreateMatch />}>
           </Route>
