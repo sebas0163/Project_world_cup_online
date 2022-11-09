@@ -53,7 +53,7 @@ function TourneyForm() {
      * @returns a boolean value.
      */
     function validateTournament() {
-        
+
         if (tourneyData.Name.length == 0 ||
             tourneyData.StartDate.length == 0 ||
             tourneyData.EndDate.length == 0 ||
@@ -71,7 +71,7 @@ function TourneyForm() {
      */
     function submitTournament(e) {
         e.preventDefault();
-        if(validateTournament()){
+        if (validateTournament()) {
             console.log(url)
             axios.post(url, {
                 Id: tourneyData.Id,
@@ -81,11 +81,11 @@ function TourneyForm() {
                 Rules: tourneyData.Rules,
                 Type: tourneyData.Type
             })
-            .then(response => {
-                console.log(response.tourneyData)
-            })
+                .then(response => {
+                    console.log(response.tourneyData)
+                })
             alert(`Torneo creado correctamente`)
-        }else{
+        } else {
             alert(`Por favor llene todos los espacios`)
         }
     }
@@ -104,25 +104,27 @@ function TourneyForm() {
         setTeamsData(teamResponse.data)
     }
 
-    async function handleTeamList(e){
+    async function handleTeamList(e) {
         const newData = e.target.value
         console.log("newData", newData)
         setTeamSelected(newData)
-        console.log("Teamselected",teamSelected)
+        console.log("Teamselected", teamSelected)
     }
-    
-    useEffect(()=>{},[teamRows,teamsCache,teamSelected])
 
-    function createTeamList(){
+    useEffect(() => {
+        setTeamsCache([...teamsCache])
+    }, [teamsCache])
+
+    function createTeamList() {
         teamsCache.push(teamSelected)
         console.log(teamsCache)
     }
 
-   /**
-    * Function used to limit and set the start date of an event
-    * 
-    * @param e - the date selected by the user
-    */
+    /**
+     * Function used to limit and set the start date of an event
+     * 
+     * @param e - the date selected by the user
+     */
     function handleDate(e) {
         setMinEndDate("")
         const newData = { ...tourneyData }
@@ -257,58 +259,58 @@ function TourneyForm() {
                         <button id="goldBtn" className="btn btn-warning" type="submit"> Crear torneo</button>
                     </form>
                 </div>
-                    <div className="col">
-                        <br />
-                        <div className="row">
+                <div className="col">
+                    <br />
+                    <div className="row">
                         <div className="col-auto">
-                                <label><strong>Fase: </strong></label>
-                            </div>
-                            <div className="col-auto">
-                                <input onChange={(e) => handleTourneyData(e)} id="Name" value={tourneyData.Name} placeholder="Nombre de fase" type="text"></input>
-                                <br /><br />
-                                <Table hover>
-                                    <thead>
-                                        <tr>
-                                            <th>Stages</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {stageRows}
-                                    </tbody>
-                                </Table>
-                            </div>
-                            <div className="col-auto">
-                            <button type="button" className="btn btn-primary">+</button>
-                            </div>
-                            <div className="col-auto">
-                                    <label><strong>Equipos: </strong></label>
-                                </div>
-                                <div className="col-auto">
-                                    <select onChange={(e) => {setTeamSelected(e.target.value);console.log(teamSelected)}} id="Id_Team">
-                                    <option value=""> --Escoja un equipo--</option>
-                                        {teamsData.map((option, index) => (
-                                            <option key={index} value={option.Id}>
-                                                {option.Id + " - " + option.Name}
-                                            </option>
-                                        ))}
-                                    </select>
-                                    <br /><br />
-                                    <Table hover>
-                                        <thead>
-                                            <tr>
-                                                <th>Equipos</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {teamRows}
-                                        </tbody>
-                                    </Table>
-                                </div>
-                                <div className="col-auto">
-                                    <button type="button" onClick= {() => createTeamList()} className="btn btn-primary">+</button>
-                                </div>
+                            <label><strong>Fase: </strong></label>
                         </div>
-                        <br />
+                        <div className="col-auto">
+                            <input onChange={(e) => handleTourneyData(e)} id="Name" value={tourneyData.Name} placeholder="Nombre de fase" type="text"></input>
+                            <br /><br />
+                            <Table hover>
+                                <thead>
+                                    <tr>
+                                        <th>Stages</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {stageRows}
+                                </tbody>
+                            </Table>
+                        </div>
+                        <div className="col-auto">
+                            <button type="button" className="btn btn-primary">+</button>
+                        </div>
+                        <div className="col-auto">
+                            <label><strong>Equipos: </strong></label>
+                        </div>
+                        <div className="col-auto">
+                            <select onChange={(e) => { setTeamSelected(e.target.value); console.log(teamSelected) }} id="Id_Team">
+                                <option value=""> --Escoja un equipo--</option>
+                                {teamsData.map((option, index) => (
+                                    <option key={index} value={option.Id}>
+                                        {option.Id + " - " + option.Name}
+                                    </option>
+                                ))}
+                            </select>
+                            <br /><br />
+                            <Table hover>
+                                <thead>
+                                    <tr>
+                                        <th>Equipos</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {teamRows}
+                                </tbody>
+                            </Table>
+                        </div>
+                        <div className="col-auto">
+                            <button type="button" onClick={() => createTeamList()} className="btn btn-primary">+</button>
+                        </div>
+                    </div>
+                    <br />
                 </div>
             </div>
         </div>
