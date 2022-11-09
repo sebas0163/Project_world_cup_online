@@ -30,29 +30,35 @@ function CreatePrediction(){
         Visit_Name: "Alemania"
     })
     const [prediction, setPrediction] = useState({
-        ScoreHome : 0,
-        ScoreVisit : 0,
-        Best_Player : "",
-        User_Id : "",
-        Match_Id : "",
-        Gols : [],
-        Asisted : []
+        Home_Score : 0,
+        Visit_Score : 0,
+        Best_player : "",
+        Id_user : "",
+        Id_match : "",
+        GoalList : []
     })
     
 /* Getting the tournament data from the API */
     useEffect(() => {
         /*get de match que traiga todo lo del match, team names, */
-        client.get('team/').then((response) => {
-            setPlayers(response.data);
+        var temp = []
+        client.get('player/team/'+currentMatch.HomeId).then((response) => {
+            
             setHomePlayers(response.data);
-            setVisitPlayers(response.data);
+            temp = temp.concat(response.data);
+            console.log("playes", temp)
         });
-
+        client.get('player/team/'+currentMatch.VisitId).then((response) => {
+            
+            setVisitPlayers(response.data);
+            setPlayers(temp.concat(response.data))
+            console.log("playes", temp)
+        });
     }, []);
     function handleHomeScore(e)
     {
         const newData = { ...prediction }
-        newData["ScoreHome"] = e
+        newData["Home_Score"] = e
         setPrediction(newData)
         console.log(newData)
         setHomeGoalies(e, "Home")
@@ -62,7 +68,7 @@ function CreatePrediction(){
     function handleVisitScore(e)
     {
         const newData = { ...prediction }
-        newData["ScoreVisit"] = e
+        newData["Visit_Score"] = e
         setPrediction(newData)
         console.log(newData)
         setVisitGoalies(e, "Visit")
@@ -85,7 +91,7 @@ function CreatePrediction(){
                        <h5>Gol #{number}</h5>
                         <select onChange={(e) => handlePlayerSelects(e)} id={tag +"-Gol-"+number}>
                             <option value=""> --Escoja al goleador--</option>
-                            {players.map((option, index) => (
+                            {HomePlayers.map((option, index) => (
                                 <option key={index} value={option.Id}>
                                     {option.Name}
                                 </option>
@@ -94,7 +100,7 @@ function CreatePrediction(){
                         <h6>asistido por: </h6>
                         <select onChange={(e) => handlePlayerSelects(e)} id={tag + "-Asisted-"+number} >
                             <option value=""> --Escoja al que asistio el gol--</option>
-                            {players.map((option, index) => (
+                            {HomePlayers.map((option, index) => (
                                 <option key={index} value={option.Id}>
                                     {option.Name}
                                 </option>
@@ -118,7 +124,7 @@ function CreatePrediction(){
                        <h5>Gol #{number}</h5>
                         <select onChange={(e) => handlePlayerSelects(e)} id={tag +"-Gol-"+number} >
                             <option value=""> --Escoja al goleador--</option>
-                            {players.map((option, index) => (
+                            {VisitPlayers.map((option, index) => (
                                 <option key={index} value={option.Id}>
                                     {option.Name}
                                 </option>
@@ -127,7 +133,7 @@ function CreatePrediction(){
                         <h6>asistido por: </h6>
                         <select onChange={(e) => handlePlayerSelects(e)} id={tag + "-Asisted-"+number} >
                             <option value=""> --Escoja al que asistio el gol--</option>
-                            {players.map((option, index) => (
+                            {VisitPlayers.map((option, index) => (
                                 <option key={index} value={option.Id}>
                                     {option.Name}
                                 </option>
@@ -174,7 +180,7 @@ function CreatePrediction(){
                                 <NumericInput 
                                 className="form-control"
                                 name = "ScoreHome"
-                                value={prediction.ScoreHome}
+                                value={prediction.Home_Score}
                                 min ={0}  
                                 max ={99}
                                 strict
@@ -193,7 +199,7 @@ function CreatePrediction(){
                                 <NumericInput 
                                 className="form-control"
                                 name = "ScoreVisit"
-                                value={prediction.ScoreVisit}  
+                                value={prediction.Visit_Score}  
                                 min ={0}  
                                 max ={99}
                                 strict
@@ -214,7 +220,7 @@ function CreatePrediction(){
                                 <h3>Mejor jugador del partido: </h3>
                             </div>
                             <div className="col=2">
-                                <select onChange={(e) => handleBestPlayer(e)} id="Best_Player" value={prediction.Best_Player}>
+                                <select onChange={(e) => handleBestPlayer(e)} id="Best_Player" value={prediction.Best_player}>
                                 <option value=""> --Escoja al mejor jugador--</option>
                                 {players.map((option, index) => (
                                     <option key={index} value={option.Id}>
