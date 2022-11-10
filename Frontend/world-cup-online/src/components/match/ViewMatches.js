@@ -30,7 +30,7 @@ function ViewMatches() {
     /* Getting the tournament data from the API */
     useEffect(() => {
         client.get('tournament/').then((response) => {
-            setTourneysData(response.data[0]);
+            setTourneysData(response.data);
         });
 
     }, []);
