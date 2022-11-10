@@ -97,12 +97,10 @@ export function createRandomUser(override = {}): User {
     return {
         Id: faker.datatype.number(),
         Name: faker.name.firstName(),
-        FirstSurname: faker.name.lastName(),
-        SecondSurname: faker.name.lastName(),
         Email: faker.internet.email(),
         Password: faker.internet.password(),
         Birthdate: faker.date.past().toString(),
-        Nationality: faker.address.country(),
+        Nickname: faker.internet.userName(),
         ...override,
     }
 }
@@ -224,16 +222,18 @@ function get_random(list: any) {
 }
 
 export function createRandomGoalList(players: Player[], Home_Score: number,
-    Visit_Score: number): { Goal_Scorer: number, Attendee: number }[] {
+    Visit_Score: number): { Player_Id: number, Goals: number, Assists: number }[] {
 
-    let goalList: { Goal_Scorer: number, Attendee: number }[] = [];
+    let goalList: { Player_Id: number, Goals: number, Assists: number }[] = [];
     const goalsQuantity: number = Home_Score + Visit_Score;
-
+    const randomGoals = faker.datatype.number({ min: 0, max: goalsQuantity });
+    const randomAssists = faker.datatype.number({ min: 0, max: goalsQuantity - randomGoals });
 
     for (let i = 0; i < goalsQuantity; i++) {
-        if (players[i + 1] != undefined) {
-            goalList.push({ Goal_Scorer: players[i].Id, Attendee: players[i + 1].Id });
-        }
+        goalList.push({
+            Player_Id: players[i].Id, Goals: randomGoals,
+            Assists: randomAssists
+        });
     }
 
     return goalList;

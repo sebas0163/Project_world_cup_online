@@ -13,31 +13,23 @@ export class PredictionRepository {
         return result.recordset;
     }
 
-    private async addGoalPrediction(GoalList: { Goal_Scorer: string, Attendee: string }[],
-        Id_prediction: number): Promise<number> {
-        const length = GoalList.length;
+    private async addGoalPrediction(PredictionList: {
+        Player_Id: string, Goals: string, Assists: string
+    }[], Id_prediction: number): Promise<number> {
+
+        const length = PredictionList.length;
         let result = 0;
         for (let i = 0; i < length; i++) {
-            const assister = GoalList[i].Attendee;
-            if (assister == null) {
-                const add_goal_prediction = await this.pool.request()
-                    .input('Goal_Scorer', sql.Int, +GoalList[i].Goal_Scorer)
-                    .input('Id_prediction', sql.Int, Id_prediction)
-                    .query("INSERT INTO GOAL_PREDICTION (Goal_Scorer, Id_prediction) VALUES (@Goal_Scorer, @Id_prediction)");
-                if (add_goal_prediction.rowsAffected[0] == 1) {
-                    console.log("Goal prediction added");
-                    result++;
-                }
-            } else {
-                const add_goal_prediction = await this.pool.request()
-                    .input('Goal_Scorer', sql.Int, +GoalList[i].Goal_Scorer)
-                    .input('Attendee', sql.Int, +GoalList[i].Attendee)
-                    .input('Id_prediction', sql.Int, Id_prediction)
-                    .query("INSERT INTO GOALS_PREDICTION (Goal_Scorer, Attendee, Id_prediction) VALUES (@Goal_Scorer, @Attendee, @Id_prediction)");
-                if (add_goal_prediction.rowsAffected[0] == 1) {
-                    console.log("Goal prediction added");
-                    result++;
-                }
+            const add_goal_prediction = await this.pool.request()
+                .input('Player_Id', sql.Int, +PredictionList[i].Player_Id)
+                .input('Goals', sql.Int, +PredictionList[i].Goals)
+                .input('Assists', sql.Int, +PredictionList[i].Assists)
+                .input('Id_prediction', sql.Int, Id_prediction)
+                .query("INSERT INTO PLAYERS_PREDICTION (Player_Id, Goals, Assists, Id_prediction) " +
+                    "VALUES (@Player_Id, @Goals, @Assists, @Id_prediction)");
+            if (add_goal_prediction.rowsAffected[0] == 1) {
+                console.log("Goal prediction added");
+                result++;
             }
         }
         if (result == length) {
@@ -56,7 +48,9 @@ export class PredictionRepository {
 
     public async createPrediction(Home_Score: number, Visit_Score: number,
         Best_player: number, Id_user: number, Id_match: number,
-        GoalList: { Goal_Scorer: string, Attendee: string }[]): Promise<number> {
+        PredictionList: {
+            Player_Id: string, Goals: string, Assists: string
+        }[]): Promise<number> {
         const result = await this.pool.request()
             .input('Home_Score', sql.Int, Home_Score)
             .input('Visit_Score', sql.Int, Visit_Score)
@@ -68,7 +62,7 @@ export class PredictionRepository {
                 " VALUES (@Home_Score, @Visit_Score, @Best_player, @Id_user, @Id_match)");
         const id_prediction = result.recordset[0].Id;
         console.log(id_prediction);
-        const addGoalPrediction = await this.addGoalPrediction(GoalList, id_prediction);
+        const addGoalPrediction = await this.addGoalPrediction(PredictionList, id_prediction);
         if (addGoalPrediction == 1) {
             return id_prediction;
         } else {
