@@ -1,9 +1,16 @@
 
+//<CreateMatch />
+//<ViewMatches />
+//<CreateTournament/>
+//<TournamentDisplays/>
 import './App.css';
 import { Link, Routes, Route } from 'react-router-dom';
 import CreateMatch from './components/CreateMatch';
 import CreateTournament from './components/CreateTournament';
 import Home from './components/home';
+import ViewMatches from './components/ViewMatches';
+import TournamentDisplay from './components/TournamentDisplay';
+import CreateStage from './components/CreateStage';
 
 function App() {
   return (
@@ -20,10 +27,10 @@ function App() {
                 <Link class="nav-link active" aria-current="page" to="/">Home</Link>
               </li>
               <li class="nav-item">
-                <Link class="nav-link" to="/create-tournament">Tournament</Link>
+                <Link class="nav-link" to="/tournament-display">Tournament</Link>
               </li>
               <li class="nav-item">
-                <Link class="nav-link" to="/create-match">Match</Link>
+                <Link class="nav-link" to="/view-match">Match</Link>
               </li>
             </ul>
           </div>
@@ -36,6 +43,12 @@ function App() {
           <Route path="/create-match" element={<CreateMatch />}>
           </Route>
           <Route path='/create-tournament' element={<CreateTournament />}>
+          </Route>
+          <Route path='/view-match' element={<ViewMatches />}>
+          </Route>
+          <Route path='/tournament-display' element={<TournamentDisplay />}>
+          </Route>
+          <Route path='/create-stage' element={<CreateStage />}>
           </Route>
         </Routes>
       </div>

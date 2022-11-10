@@ -1,0 +1,44 @@
+.float {
+    position: fixed;
+    width: 60px;
+    height: 60px;
+    bottom: 40px;
+    right: 40px;
+    background-color: #FEC310;
+    color: #FFF;
+    border-radius: 50px;
+    text-align: center;
+    box-shadow: 2px 2px 3px #999;
+}
+
+.my-float {
+    margin-top: 22px;
+}
+
+#icon {
+    width: 3em;
+    margin-top: 5px;
+}
+
+.float:hover {
+    scale: 1.1;
+}
+
+thead {
+    background-color: #1077C3;
+    color: white;
+}
+
+tbody {
+    background-color: white;
+    color: black;
+}
+
+#titleLeft {
+    text-align: left;
+}
+
+#matchImage {
+    width: 52vw;
+    height: 91vh;
+}

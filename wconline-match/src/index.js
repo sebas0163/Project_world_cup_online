@@ -17,3 +17,6 @@ root.render(
 
 );
 
+(() => {
+    console.log('webpack worked')
+})()
