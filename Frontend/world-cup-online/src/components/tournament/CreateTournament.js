@@ -13,7 +13,7 @@ function TourneyForm() {
     const [stageCache, setStageCache] = useState([])
     const [teamsData, setTeamsData] = useState([])
     const [minEndDate, setMinEndDate] = useState("");
-    const url = "http://localhost:5000/api/v1/tournament/"
+    const url = "http://localhost:5000/api/v1/tournament/full"
     const type = [
         { value: '', text: 'Escoja el tipo de torneo' },
         { value: 'Selección', text: 'Selecciones' },
@@ -74,6 +74,8 @@ function TourneyForm() {
         e.preventDefault();
         if (validateTournament()) {
             console.log(url)
+            console.log("Chequeo de teams", teamsCache)
+            console.log("Chequeo de Stages", stageCache)
             axios.post(url, {
                 Id: tourneyData.Id,
                 Name: tourneyData.Name,
