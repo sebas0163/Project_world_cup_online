@@ -8,6 +8,7 @@ import Table from 'react-bootstrap/Table';
 
 function TourneyForm() {
     const [teamSelected, setTeamSelected] = useState("")
+    const [stageSelected, setStageSelected] = useState("")
     const [teamsCache, setTeamsCache] = useState([])
     const [stageCache, setStageCache] = useState([])
     const [teamsData, setTeamsData] = useState([])
@@ -79,7 +80,9 @@ function TourneyForm() {
                 StartDate: tourneyData.StartDate,
                 EndDate: tourneyData.EndDate,
                 Rules: tourneyData.Rules,
-                Type: tourneyData.Type
+                Type: tourneyData.Type,
+                StageList: teamsCache,
+                TeamList: stageCache
             })
                 .then(response => {
                     console.log(response.tourneyData)
@@ -104,20 +107,22 @@ function TourneyForm() {
         setTeamsData(teamResponse.data)
     }
 
-    async function handleTeamList(e) {
-        const newData = e.target.value
-        console.log("newData", newData)
-        setTeamSelected(newData)
-        console.log("Teamselected", teamSelected)
-    }
-
     useEffect(() => {
         setTeamsCache([...teamsCache])
     }, [teamsCache])
 
+    useEffect(() => {
+        setStageCache([...stageCache])
+    }, [stageCache])
+
     function createTeamList() {
         teamsCache.push(teamSelected)
         console.log(teamsCache)
+    }
+
+    function createStageList(){
+        stageCache.push(stageSelected)
+        console.log(stageCache)
     }
 
     /**
@@ -166,15 +171,8 @@ function TourneyForm() {
     const stageRows = stageCache.map(
         (element, key) => {
             return (
-
                 <tr>
-                    <td>{element.Id}</td>
-                    <td>{element.CodeTournament}</td>
-                    <td>{element.Name}</td>
-                    <td>{element.StartDate}</td>
-                    <td>{element.EndDate}</td>
-                    <td>{element.Rules}</td>
-                    <td>{element.Type}</td>
+                    <td>{element}</td>
                 </tr>
             )
         }
@@ -266,7 +264,7 @@ function TourneyForm() {
                             <label><strong>Fase: </strong></label>
                         </div>
                         <div className="col-auto">
-                            <input onChange={(e) => handleTourneyData(e)} id="Name" value={tourneyData.Name} placeholder="Nombre de fase" type="text"></input>
+                            <input onChange={(e) => setStageSelected(e.target.value)} id="Name" placeholder="Nombre de fase" type="text"></input>
                             <br /><br />
                             <Table hover>
                                 <thead>
@@ -280,7 +278,7 @@ function TourneyForm() {
                             </Table>
                         </div>
                         <div className="col-auto">
-                            <button type="button" className="btn btn-primary">+</button>
+                            <button type="button" onClick={() => createStageList()} className="btn btn-primary">+</button>
                         </div>
                         <div className="col-auto">
                             <label><strong>Equipos: </strong></label>
