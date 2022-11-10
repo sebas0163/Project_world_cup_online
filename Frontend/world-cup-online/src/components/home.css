@@ -13,6 +13,27 @@
     background-color: #FEC310;
 }
 
+#defaultImageTournament {
+    width: 18rem;
+}
+
+#tournamentCard {
+    width: 18rem;
+    background-color: #1077C3;
+    color: white;
+}
+
+#cardRules {
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#nickname {
+    color: white;
+}
+
 /* .Home {
     background-image: url("../assets/images/home.jpg");
     background-size: cover;
