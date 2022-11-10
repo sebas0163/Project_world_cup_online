@@ -71,7 +71,7 @@ const ViewTourneys = props => {
     )
     return (
         <div>
-            <h3>Torneos</h3>
+            <h3 id='leftTitle'>Torneos</h3>
             <br /><br />
             <a href='/create-tournament' class="float" title='Create a new tournament'>
                 <i class="fa fa-plus my-float">

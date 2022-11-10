@@ -20,6 +20,12 @@ const Home = props => {
         });
     }
 
+    const goToTournament = (e, tournament) => {
+        e.preventDefault();
+        props.select(tournament);
+        navigate("/tournament");
+    }
+
     useEffect(() => {
         getTournaments();
     }, []);
@@ -42,7 +48,7 @@ const Home = props => {
                                     <div className="card-body">
                                         <h5 className="card-title">{tournament.Name}</h5>
                                         <p id="cardRules" className="card-text">{tournament.Rules}</p>
-                                        <a href="#" id="goldenBtn" className="btn btn-warning">Ver Torneo</a>
+                                        <a onClick={(e) => goToTournament(e, tournament)} id="goldenBtn" className="btn btn-warning">Ver Torneo</a>
                                     </div>
                                 </div>
                             </div>
