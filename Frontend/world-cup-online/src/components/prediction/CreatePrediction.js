@@ -3,6 +3,7 @@ import axios from "axios";
 import NumericInput from 'react-numeric-input';
 import predictionImage from '../../assets/images/prediction.jpg';
 import './prediction.css';
+import Table from 'react-bootstrap/Table';
 
 function CreatePrediction(){
     const client = axios.create({
@@ -127,64 +128,71 @@ function CreatePrediction(){
 
     function setHomeGoalies(num, tag){
         
-        const numbers = Array. from({length: num}, (_, index) => index + 1);
+       
         sethomeSelect(
-            numbers.map(number => {
+            HomePlayers.map(player => {
                 return(
-                    <div>
-                       <h5>Gol #{number}</h5>
-                        <select onChange={(e) => handlePlayerSelects(e)} id={tag +"-Gol-"+number}>
-                            <option value=""> --Escoja al goleador--</option>
-                            {HomePlayers.map((option, index) => (
-                                <option key={index} value={option.Id}>
-                                    {option.Name}
-                                </option>
-                            ))}
-                        </select>
-                        <h6>asistido por: </h6>
-                        <select onChange={(e) => handlePlayerSelects(e)} id={tag + "-Asisted-"+number} >
-                            <option value=""> --Escoja al que asistio el gol--</option>
-                            {HomePlayers.map((option, index) => (
-                                <option key={index} value={option.Id}>
-                                    {option.Name}
-                                </option>
-                            ))}
-                        </select>
-                        <br />
-                    </div>
+                    <tr>
+                        <td>
+                        <h7>{player.Id +"-"+ player.Name}</h7>
+                        </td>
+                        <td>
+                        <input 
+                            className="form-control"
+                            name = {"Home-Goal-"+player.Id}
+                            type = "number"
+                            onChange={(e) => handlePlayer(e)}
+                            value = {0}
+                        />
+                        </td>
+                        <td>
+                        <input 
+                            className="form-control"
+                            name = {"Home-Asist-"+player.Id}
+                            type = "number"
+                            onChange={(e) => handlePlayer(e)}
+                            value = {0}
+                        />
+                        </td>
+                    </tr>
                 )
             })
         )
         
         
     }
+    function handlePlayer(e){
+        console.log(e.target.name)
+        console.log(e.target.value)
+    }
     function setVisitGoalies(num, tag){
-        
-        const numbers = Array. from({length: num}, (_, index) => index + 1);
         setvisitSelect(
-            numbers.map(number => {
+            VisitPlayers.map(player => {
                 return(
-                    <div>
-                       <h5>Gol #{number}</h5>
-                        <select onChange={(e) => handlePlayerSelects(e)} id={tag +"-Gol-"+number} >
-                            <option value=""> --Escoja al goleador--</option>
-                            {VisitPlayers.map((option, index) => (
-                                <option key={index} value={option.Id}>
-                                    {option.Name}
-                                </option>
-                            ))}
-                        </select>
-                        <h6>asistido por: </h6>
-                        <select onChange={(e) => handlePlayerSelects(e)} id={tag + "-Asisted-"+number} >
-                            <option value=""> --Escoja al que asistio el gol--</option>
-                            {VisitPlayers.map((option, index) => (
-                                <option key={index} value={option.Id}>
-                                    {option.Name}
-                                </option>
-                            ))}
-                        </select>
-                        <br />
-                    </div>
+                    <tr>
+                        <td>
+                        <h7>{player.Id +"-"+ player.Name}</h7>
+                        </td>
+                        <td>
+                        <input 
+                            className="form-control"
+                            name = {"Visit-Goal-"+player.Id}
+                            type = "number"
+                            onChange={(e) => handlePlayer(e)}
+                            value = {0}
+                        />
+                        </td>
+                        <td>
+                        <input 
+                            className="form-control"
+                            name = {"Visit-Asist-"+player.Id}
+                            type = "number"
+                            onChange={(e) => handlePlayer(e)}
+                            value = {0}
+                        />
+                        </td>
+                    </tr>
+                    
                 )
             })
         )
@@ -226,9 +234,9 @@ function CreatePrediction(){
     return(
         <div>
             <div className="row">
-                <div className="col-auto">
+                {/* <div className="col-auto">
                     <img id="predictionImage" src={predictionImage} alt="prediction" />
-                </div>
+                </div> */}
                 <div className="col">
                     <form onSubmit={(e) => submit(e)}>
                         <div className="row">
@@ -248,11 +256,20 @@ function CreatePrediction(){
                                 onChange={(e) => handleHomeScore(e)}
                                 />
                                 <br />
-                                <tbody>
-                                    {homeSelect}
-                                </tbody>
+                                <Table hover id='gamesTable'>
+                                    <thead>
+                                        <tr>
+                                            <th>Jugador</th>
+                                            <th>Goles</th>
+                                            <th>Asistencias</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {homeSelect}
+                                    </tbody>
+                                </Table>
                             </div>
-                            <div className="col">
+                            <div className="col-auto">
                                 <h4>vs</h4>
                             </div>
                             <div className="col">
@@ -267,9 +284,18 @@ function CreatePrediction(){
                                 onChange={(e) => handleVisitScore(e)}
                                 />
                                 <br />
-                                <tbody>
-                                    {visitSelect}
-                                </tbody>
+                                <Table hover id='gamesTable'>
+                                    <thead>
+                                        <tr>
+                                            <th>Jugador</th>
+                                            <th>Goles</th>
+                                            <th>Asistencias</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {visitSelect}
+                                    </tbody>
+                                </Table>
                             </div>
                         </div>
                         <div className="row">
@@ -281,7 +307,7 @@ function CreatePrediction(){
                                 <h3>Mejor jugador del partido: </h3>
                             </div>
                             <div className="col=2">
-                                <select onChange={(e) => handleBestPlayer(e)} id="Best_player" value={prediction.Best_player}>
+                                <select onChange={(e) => handleBestPlayer(e)} id="Best_player" value={prediction.Best_player }>
                                 <option value=""> --Escoja al mejor jugador--</option>
                                 {players.map((option, index) => (
                                     <option key={index} value={option.Id}>
