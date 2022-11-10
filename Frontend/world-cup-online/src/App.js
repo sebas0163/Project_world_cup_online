@@ -10,6 +10,7 @@ import CreateStage from './components/tournament/CreateStage'
 import PositionsTable from './components/PositionsTable'
 import ParticipantTeams from './components/tournament/ParticipantTeams';
 import Login from './components/login';
+import Tournament from './components/tournament/Tournament';
 
 export default function App() {
 
@@ -31,8 +32,9 @@ export default function App() {
           <Route exact path="/" element={<Login />} />
         </Route>
         <Route element={<DefaultContainer />}>
-          <Route path="/home" element={<Home />}>
+          <Route path="/home" element={<Home select={selectTournament} />}>
           </Route>
+          <Route path="/tournament" element={<Tournament tournament={tournament} />}></Route>
           <Route path="/create-match" element={<CreateMatch />}>
           </Route>
           <Route path='/create-tournament' element={<CreateTournament />}>
@@ -61,7 +63,7 @@ const InitContainer = () => (
 
 const DefaultContainer = () => (
   <>
-    <div className="container-fluid p-0">
+    <div id='defaultContainer' className="container-fluid p-0">
       <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id='navbar'>
         <div class="container-fluid">
           <Link class="navbar-brand" to="/home">World Cup Online</Link>

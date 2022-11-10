@@ -1,7 +1,7 @@
 #titleHome {
     font-size: 50px;
     font-weight: bold;
-    color: rgb(0, 0, 0);
+    color: white;
     text-align: center;
     margin-top: 50px;
     margin-bottom: 50px;
@@ -15,11 +15,14 @@
 
 #defaultImageTournament {
     width: 18rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 #tournamentCard {
     width: 18rem;
-    background-color: #1077C3;
+    background-color: #5b1a3a;
     color: white;
 }
 

@@ -122,7 +122,7 @@ function TourneyForm() {
         console.log(teamsCache)
     }
 
-    function createStageList(){
+    function createStageList() {
         stageCache.push(stageSelected)
         console.log(stageCache)
     }
@@ -181,83 +181,88 @@ function TourneyForm() {
     )
     return (
         <div>
+            <h1 id="leftTitle">Creacion de torneos</h1>
+            <br />
             <div className="row">
                 <div className="col-auto">
-                    <form onSubmit={(e) => submitTournament(e)}>
-                        <h1>Creacion de torneos</h1>
-                        <br />
-                        <div className="row">
-                            <div className="col-auto">
-                                <label><strong>Fecha de incio: </strong></label>
-                            </div>
+                    <div id="lighterCard" className="card">
+                        <div className="card-body">
+                            <form onSubmit={(e) => submitTournament(e)}>
+                                <br />
+                                <div className="row">
+                                    <div className="col-auto">
+                                        <label><strong>Fecha de incio: </strong></label>
+                                    </div>
 
-                            <div className="col-3">
-                                <DateTime
-                                    name="StartDateTime"
-                                    value={tourneyData.StartDate.split("T")[0]}
-                                    onChange={(e) => handleDate(e)}
-                                    minDate={new Date()}
-                                    placeholderText="Select a date"
-                                />
-                            </div>
-                        </div>
-                        <br />
-                        <div className="row">
-                            <div className="col-auto">
-                                <label><strong>Fecha final: </strong></label>
-                            </div>
-
-                            <div className="col-3">
-                                <DateTime
-                                    name="EndDateTime"
-                                    value={tourneyData.EndDate.split("T")[0]}
-                                    onChange={(e) => handleEndDate(e)}
-                                    minDate={new Date(minEndDate)}
-                                    placeholderText="Select a date"
-                                />
-                            </div>
-                        </div>
-                        <br />
-
-                        <div className="row">
-                            <div className="col-auto">
-                                <label><strong>Nombre: </strong></label>
-                            </div>
-                            <div className="col-auto">
-                                <input onChange={(e) => handleTourneyData(e)} id="Name" value={tourneyData.Name} placeholder="Name" type="text"></input>
-                            </div>
-                        </div>
-                        <br />
-                        <div className="row">
-                            <div className="col-auto">
-                                <label><strong>Describa las reglas del torneo </strong></label>
-                            </div>
-                        </div>
-                        <div className="row">
-                            <div className="col-auto">
-                                <textarea onChange={(e) => handleTourneyData(e)} id="Rules" value={tourneyData.Rules} placeholder="Rules" type="text"></textarea>
-                            </div>
-                        </div>
-                        <br />
-                        <div>
-                            <div className="row">
-                                <div className="col-auto">
-                                    <label><strong>Tipo: </strong></label>
+                                    <div className="col-3">
+                                        <DateTime
+                                            name="StartDateTime"
+                                            value={tourneyData.StartDate.split("T")[0]}
+                                            onChange={(e) => handleDate(e)}
+                                            minDate={new Date()}
+                                            placeholderText="Select a date"
+                                        />
+                                    </div>
                                 </div>
-                                <div className="col-auto">
-                                    <select onChange={(e) => handleTourneyData(e)} id="Type" value={tourneyData.Type}>
-                                        {type.map((option, index) => (
-                                            <option key={index} value={option.value}>
-                                                {option.text}
-                                            </option>
-                                        ))}
-                                    </select>
+                                <br />
+                                <div className="row">
+                                    <div className="col-auto">
+                                        <label><strong>Fecha final: </strong></label>
+                                    </div>
+
+                                    <div className="col-3">
+                                        <DateTime
+                                            name="EndDateTime"
+                                            value={tourneyData.EndDate.split("T")[0]}
+                                            onChange={(e) => handleEndDate(e)}
+                                            minDate={new Date(minEndDate)}
+                                            placeholderText="Select a date"
+                                        />
+                                    </div>
                                 </div>
-                            </div>
+                                <br />
+
+                                <div className="row">
+                                    <div className="col-auto">
+                                        <label><strong>Nombre: </strong></label>
+                                    </div>
+                                    <div className="col-auto">
+                                        <input onChange={(e) => handleTourneyData(e)} id="Name" value={tourneyData.Name} placeholder="Name" type="text"></input>
+                                    </div>
+                                </div>
+                                <br />
+                                <div className="row">
+                                    <div className="col-auto">
+                                        <label><strong>Describa las reglas del torneo </strong></label>
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="col-auto">
+                                        <textarea onChange={(e) => handleTourneyData(e)} id="Rules" value={tourneyData.Rules} placeholder="Rules" type="text"></textarea>
+                                    </div>
+                                </div>
+                                <br />
+                                <div>
+                                    <div className="row">
+                                        <div className="col-auto">
+                                            <label><strong>Tipo: </strong></label>
+                                        </div>
+                                        <div className="col-auto">
+                                            <select onChange={(e) => handleTourneyData(e)} id="Type" value={tourneyData.Type}>
+                                                {type.map((option, index) => (
+                                                    <option key={index} value={option.value}>
+                                                        {option.text}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br />
+                                <button id="goldBtn" className="btn btn-warning" type="submit"> Crear torneo</button>
+                            </form>
                         </div>
-                        <br />
-                        <button id="goldBtn" className="btn btn-warning" type="submit"> Crear torneo</button>
-                    </form>
+                    </div>
                 </div>
                 <div className="col">
                     <br />
@@ -271,7 +276,7 @@ function TourneyForm() {
                             <Table hover>
                                 <thead>
                                     <tr>
-                                        <th>Stages</th>
+                                        <th>Fases</th>
                                     </tr>
                                 </thead>
                                 <tbody>
