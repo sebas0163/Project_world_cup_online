@@ -1,9 +1,7 @@
 export type User = {
     Id: number,
     Name: string,
-    FirstSurname: string,
-    SecondSurname: string,
-    Nationality: string,
+    Nickname: string,
     Email: string,
     Password: string,
     Birthdate: string

@@ -21,18 +21,16 @@ export class UserRepository {
         return result.recordset[0];
     }
 
-    public async createUser(Name: string, FirstSurname: string, SecondSurname: string,
-        Nationality: string, Email: string, Password: string, Birthdate: string): Promise<number> {
+    public async createUser(Name: string, Nickname: String,
+        Email: string, Password: string, Birthdate: string): Promise<number> {
         const new_user = await this.pool.request()
             .input('Name', sql.VarChar, Name)
-            .input('FirstSurname', sql.VarChar, FirstSurname)
-            .input('SecondSurname', sql.VarChar, SecondSurname)
-            .input('Nationality', sql.VarChar, Nationality)
+            .input('Nickname', sql.VarChar, Nickname)
             .input('Email', sql.VarChar, Email)
             .input('Password', sql.VarChar, Password)
             .input('Birthdate', sql.Date, Birthdate)
-            .query("INSERT INTO [USER] ([Name], FirstSurname, SecondSurname, Nationality," +
-                " Email, [Password], Birthdate)" + " VALUES (@Name, @FirstSurname, @SecondSurname, @Nationality," +
+            .query("INSERT INTO [USER] ([Name], Nickname," +
+                " Email, [Password], Birthdate)" + " VALUES (@Name, @Nickname," +
                 " @Email, PWDENCRYPT(@Password), @Birthdate);");
         return new_user.rowsAffected[0];
     }
