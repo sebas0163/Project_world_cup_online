@@ -83,8 +83,8 @@ function TourneyForm() {
                 EndDate: tourneyData.EndDate,
                 Rules: tourneyData.Rules,
                 Type: tourneyData.Type,
-                StageList: teamsCache,
-                TeamList: stageCache
+                StageList: stageCache,
+                TeamList: teamsCache
             })
                 .then(response => {
                     console.log(response.tourneyData)

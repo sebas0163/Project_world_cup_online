@@ -82,12 +82,12 @@ const ViewTourneys = props => {
                 <thead>
                     <tr>
                         <th>Id</th>
-                        <th>CodeTournament</th>
-                        <th>Name</th>
-                        <th>StartDate</th>
-                        <th>EndDate</th>
-                        <th>Rules</th>
-                        <th>Type</th>
+                        <th>Codigo de torneo</th>
+                        <th>Nombre</th>
+                        <th>Fecha de inicio</th>
+                        <th>Fecha de cierre</th>
+                        <th>Reglas</th>
+                        <th>Tipo de torneo</th>
                     </tr>
                 </thead>
                 <tbody>
