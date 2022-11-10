@@ -69,7 +69,7 @@ const DefaultContainer = () => (
             <span class="navbar-toggler-icon"></span>
           </button>
           <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
+            <ul class="navbar-nav me-auto">
               <li class="nav-item">
                 <Link class="nav-link active" aria-current="page" to="/home">Inicio</Link>
               </li>
@@ -78,6 +78,11 @@ const DefaultContainer = () => (
               </li>
               <li class="nav-item">
                 <Link class="nav-link" to="/view-match">Partidos</Link>
+              </li>
+            </ul>
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <h5 id='nickname'>Nickname</h5>
               </li>
             </ul>
           </div>
