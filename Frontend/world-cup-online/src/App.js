@@ -11,6 +11,7 @@ import PositionsTable from './components/PositionsTable'
 import ParticipantTeams from './components/tournament/ParticipantTeams';
 import Login from './components/login';
 import CreatePrediction from './components/prediction/CreatePrediction';
+import ViewPredictions from './components/prediction/ViewPredictions';
 
 function App() {
 
@@ -58,6 +59,8 @@ function App() {
           </Route>
           <Route path="/create-prediction" element={<CreatePrediction />}>
           </Route>
+          <Route path="/view-prediction" element={<ViewPredictions />}>
+          </Route>
           <Route path='/create-tournament' element={<CreateTournament />}>
           </Route>
           <Route path='/view-match' element={<ViewMatches />}>
@@ -70,6 +73,7 @@ function App() {
           </Route>
           <Route path='/assignment' element={<ParticipantTeams />}>
           </Route>
+          
         </Routes>
       </div>
     </div>

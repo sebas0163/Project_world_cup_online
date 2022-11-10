@@ -33,6 +33,8 @@ function CreatePrediction(){
         Home_Name: "Costa Rica",
         Visit_Name: "Alemania"
     })
+    const [currentUser, setCurrentUser] = useState(1)
+
     const [prediction, setPrediction] = useState({
         Home_Score : 0,
         Visit_Score : 0,
@@ -81,13 +83,6 @@ function CreatePrediction(){
 
     }
 
-    function goalArray(){
-        var size = prediction.Visit_Score + prediction.Home_Score
-        console.log("size",size)
-        const numbers = Array. from({length: size}, (_, index) => index + 1);
-        
-            
-    }
     function handlePlayerSelects(e){
 
         var selectTeam = e.target.id.split("-")[0]
@@ -142,7 +137,7 @@ function CreatePrediction(){
                             name = {"Home-Goal-"+player.Id}
                             type = "number"
                             onChange={(e) => handlePlayer(e)}
-                            value = {0}
+                            
                         />
                         </td>
                         <td>
@@ -151,7 +146,7 @@ function CreatePrediction(){
                             name = {"Home-Asist-"+player.Id}
                             type = "number"
                             onChange={(e) => handlePlayer(e)}
-                            value = {0}
+                            
                         />
                         </td>
                     </tr>
@@ -162,6 +157,41 @@ function CreatePrediction(){
         
     }
     function handlePlayer(e){
+        
+        var selectTag = e.target.name.split("-")[1]
+        var playerId = e.target.name.split("-")[2]
+        var Id = playerId
+        if(selectTag =="Goal")
+        {
+            
+            setGoals(current =>
+                current.filter(object =>{
+                    return object.Player_Id != playerId
+                }))
+            if (e.target.value !='0' && e.target.value != ''){
+                setGoals( goals => [...goals, {
+                
+                    Player_Id : playerId,
+                    Goals: e.target.value
+                }])
+            }
+        }
+        if(selectTag =="Asist")
+        {
+            setAsistances(current =>
+                current.filter(object =>{
+                    return object.Player_Id != playerId
+                }))
+            if (e.target.value !='0' && e.target.value != ''){
+                setAsistances( asistances => [...asistances, {
+                    
+                    Player_Id : playerId,
+                    Assists : e.target.value
+                }])
+            }
+        }
+        console.log("numPickId",e.target.name)
+        console.log("selectTag",selectTag)
         console.log(e.target.name)
         console.log(e.target.value)
     }
@@ -179,7 +209,7 @@ function CreatePrediction(){
                             name = {"Visit-Goal-"+player.Id}
                             type = "number"
                             onChange={(e) => handlePlayer(e)}
-                            value = {0}
+                            
                         />
                         </td>
                         <td>
@@ -188,7 +218,7 @@ function CreatePrediction(){
                             name = {"Visit-Asist-"+player.Id}
                             type = "number"
                             onChange={(e) => handlePlayer(e)}
-                            value = {0}
+                            
                         />
                         </td>
                     </tr>
@@ -206,6 +236,8 @@ function CreatePrediction(){
         console.log(newData)
         console.log("vivsit",visitSelect)
         console.log("homme", homeSelect)
+        console.log("goals",goals)
+        console.log("assistances",asistances)
 
 
     }
@@ -217,13 +249,15 @@ function CreatePrediction(){
         const result = [
             ...[...goals, ...asistances]
               .reduce(
-                (acc, curr) => acc.set(curr.Id, { ...acc.get(curr.Id), ...curr }),
+                (acc, curr) => acc.set(curr.Player_Id, { ...acc.get(curr.Player_Id), ...curr }),
                 new Map()
               )
               .values(),
           ];
         const newData = { ...prediction }
         newData["GoalList"] = result
+        newData["Id_match"] = currentMatch.Id
+        newData["Id_user"] = currentUser
         setPrediction(newData)
 
         
