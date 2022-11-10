@@ -12,9 +12,12 @@ function CreatePrediction(){
     const [VisitPlayers, setVisitPlayers] = useState([])
     const [players, setPlayers] = useState([])
 
-    const [playerselect, setplayerselect] = useState([])
-    const [homeGoaliesSelect, sethomeGoaliesSelect] = useState([])
-    const [visitGoaliesSelect, setvisitGoaliesSelect] = useState([])
+    const [goals, setGoals] = useState([])
+    const [asistances, setAsistances] = useState([])
+
+    /*Selects de react*/
+    const [homeSelect, sethomeSelect] = useState([])
+    const [visitSelect, setvisitSelect] = useState([])
 
     const [currentMatch, setCurrentMatch] = useState({
         Id: "1",
@@ -46,13 +49,13 @@ function CreatePrediction(){
             
             setHomePlayers(response.data);
             temp = temp.concat(response.data);
-            console.log("playes", temp)
+            
         });
         client.get('player/team/'+currentMatch.VisitId).then((response) => {
             
             setVisitPlayers(response.data);
             setPlayers(temp.concat(response.data))
-            console.log("playes", temp)
+            
         });
     }, []);
     function handleHomeScore(e)
@@ -62,6 +65,7 @@ function CreatePrediction(){
         setPrediction(newData)
         console.log(newData)
         setHomeGoalies(e, "Home")
+        
 
 
     }
@@ -72,19 +76,59 @@ function CreatePrediction(){
         setPrediction(newData)
         console.log(newData)
         setVisitGoalies(e, "Visit")
+        
 
     }
+
+    function goalArray(){
+        var size = prediction.Visit_Score + prediction.Home_Score
+        console.log("size",size)
+        const numbers = Array. from({length: size}, (_, index) => index + 1);
+        
+            
+    }
     function handlePlayerSelects(e){
-        var selectId=e.target.id
-        setplayerselect(e.target.value) 
+
+        var selectTeam = e.target.id.split("-")[0]
+        var selectTag = e.target.id.split("-")[1]
+        var selectId = parseInt(e.target.id.split("-")[2])
+        var playerId = e.target.value
+
+        if(selectTag =="Gol")
+        {
+            setGoals(current =>
+                current.filter(object =>{
+                    return object.Id != selectTeam+"-"+selectId
+                }))
+            setGoals( goals => [...goals, {
+               
+                Id: selectTeam+"-"+selectId,
+                Goal_Scorer : playerId
+            }])
+        }
+        if(selectTag =="Asisted")
+        {
+            setAsistances(current =>
+                current.filter(object =>{
+                    return object.Id != selectTeam+"-"+selectId
+                }))
+            setAsistances( asistances => [...asistances, {
+                
+                Id: selectTeam+"-"+selectId,
+                Attendee : playerId
+            }])
+        }
+        
         console.log("handlegoalie id",e.target.id)
         console.log("handlegoalie2 value",e.target.value)
+
+        
     }
 
     function setHomeGoalies(num, tag){
         
         const numbers = Array. from({length: num}, (_, index) => index + 1);
-        sethomeGoaliesSelect(
+        sethomeSelect(
             numbers.map(number => {
                 return(
                     <div>
@@ -117,7 +161,7 @@ function CreatePrediction(){
     function setVisitGoalies(num, tag){
         
         const numbers = Array. from({length: num}, (_, index) => index + 1);
-        setvisitGoaliesSelect(
+        setvisitSelect(
             numbers.map(number => {
                 return(
                     <div>
@@ -152,14 +196,31 @@ function CreatePrediction(){
         newData[e.target.id] = e.target.value
         setPrediction(newData)
         console.log(newData)
-        console.log("vivsit",visitGoaliesSelect)
-        console.log("homme", homeGoaliesSelect)
+        console.log("vivsit",visitSelect)
+        console.log("homme", homeSelect)
 
 
     }
     function submit(e){
         e.preventDefault();
-        console.log("submit", prediction)
+        console.log("goals",goals)
+        console.log("assistances",asistances)
+
+        const result = [
+            ...[...goals, ...asistances]
+              .reduce(
+                (acc, curr) => acc.set(curr.Id, { ...acc.get(curr.Id), ...curr }),
+                new Map()
+              )
+              .values(),
+          ];
+        const newData = { ...prediction }
+        newData["GoalList"] = result
+        setPrediction(newData)
+
+        
+
+        console.log("submit", newData)
     }
     
     return(
@@ -188,7 +249,7 @@ function CreatePrediction(){
                                 />
                                 <br />
                                 <tbody>
-                                    {homeGoaliesSelect}
+                                    {homeSelect}
                                 </tbody>
                             </div>
                             <div className="col">
@@ -207,7 +268,7 @@ function CreatePrediction(){
                                 />
                                 <br />
                                 <tbody>
-                                    {visitGoaliesSelect}
+                                    {visitSelect}
                                 </tbody>
                             </div>
                         </div>
@@ -220,7 +281,7 @@ function CreatePrediction(){
                                 <h3>Mejor jugador del partido: </h3>
                             </div>
                             <div className="col=2">
-                                <select onChange={(e) => handleBestPlayer(e)} id="Best_Player" value={prediction.Best_player}>
+                                <select onChange={(e) => handleBestPlayer(e)} id="Best_player" value={prediction.Best_player}>
                                 <option value=""> --Escoja al mejor jugador--</option>
                                 {players.map((option, index) => (
                                     <option key={index} value={option.Id}>
