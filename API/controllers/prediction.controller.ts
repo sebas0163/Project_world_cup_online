@@ -18,6 +18,32 @@ export default class PredictionController {
         }
     }
 
+    static async getPredictionsByUser(req: Request, res: Response) {
+        try {
+            const id = req.params.id || {};
+            const pool = await poolPromise;
+            const predictionRepository: IPredictionRepository = new PredictionRepository(pool);
+            const predictions = await predictionRepository.getPredictionsByUser(+id);
+            res.status(200).json(predictions);
+        } catch (err) {
+            res.status(500);
+            console.log(err);
+        }
+    }
+
+    static async getFullPredictions(req: Request, res: Response) {
+        try {
+            const id = req.params.id || {};
+            const pool = await poolPromise;
+            const predictionRepository: IPredictionRepository = new PredictionRepository(pool);
+            const predictions = await predictionRepository.getFullPredictions(+id);
+            res.status(200).json(predictions);
+        } catch (err) {
+            res.status(500);
+            console.log(err);
+        }
+    }
+
     static async createPrediction(req: Request, res: Response) {
         try {
             const { Home_Score, Visit_Score, Best_player, Id_user, Id_match,
