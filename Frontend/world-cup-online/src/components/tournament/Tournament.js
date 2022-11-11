@@ -1,9 +1,10 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import defaultTournament from '../../assets/images/tournament_default.jpg';
 
 const Tournament = props => {
-
+    const navigate = useNavigate();
     const [tournament, setTournament] = useState([]);
     const [matches, setMatches] = useState([]);
     const [areMatches, setAreMatches] = useState(false);
@@ -27,6 +28,13 @@ const Tournament = props => {
         getMatches(props.tournament.CodeTournament);
     }, [props.tournament]);
 
+    function handlePrediction(e,match){
+        e.preventDefault();
+        props.select(match);
+        console.log("Match Tour", match);
+        navigate("/create-prediction");
+
+    }
     return (
         <>
             <h1 id="leftTitle">{tournament.Name}</h1>
@@ -87,7 +95,7 @@ const Tournament = props => {
                                 <td>{match.StartDateTime?.split("T", 1)}</td>
                                 <td>{match.HomeId} vs {match.VisitId}</td>
                                 <td>{match.Stadium}</td>
-                                <td><a id="goldenBtn" className="btn btn-warning">Hacer prediccion</a></td>
+                                <td><a id="goldenBtn" className="btn btn-warning" onClick={(e)=> handlePrediction(e,match)}>Hacer prediccion </a></td>
                             </tr>
                         ))}
                     </tbody>

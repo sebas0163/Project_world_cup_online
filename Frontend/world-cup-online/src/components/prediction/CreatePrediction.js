@@ -5,7 +5,7 @@ import predictionImage from '../../assets/images/prediction.jpg';
 import './prediction.css';
 import Table from 'react-bootstrap/Table';
 
-function CreatePrediction(){
+const CreatePrediction = props =>{
     const client = axios.create({
         baseURL: "http://localhost:5000/api/v1/"
     });
@@ -21,17 +21,7 @@ function CreatePrediction(){
     const [visitSelect, setvisitSelect] = useState([])
 
     const [currentMatch, setCurrentMatch] = useState({
-        Id: "1",
-        Stadium: "Test Stadium",
-        HomeId: "1",
-        VisitId: "2",
-        StartDateTime: "",
-        State: "Pendiente",
-        Score: "0-0",
-        Tournament_ID: "",
-        Stage_ID: "",
-        Home_Name: "Costa Rica",
-        Visit_Name: "Alemania"
+        
     })
     const [currentUser, setCurrentUser] = useState(1)
 
@@ -44,8 +34,14 @@ function CreatePrediction(){
         GoalList : []
     })
     
+    useEffect(()=>{
+        console.log("Match", props.match)
+        setCurrentMatch(props.match)
+        setCurrentUser(props.user)
+    }, [props.match,props.user])
 /* Getting the tournament data from the API */
     useEffect(() => {
+        
         /*get de match que traiga todo lo del match, team names, */
         var temp = []
         client.get('player/team/'+currentMatch.HomeId).then((response) => {
@@ -279,7 +275,7 @@ function CreatePrediction(){
                             <h3>¿Cual va a ser el marcador del partido?</h3>
                             <br />
                             <div className="col">
-                                <h4> {currentMatch.Home_Name}</h4>
+                                <h4> {currentMatch.HomeId}</h4>
                                 <NumericInput 
                                 className="form-control"
                                 name = "ScoreHome"
@@ -307,7 +303,7 @@ function CreatePrediction(){
                                 <h4>vs</h4>
                             </div>
                             <div className="col">
-                                <h4> {currentMatch.Visit_Name}</h4>
+                                <h4> {currentMatch.VisitId}</h4>
                                 <NumericInput 
                                 className="form-control"
                                 name = "ScoreVisit"
