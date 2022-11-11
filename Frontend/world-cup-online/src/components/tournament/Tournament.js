@@ -28,7 +28,7 @@ const Tournament = props => {
         getMatches(props.tournament.CodeTournament);
     }, [props.tournament]);
 
-    function handlePrediction(e,match){
+    function handlePrediction(e, match) {
         e.preventDefault();
         props.select(match);
         console.log("Match Tour", match);
@@ -93,9 +93,9 @@ const Tournament = props => {
                         {matches.map((match, index) => (
                             <tr key={index}>
                                 <td>{match.StartDateTime?.split("T", 1)}</td>
-                                <td>{match.HomeId} vs {match.VisitId}</td>
+                                <td>{match.HomeName} vs {match.VisitName}</td>
                                 <td>{match.Stadium}</td>
-                                <td><a id="goldenBtn" className="btn btn-warning" onClick={(e)=> handlePrediction(e,match)}>Hacer prediccion </a></td>
+                                <td><a id="goldenBtn" className="btn btn-warning" onClick={(e) => handlePrediction(e, match)}>Hacer prediccion </a></td>
                             </tr>
                         ))}
                     </tbody>

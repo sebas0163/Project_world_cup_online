@@ -31,6 +31,7 @@ describe('Prediction Controller', () => {
             const prediction = generateRandomPrediction();
             const spy = jest.spyOn(PredictionRepository.prototype, 'createPrediction')
                 .mockResolvedValue(prediction.Id);
+            //console.log(prediction);
             req = createRequest({
                 body: prediction
             });
