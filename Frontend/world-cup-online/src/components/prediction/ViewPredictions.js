@@ -22,6 +22,7 @@ function ViewPredictions() {
         client.get('prediction/user/'+currentUser).then((response) => {
             console.log("resp>",response.data)
             setUserPredictions(response.data);
+
         });
 
     }, []);
@@ -35,10 +36,9 @@ function ViewPredictions() {
                     <td>{element.Id}</td>
                     <td>{element.Home_Score}</td>
                     <td>{element.Visit_Score}</td>
-                    <td>{element.Best_Player}</td>
+                    <td>{element.Best_player}</td>
                     <td>{element.Id_user}</td>
                     <td>{element.Id_match}</td>
-                    <td>{element.GoalList}</td>
                 </tr>
 
             )
@@ -63,10 +63,9 @@ function ViewPredictions() {
                             <th>Id</th>
                             <th>Home_Score</th>
                             <th>Visit_Score</th>
-                            <th>Best_Player</th>
+                            <th>Best_player</th>
                             <th>Id_user</th>
                             <th>Id_match</th>
-                            <th>GoalList</th>
                         </tr>
                     </thead>
                     <tbody>

@@ -23,7 +23,7 @@ const CreatePrediction = props =>{
     const [currentMatch, setCurrentMatch] = useState({
         
     })
-    const [currentUser, setCurrentUser] = useState(1)
+    const [currentUser, setCurrentUser] = useState("admin")
 
     const [prediction, setPrediction] = useState({
         Home_Score : 0,
@@ -34,29 +34,30 @@ const CreatePrediction = props =>{
         GoalList : []
     })
     
-    useEffect(()=>{
+    useEffect(() => {
         console.log("Match", props.match)
         setCurrentMatch(props.match)
         setCurrentUser(props.user)
-    }, [props.match,props.user])
+    }, [props.match,props.user]);
 /* Getting the tournament data from the API */
     useEffect(() => {
         
+        
         /*get de match que traiga todo lo del match, team names, */
         var temp = []
-        client.get('player/team/'+currentMatch.HomeId).then((response) => {
+        client.get('player/team/'+props.match.HomeId).then((response) => {
             
             setHomePlayers(response.data);
             temp = temp.concat(response.data);
             
         });
-        client.get('player/team/'+currentMatch.VisitId).then((response) => {
+        client.get('player/team/'+props.match.VisitId).then((response) => {
             
             setVisitPlayers(response.data);
             setPlayers(temp.concat(response.data))
             
         });
-    }, []);
+    }, [props.match,props.user]);
     function handleHomeScore(e)
     {
         const newData = { ...prediction }
@@ -223,9 +224,11 @@ const CreatePrediction = props =>{
             Home_Score : newData.Home_Score,
             Visit_Score : newData.Visit_Score,
             Best_player: newData.Best_player,
-            Id_user : newData.Id_user,
+            Id_user : 1,
             Id_match : newData.Id_match,
             GoalList: newData.GoalList
+        }).then(response => {
+            console.log(response)
         })
         
 
@@ -246,7 +249,7 @@ const CreatePrediction = props =>{
                             <h3>¿Cual va a ser el marcador del partido?</h3>
                             <br />
                             <div className="col">
-                                <h4> {currentMatch.HomeId}</h4>
+                                <h4> {currentMatch.HomeName}</h4>
                                 <NumericInput 
                                 className="form-control"
                                 name = "ScoreHome"
@@ -274,7 +277,7 @@ const CreatePrediction = props =>{
                                 <h4>vs</h4>
                             </div>
                             <div className="col">
-                                <h4> {currentMatch.VisitId}</h4>
+                                <h4> {currentMatch.VisitName}</h4>
                                 <NumericInput 
                                 className="form-control"
                                 name = "ScoreVisit"

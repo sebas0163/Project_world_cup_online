@@ -95,6 +95,9 @@ const DefaultContainer = () => (
               <li class="nav-item">
                 <Link class="nav-link" to="/view-match">Partidos</Link>
               </li>
+              <li class="nav-item">
+                <Link class="nav-link" to="/view-prediction">Predicciones</Link>
+              </li>
             </ul>
             <ul class="navbar-nav">
               <li class="nav-item">
