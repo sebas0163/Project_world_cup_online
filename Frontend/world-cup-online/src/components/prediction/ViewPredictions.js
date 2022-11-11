@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import plusLGIcon from '../../assets/icons/plus-lg.svg';
 import { Link } from 'react-router-dom';
 
-function ViewPredictions() {
+const ViewPredictions= props =>{
     const navigate = useNavigate();
     /* All tournaments */
     
@@ -19,12 +19,14 @@ function ViewPredictions() {
     });
     /* Getting the prediction data from the API */
     useEffect(() => {
-        client.get('prediction/user/'+currentUser).then((response) => {
+        setCurrentUser(props.user)
+        client.get('prediction/user/'+props.user.Id).then((response) => {
             console.log("resp>",response.data)
             setUserPredictions(response.data);
+
         });
 
-    }, []);
+    }, [props.user]);
 
     /* Creating a table row for each element in the array. */
     const tableRows = userPredictions.map(
@@ -35,10 +37,9 @@ function ViewPredictions() {
                     <td>{element.Id}</td>
                     <td>{element.Home_Score}</td>
                     <td>{element.Visit_Score}</td>
-                    <td>{element.Best_Player}</td>
+                    <td>{element.Best_player}</td>
                     <td>{element.Id_user}</td>
                     <td>{element.Id_match}</td>
-                    <td>{element.GoalList}</td>
                 </tr>
 
             )
@@ -63,10 +64,9 @@ function ViewPredictions() {
                             <th>Id</th>
                             <th>Home_Score</th>
                             <th>Visit_Score</th>
-                            <th>Best_Player</th>
+                            <th>Best_player</th>
                             <th>Id_user</th>
                             <th>Id_match</th>
-                            <th>GoalList</th>
                         </tr>
                     </thead>
                     <tbody>
