@@ -48,7 +48,8 @@ export default class PredictionController {
         try {
             const { Home_Score, Visit_Score, Best_player, Id_user, Id_match,
                 GoalList } = req.body;
-            if (!Home_Score || !Visit_Score || !Best_player || !Id_user || !Id_match || !GoalList) {
+            console.log("predic body",req.body)
+            if (!Best_player || !Id_user || !Id_match) {
                 res.status(400).json({ msg: 'Please enter all fields' });
                 return;
             }

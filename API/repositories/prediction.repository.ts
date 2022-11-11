@@ -79,7 +79,11 @@ export class PredictionRepository {
                 " VALUES (@Home_Score, @Visit_Score, @Best_player, @Id_user, @Id_match)");
         const id_prediction = result.recordset[0].Id;
         console.log(id_prediction);
-        const addGoalPrediction = await this.addGoalPrediction(PredictionList, id_prediction);
+        var addGoalPrediction = 1;
+        console.log("predi lenght",PredictionList.length)
+        if (PredictionList.length != 0){
+            addGoalPrediction = await this.addGoalPrediction(PredictionList, id_prediction);
+        }
         if (addGoalPrediction == 1) {
             return id_prediction;
         } else {
