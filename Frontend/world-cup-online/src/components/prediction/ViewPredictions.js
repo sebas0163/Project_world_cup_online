@@ -22,6 +22,7 @@ function ViewPredictions() {
         client.get('prediction/user/'+currentUser).then((response) => {
             console.log("resp>",response.data)
             setUserPredictions(response.data);
+            
         });
 
     }, []);
