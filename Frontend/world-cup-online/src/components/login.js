@@ -6,7 +6,6 @@ import placeholderPNG from '../assets/images/login.webp';
 import axios from "axios";
 
 const Login = props => {
-    const [user, setUser] = useState({})
     const url = "http://localhost:5000/api/v1/user/login"
 
     function validateLogin() {
@@ -18,7 +17,7 @@ const Login = props => {
         }
         return true
     }
-    const[loginData, setLoginData] = useState({
+    const [loginData, setLoginData] = useState({
         Email: "",
         Password: ""
     })
@@ -32,35 +31,32 @@ const Login = props => {
 
     async function submitLogin(e) {
         e.preventDefault()
-        if(validateLogin()){
+        if (validateLogin()) {
             console.log(url)
             const post = await axios.post(url, {
                 Email: loginData.Email,
                 Password: loginData.Password
             })
                 .then(response => {
-                    setUser(response.data)
-                    console.log(response.data)
-                    console.log("Success")
                     props.select(response.data)
                     return Promise.resolve(true)
                 })
                 .catch((error) => {
                     return Promise.resolve(false)
                 })
-                console.log(post)
-                if(post){
-                    alert("Bienvenido")
-                    navigate("/home")
-                }
-                console.log("usuario")
-                if(!post){
-                    alert("Usuario o contraseña incorrectos")
-                }
-                
-            
+            console.log(post)
+            if (post) {
+                alert("Bienvenido")
+                navigate("/home")
+            }
+            console.log("usuario")
+            if (!post) {
+                alert("Usuario o contraseña incorrectos")
+            }
+
+
         }
-        else{
+        else {
             alert(`Por favor llene todos los espacios`)
         }
     }
@@ -69,7 +65,7 @@ const Login = props => {
     const navigate = useNavigate();
     return (
         <>
-        <br /><br /><br />
+            <br /><br /><br />
             <div className="row">
                 <div className="col-auto">
                     <br />
@@ -98,7 +94,7 @@ const Login = props => {
                         </div>
                         <div className="row">
                             <div className="col-auto">
-                                <input type="text" onChange={(e) => handleLoginInput(e)} value={loginData.Password} placeholder="Password" id="Password"></input>
+                                <input type="password" onChange={(e) => handleLoginInput(e)} value={loginData.Password} placeholder="Password" id="Password"></input>
                             </div>
                         </div>
                     </div>

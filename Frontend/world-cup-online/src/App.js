@@ -32,6 +32,7 @@ export default function App() {
   }
   async function selectUser(user = null) {
     setUser(user);
+    Nickname = user.NickName;
   }
   async function selectMatch(match = null) {
     setMatch(match);
@@ -45,7 +46,7 @@ export default function App() {
           <Route exact path="/" element={<Login select={selectUser} />} />
         </Route>
         <Route path='/create-user' element={<CreateUserAccount />}>
-          </Route>
+        </Route>
         <Route element={<DefaultContainer />}>
           <Route path="/home" element={<Home user={user}
             selectTournament={selectTournament} selectMatch={selectMatch} />}>
@@ -70,9 +71,9 @@ export default function App() {
           </Route>
           <Route path='/create-prediction' element={<CreatePrediction user={user} match={match} />}>
           </Route>
-          <Route path='/view-prediction' element={<ViewPredictions user={user}/>}>
+          <Route path='/view-prediction' element={<ViewPredictions user={user} />}>
           </Route>
-          
+
         </Route>
       </Routes>
     </div>
@@ -84,6 +85,8 @@ const InitContainer = () => (
     <Outlet />
   </div>
 )
+
+let Nickname = "Usuario";
 
 const DefaultContainer = () => (
   <>
@@ -111,7 +114,7 @@ const DefaultContainer = () => (
             </ul>
             <ul class="navbar-nav">
               <li class="nav-item">
-                <h5 id='nickname'>Nickname</h5>
+                <h5 id='nickname'>{Nickname}</h5>
               </li>
             </ul>
           </div>
