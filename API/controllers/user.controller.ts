@@ -75,9 +75,12 @@ class UserController {
                 if (user) {
                     res.status(200).json(user);
                 }
+                if (user == null){
+                    res.status(400).json({message: "Wrong credentials"})
+                }
             }
         } catch (error) {
-            res.status(500);
+            res.status(500).json({message: "Wrong credentials"});
             console.log(error);
         }
     }

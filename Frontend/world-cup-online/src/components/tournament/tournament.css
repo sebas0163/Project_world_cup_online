@@ -2,3 +2,32 @@
     width: 52vw;
     height: 91vh;
 }
+
+#leftTitle {
+    text-align: left;
+    color: white;
+}
+
+#rightTitle {
+    text-align: right;
+}
+
+#tournamentDetailsImage {
+    height: 10rem;
+}
+
+#detailsCard {
+    min-height: 10rem;
+    background-color: #5b1a3a;
+    color: white;
+}
+
+#lighterCard {
+    background-color: #5b1a3a;
+    color: white;
+}
+
+.table-hover tbody tr:hover td,
+.table-hover tbody tr:hover th {
+    color: #FEC310;
+}

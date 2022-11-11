@@ -30,8 +30,8 @@ thead {
 }
 
 tbody {
-    background-color: white;
-    color: black;
+    background-color: #5b1a3a;
+    color: white;
 }
 
 #titleLeft {
@@ -40,5 +40,5 @@ tbody {
 
 #matchImage {
     width: 52vw;
-    height: 91vh;
+    height: 93vh;
 }

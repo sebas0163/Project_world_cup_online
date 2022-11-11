@@ -25,7 +25,7 @@ const ViewTourneys = props => {
     });
     useEffect(() => {
         client.get('tournament/').then((response) => {
-            setTourneysData(response.data[0]);
+            setTourneysData(response.data);
         });
 
     }, []);
@@ -71,23 +71,23 @@ const ViewTourneys = props => {
     )
     return (
         <div>
-            <h3>Torneos</h3>
+            <h3 id='leftTitle'>Torneos</h3>
             <br /><br />
             <a href='/create-tournament' class="float" title='Create a new tournament'>
                 <i class="fa fa-plus my-float">
                     <img src={plusLGIcon} alt="plus icon" id="icon" />
                 </i>
             </a>
-            <Table hover>
+            <Table hover borderless>
                 <thead>
                     <tr>
                         <th>Id</th>
-                        <th>CodeTournament</th>
-                        <th>Name</th>
-                        <th>StartDate</th>
-                        <th>EndDate</th>
-                        <th>Rules</th>
-                        <th>Type</th>
+                        <th>Codigo de torneo</th>
+                        <th>Nombre</th>
+                        <th>Fecha de inicio</th>
+                        <th>Fecha de cierre</th>
+                        <th>Reglas</th>
+                        <th>Tipo de torneo</th>
                     </tr>
                 </thead>
                 <tbody>
