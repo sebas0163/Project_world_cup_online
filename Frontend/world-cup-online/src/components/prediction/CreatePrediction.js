@@ -78,45 +78,6 @@ const CreatePrediction = props =>{
         
 
     }
-
-    function handlePlayerSelects(e){
-
-        var selectTeam = e.target.id.split("-")[0]
-        var selectTag = e.target.id.split("-")[1]
-        var selectId = parseInt(e.target.id.split("-")[2])
-        var playerId = e.target.value
-
-        if(selectTag =="Gol")
-        {
-            setGoals(current =>
-                current.filter(object =>{
-                    return object.Id != selectTeam+"-"+selectId
-                }))
-            setGoals( goals => [...goals, {
-               
-                Id: selectTeam+"-"+selectId,
-                Goal_Scorer : playerId
-            }])
-        }
-        if(selectTag =="Asisted")
-        {
-            setAsistances(current =>
-                current.filter(object =>{
-                    return object.Id != selectTeam+"-"+selectId
-                }))
-            setAsistances( asistances => [...asistances, {
-                
-                Id: selectTeam+"-"+selectId,
-                Attendee : playerId
-            }])
-        }
-        
-        console.log("handlegoalie id",e.target.id)
-        console.log("handlegoalie2 value",e.target.value)
-
-        
-    }
-
     function setHomeGoalies(num, tag){
         
        
@@ -254,8 +215,18 @@ const CreatePrediction = props =>{
         newData["GoalList"] = result
         newData["Id_match"] = currentMatch.Id
         newData["Id_user"] = currentUser
+
+        
         setPrediction(newData)
 
+        client.post('prediction', {
+            Home_Score : newData.Home_Score,
+            Visit_Score : newData.Visit_Score,
+            Best_player: newData.Best_player,
+            Id_user : newData.Id_user,
+            Id_match : newData.Id_match,
+            GoalList: newData.GoalList
+        })
         
 
         console.log("submit", newData)
