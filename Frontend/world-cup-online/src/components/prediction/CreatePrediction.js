@@ -11,22 +11,28 @@ const CreatePrediction = props =>{
         baseURL: "http://localhost:5000/api/v1/"
     });
     const navigate = useNavigate();
+    /*Lists with team players from a match*/
     const [HomePlayers, setHomePlayers] = useState([])
     const [VisitPlayers, setVisitPlayers] = useState([])
     const [players, setPlayers] = useState([])
 
+    /* Lists with goals and asistances*/
     const [goals, setGoals] = useState([])
     const [asistances, setAsistances] = useState([])
 
-    /*Selects de react*/
+    /*Header, goal number picker and asistances number picker for each player*/
     const [homeSelect, sethomeSelect] = useState([])
     const [visitSelect, setvisitSelect] = useState([])
 
+    /* Selected match*/
     const [currentMatch, setCurrentMatch] = useState({
         
     })
+
+    /*Logged in user*/
     const [currentUser, setCurrentUser] = useState("admin")
 
+    /*Prediction to post */
     const [prediction, setPrediction] = useState({
         Home_Score : 0,
         Visit_Score : 0,
@@ -36,15 +42,19 @@ const CreatePrediction = props =>{
         GoalList : []
     })
     
+    /*All goals and assists to validate counter */
     const [allGoals, setAllGoals] = useState([])
     const [allAssists, setAllAssists] = useState([])
 
+    /* Setting the currentMatch and currentUser to the props.match and props.user. */
     useEffect(() => {
         console.log("Match", props.match)
         setCurrentMatch(props.match)
         setCurrentUser(props.user)
     }, [props.match,props.user]);
-/* Getting the tournament data from the API */
+
+    
+    /* Getting the players from the database and setting them to the state. */
     useEffect(() => {
         
         /*get de match que traiga todo lo del match, team names, */
@@ -62,28 +72,43 @@ const CreatePrediction = props =>{
             
         });
     }, [props.match,props.user]);
+
+   /**
+    * When the user enters a number into the Home_Score input field, the function will update the
+    * Home_Score property of the prediction object with the value entered by the user, and then call
+    * the setHomeGoalies function
+    * @param e - the value of the input field
+    */
     function handleHomeScore(e)
     {
         const newData = { ...prediction }
         newData["Home_Score"] = e
         setPrediction(newData)
         console.log(newData)
-        setHomeGoalies(e, "Home")
-        
-
-
+        setHomeGoalies()
     }
+    /**
+      * When the user enters a number into the VisitHome_Score input field, the function will update the
+    * Home_Score property of the prediction object with the value entered by the user, and then call
+    * the setVisitGoalies function
+     * @param e - the value of the input field
+     */
     function handleVisitScore(e)
     {
         const newData = { ...prediction }
         newData["Visit_Score"] = e
         setPrediction(newData)
         console.log(newData)
-        setVisitGoalies(e, "Visit")
+        setVisitGoalies()
         
 
     }
-    function setHomeGoalies(num, tag){
+    
+    /**
+     * It takes creates the list of home players, each with a header, a goal counter 
+     * and an asistances counter.
+     */
+    function setHomeGoalies(){
         
         sethomeSelect(
             HomePlayers.map(player => {
@@ -117,6 +142,49 @@ const CreatePrediction = props =>{
         
         
     }
+    /**
+     * It takes creates the list of visit players, each with a header, a goal counter 
+     * and an asistances counter.
+     */
+    function setVisitGoalies(){
+        setvisitSelect(
+            VisitPlayers.map(player => {
+                return(
+                    <tr>
+                        <td>
+                        <h7>{player.Id +"-"+ player.Name}</h7>
+                        </td>
+                        <td>
+                        <input 
+                            className="form-control"
+                            name = {"Visit-Goal-"+player.Id}
+                            type = "number"
+                            onChange={(e) => handlePlayer(e)}
+                            
+                        />
+                        </td>
+                        <td>
+                        <input 
+                            className="form-control"
+                            name = {"Visit-Asist-"+player.Id}
+                            type = "number"
+                            onChange={(e) => handlePlayer(e)}
+                            
+                        />
+                        </td>
+                    </tr>
+                    
+                )
+            })
+        )
+        
+        
+    }
+
+    /**
+     * When the user inputs a number of asistances or goals it saves the number on a list with the player id and the amount .
+     * @param e - the event object
+     */
     function handlePlayer(e){
         var selectTeam = e.target.name.split("-")[0]+"-"
         var selectTag = e.target.name.split("-")[1]
@@ -179,40 +247,11 @@ const CreatePrediction = props =>{
         console.log(e.target.name)
         console.log(e.target.value)
     }
-    function setVisitGoalies(num, tag){
-        setvisitSelect(
-            VisitPlayers.map(player => {
-                return(
-                    <tr>
-                        <td>
-                        <h7>{player.Id +"-"+ player.Name}</h7>
-                        </td>
-                        <td>
-                        <input 
-                            className="form-control"
-                            name = {"Visit-Goal-"+player.Id}
-                            type = "number"
-                            onChange={(e) => handlePlayer(e)}
-                            
-                        />
-                        </td>
-                        <td>
-                        <input 
-                            className="form-control"
-                            name = {"Visit-Asist-"+player.Id}
-                            type = "number"
-                            onChange={(e) => handlePlayer(e)}
-                            
-                        />
-                        </td>
-                    </tr>
-                    
-                )
-            })
-        )
-        
-        
-    }
+
+    /**
+     * Sets the best player value to the selected player in dropdown menu
+     * @param e - the event object
+     */
     function handleBestPlayer(e) {
         const newData = { ...prediction }
         newData[e.target.id] = e.target.value
@@ -226,6 +265,11 @@ const CreatePrediction = props =>{
 
 
     }
+    /**
+     * It checks if the number of goals and assists entered by the user match the number of goals and
+     * assists by player. It alerts the user when it doesnt
+     * @return true if it matches, false otherwise
+     */
     function validateScore(){
         console.log("v allgoals", allGoals)
         console.log("v allassists", allAssists)
@@ -268,12 +312,15 @@ const CreatePrediction = props =>{
             return false
         }
         else{return true}
-        console.log("v home goals", homeGoals)
-        console.log("v home assists", homeAssists)
-        console.log("v visit goals", visitGoals)
-        console.log("v visit assists", visitAssists)
+        
 
     }
+    /**
+     * If the length of the string in the Best_player field is 0, or the length of the string in the
+     * Home_Score field is 0, or the length of the string in the Visit_Score field is 0, then display
+     * an alert and return false. Otherwise, return true.
+     * @returns true if the best player was chosen, false otherwise
+     */
     function validateBestPlayer(){
         if (prediction.Best_player.length == 0 ||
             prediction.Home_Score.length == 0 ||
@@ -284,6 +331,12 @@ const CreatePrediction = props =>{
         }
         return true
     }
+    /**
+     * It takes the goals and assistances arrays, merges them into one array, and then creates a new
+     * array with the merged data to assign to prediction GoalList. Then it validates best player and
+     * validate score, if its correct the posts a prediction to the API
+     * @param e - the event object
+     */
     function submit(e){
         e.preventDefault();
         console.log("goals",goals)
