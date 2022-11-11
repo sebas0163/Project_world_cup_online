@@ -19,13 +19,16 @@ export const CreateUserAccount = () => {
     })
     function validateDate(){
         const newData = {...userData}
-        var date = newData.Birthdate.split("/")
+        var date = newData.Birthdate.split("-")
         var year = new Date().getFullYear()
-        if(parseInt(date[2]) > (parseInt(year)-18)){
+        console.log(date[0])
+        console.log("birthdate", newData.Birthdate)
+        if(parseInt(date[0]) <= (parseInt(year)-18)){
             return true
         }else{
             return false
         }
+        
     }
     function handle(e){
         const newData = {...userData}
