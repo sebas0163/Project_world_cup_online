@@ -51,6 +51,10 @@ export default function App() {
           </Route>
           <Route path='/assignment' element={<ParticipantTeams />}>
           </Route>
+          <Route path='/create-prediction' element={<CreatePrediction />}>
+          </Route>
+          <Route path='/view-prediction' element={<ViewPredictions />}>
+          </Route>
         </Route>
       </Routes>
     </div>
