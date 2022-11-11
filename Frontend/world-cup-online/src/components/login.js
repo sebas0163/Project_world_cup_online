@@ -6,7 +6,7 @@ import placeholderPNG from '../assets/images/login.webp';
 import axios from "axios";
 
 const Login = props => {
-
+    const [user, setUser] = useState({})
     const url = "http://localhost:5000/api/v1/user/login"
 
     function validateLogin() {
@@ -30,20 +30,35 @@ const Login = props => {
         console.log(newData)
     }
 
-    function submitLogin(e) {
-        e.preventDefault();
+    async function submitLogin(e) {
+        e.preventDefault()
         if(validateLogin()){
             console.log(url)
-            axios.post(url, {
+            const post = await axios.post(url, {
                 Email: loginData.Email,
                 Password: loginData.Password
             })
                 .then(response => {
+                    setUser(response.data)
+                    console.log(response.data)
                     console.log("Success")
                     props.select(response.data)
+                    return Promise.resolve(true)
                 })
-            alert("Bienvenido")
-            navigate("/home")
+                .catch((error) => {
+                    return Promise.resolve(false)
+                })
+                console.log(post)
+                if(post){
+                    alert("Bienvenido")
+                    navigate("/home")
+                }
+                console.log("usuario")
+                if(!post){
+                    alert("Usuario o contraseña incorrectos")
+                }
+                
+            
         }
         else{
             alert(`Por favor llene todos los espacios`)
