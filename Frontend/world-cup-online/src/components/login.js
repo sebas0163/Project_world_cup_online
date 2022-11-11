@@ -2,12 +2,13 @@ import React from "react";
 import "./login.css";
 import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
-import placeholderPNG from '../assets/images/placeholder.png';
+import placeholderPNG from '../assets/images/login.webp';
 
 const Login = props => {
     const navigate = useNavigate();
     return (
         <>
+        <br /><br /><br />
             <div className="row">
                 <div className="col-auto">
                     <br />
@@ -44,7 +45,7 @@ const Login = props => {
                     <div className="btn btn-warning" onClick={() => navigate("/home")}>Ingresar</div>
                     <br />
                     <br />
-                    <p>¿No tienes cuenta? <a href="#">Resgistrate aqui.</a></p>
+                    <p>¿No tienes cuenta? <a href="/create-user">Resgistrate aqui.</a></p>
                 </div>
             </div>
         </>

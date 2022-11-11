@@ -1,0 +1,32 @@
+#col1{
+    height: 665px;
+    background-image: url("https://digitalhub.fifa.com/transform/5c8cef88-ad95-4e69-84f5-afeae91f5595/Brand_Protection_FIFA-World-Cup-Official-Trophy-P4");
+    background-size: cover;
+      background-repeat:no-repeat;
+      background-position: center center;
+      background-attachment: fixed;
+  }
+  #cont{
+    margin-top: 5cm;
+    background-color: white;
+    opacity: 0.7;
+    border-radius: 0.2cm;
+    width: 10cm;
+    color : black;
+  }
+  #description{
+    text-align: justify;
+    font-size: large;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+  
+  }
+  #span{
+    background-color:  #1077C3;
+    border-color:  #1077C3;
+    color: white;
+  }
+  #buttons{
+    background-color:  #1077C3;
+    border-color:  #1077C3;
+    margin-left: 5px;
+  }

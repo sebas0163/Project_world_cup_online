@@ -15,6 +15,7 @@ import Tournament from './components/tournament/Tournament';
 import ViewPredictions from './components/prediction/ViewPredictions';
 import ActiveTournaments from './components/tournament/ActiveTournaments';
 import ActiveMatches from './components/match/ActiveMatches';
+import { CreateUserAccount } from './components/CreateUserAccount';
 
 export default function App() {
 
@@ -43,10 +44,13 @@ export default function App() {
         <Route element={<InitContainer />}>
           <Route exact path="/" element={<Login select={selectUser} />} />
         </Route>
+        <Route path='/create-user' element={<CreateUserAccount />}>
+          </Route>
         <Route element={<DefaultContainer />}>
           <Route path="/home" element={<Home user={user}
             selectTournament={selectTournament} selectMatch={selectMatch} />}>
           </Route>
+
           <Route path="/tournament" element={<Tournament tournament={tournament} select={selectMatch} />}></Route>
           <Route path="/tournaments" element={<ActiveTournaments selectTournament={selectTournament} />}></Route>
           <Route path="/matches" element={<ActiveMatches selectMatch={selectMatch} />}></Route>
@@ -68,6 +72,7 @@ export default function App() {
           </Route>
           <Route path='/view-prediction' element={<ViewPredictions />}>
           </Route>
+          
         </Route>
       </Routes>
     </div>
@@ -95,10 +100,10 @@ const DefaultContainer = () => (
                 <Link class="nav-link active" aria-current="page" to="/home">Inicio</Link>
               </li>
               <li class="nav-item">
-                <Link class="nav-link" to="/tournament-display">Torneos</Link>
+                <Link class="nav-link" to="/tournaments">Torneos</Link>
               </li>
               <li class="nav-item">
-                <Link class="nav-link" to="/view-match">Partidos</Link>
+                <Link class="nav-link" to="/matches">Partidos</Link>
               </li>
               <li class="nav-item">
                 <Link class="nav-link" to="/view-prediction">Predicciones</Link>
