@@ -222,17 +222,17 @@ function get_random(list: any) {
 }
 
 export function createRandomGoalList(players: Player[], Home_Score: number,
-    Visit_Score: number): { Player_Id: number, Goals: number, Assists: number }[] {
+    Visit_Score: number): { Player_Id: string, Goals: string, Assists: string }[] {
 
-    let goalList: { Player_Id: number, Goals: number, Assists: number }[] = [];
+    let goalList: { Player_Id: string, Goals: string, Assists: string }[] = [];
     const goalsQuantity: number = Home_Score + Visit_Score;
     const randomGoals = faker.datatype.number({ min: 0, max: goalsQuantity });
     const randomAssists = faker.datatype.number({ min: 0, max: goalsQuantity - randomGoals });
 
     for (let i = 0; i < goalsQuantity; i++) {
         goalList.push({
-            Player_Id: players[i].Id, Goals: randomGoals,
-            Assists: randomAssists
+            Player_Id: players[i].Id.toString(), Goals: randomGoals.toString(),
+            Assists: randomAssists.toString()
         });
     }
 
@@ -246,7 +246,7 @@ export function generateRandomPrediction() {
     const randomMatch = createRandomMatch(randomTournament.Id, randomStage.Id);
     const randomUser = createRandomUser();
     const randomPlayersData = generatePlayersData(6);
-    console.log(randomPlayersData);
+    //console.log(randomPlayersData);
     const bestPlayerId = randomPlayersData[faker.datatype.number({ min: 0, max: 5 })].Id;
     const randomGoalList = createRandomGoalList(randomPlayersData, randomPrediction.Home_Score,
         randomPrediction.Visit_Score);
