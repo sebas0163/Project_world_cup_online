@@ -13,6 +13,8 @@ import Login from './components/login';
 import CreatePrediction from './components/prediction/CreatePrediction';
 import Tournament from './components/tournament/Tournament';
 import ViewPredictions from './components/prediction/ViewPredictions';
+import ActiveTournaments from './components/tournament/ActiveTournaments';
+import ActiveMatches from './components/match/ActiveMatches';
 
 export default function App() {
 
@@ -42,9 +44,12 @@ export default function App() {
           <Route exact path="/" element={<Login select={selectUser} />} />
         </Route>
         <Route element={<DefaultContainer />}>
-          <Route path="/home" element={<Home user = {user} select={selectTournament} />}>
+          <Route path="/home" element={<Home user={user}
+            selectTournament={selectTournament} selectMatch={selectMatch} />}>
           </Route>
-          <Route path="/tournament" element={<Tournament tournament={tournament} select={selectMatch}/>}></Route>
+          <Route path="/tournament" element={<Tournament tournament={tournament} select={selectMatch} />}></Route>
+          <Route path="/tournaments" element={<ActiveTournaments selectTournament={selectTournament} />}></Route>
+          <Route path="/matches" element={<ActiveMatches selectMatch={selectMatch} />}></Route>
           <Route path="/create-match" element={<CreateMatch />}>
           </Route>
           <Route path='/create-tournament' element={<CreateTournament />}>
@@ -59,7 +64,7 @@ export default function App() {
           </Route>
           <Route path='/assignment' element={<ParticipantTeams />}>
           </Route>
-          <Route path='/create-prediction' element={<CreatePrediction user={user} match={match}/>}>
+          <Route path='/create-prediction' element={<CreatePrediction user={user} match={match} />}>
           </Route>
           <Route path='/view-prediction' element={<ViewPredictions />}>
           </Route>
