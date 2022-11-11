@@ -10,7 +10,16 @@ export class MatchRepository {
     }
 
     public async getMatches(): Promise<Match[]> {
-        const result = await this.pool.request().query("SELECT * FROM MATCH");
+        const result = await this.pool.request().
+            query("SELECT" +
+                " s.Id, s.Stadium, s.StartDateTime, s.Tournament_ID, s.Stage_ID, s.[State], s.Score," +
+                "t.[Name] as 'HomeName', t1.[Name] as 'VisitName'," +
+                " t.Id as 'HomeId'," +
+                " t1.Id as 'VisitId'" +
+                " FROM MATCH as s" +
+                " JOIN TEAM t on t.Id = s.HomeId" +
+                " JOIN TEAM t1 on t1.Id = s.VisitId" +
+                " ORDER BY StartDateTime ASC");
         return result.recordset;
     }
 
