@@ -1,6 +1,6 @@
 import './App.css';
-import React from "react";
-import { Link, Routes, Route } from 'react-router-dom';
+import React, { useState } from "react";
+import { Link, Routes, Route, Outlet } from 'react-router-dom';
 import CreateMatch from './components/match/CreateMatch';
 import CreateTournament from './components/tournament/CreateTournament';
 import Home from './components/home';
@@ -11,10 +11,11 @@ import PositionsTable from './components/PositionsTable'
 import ParticipantTeams from './components/tournament/ParticipantTeams';
 import Login from './components/login';
 import CreatePrediction from './components/prediction/CreatePrediction';
+import Tournament from './components/tournament/Tournament';
 
-function App() {
+export default function App() {
 
-  const [tournament, setTournament] = React.useState(null);
+  const [tournament, setTournament] = useState(null);
 
   /**
    * When the user clicks on a tournament, set the tournament to the one that was clicked on.
@@ -26,37 +27,16 @@ function App() {
 
   return (
     <div className="App">
-      
-      <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id='navbar'>
-        <div class="container-fluid">
-          <Link class="navbar-brand" to="/">World Cup Online</Link>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-              <li class="nav-item">
-                <Link class="nav-link active" aria-current="page" to="/">Inicio</Link>
-              </li>
-              <li class="nav-item">
-                <Link class="nav-link" to="/tournament-display">Torneos</Link>
-              </li>
-              <li class="nav-item">
-                <Link class="nav-link" to="/view-match">Partidos</Link>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </nav>
-      <div className="container-fluid">
-        <Routes>
-          <Route path="/" element={<Login />}>
+
+      <Routes>
+        <Route element={<InitContainer />}>
+          <Route exact path="/" element={<Login />} />
+        </Route>
+        <Route element={<DefaultContainer />}>
+          <Route path="/home" element={<Home select={selectTournament} />}>
           </Route>
-          <Route path="/home" element={<Home />}>
-          </Route>
+          <Route path="/tournament" element={<Tournament tournament={tournament} />}></Route>
           <Route path="/create-match" element={<CreateMatch />}>
-          </Route>
-          <Route path="/create-prediction" element={<CreatePrediction />}>
           </Route>
           <Route path='/create-tournament' element={<CreateTournament />}>
           </Route>
@@ -70,10 +50,50 @@ function App() {
           </Route>
           <Route path='/assignment' element={<ParticipantTeams />}>
           </Route>
-        </Routes>
-      </div>
+        </Route>
+      </Routes>
     </div>
   );
 }
 
-export default App;
+const InitContainer = () => (
+  <div className="container-fluid">
+    <Outlet />
+  </div>
+)
+
+const DefaultContainer = () => (
+  <>
+    <div id='defaultContainer' className="container-fluid p-0">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id='navbar'>
+        <div class="container-fluid">
+          <Link class="navbar-brand" to="/home">World Cup Online</Link>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+              <li class="nav-item">
+                <Link class="nav-link active" aria-current="page" to="/home">Inicio</Link>
+              </li>
+              <li class="nav-item">
+                <Link class="nav-link" to="/tournament-display">Torneos</Link>
+              </li>
+              <li class="nav-item">
+                <Link class="nav-link" to="/view-match">Partidos</Link>
+              </li>
+            </ul>
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <h5 id='nickname'>Nickname</h5>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </div>
+    <div className="container-fluid">
+      <Outlet />
+    </div>
+  </>
+)

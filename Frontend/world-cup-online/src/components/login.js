@@ -10,6 +10,7 @@ const Login = props => {
         <>
             <div className="row">
                 <div className="col-auto">
+                    <br />
                     <img id="placeholder" src={placeholderPNG} alt="placeholder"></img>
                 </div>
                 <div className="col-auto">

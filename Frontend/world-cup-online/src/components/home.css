@@ -1,7 +1,7 @@
 #titleHome {
     font-size: 50px;
     font-weight: bold;
-    color: rgb(0, 0, 0);
+    color: white;
     text-align: center;
     margin-top: 50px;
     margin-bottom: 50px;
@@ -11,6 +11,30 @@
 
 #goldBtn {
     background-color: #FEC310;
+}
+
+#defaultImageTournament {
+    width: 18rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#tournamentCard {
+    width: 18rem;
+    background-color: #5b1a3a;
+    color: white;
+}
+
+#cardRules {
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#nickname {
+    color: white;
 }
 
 /* .Home {

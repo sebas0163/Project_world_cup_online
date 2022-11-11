@@ -43,3 +43,8 @@
   background-color: #56042C !important;
   /* override background image gradient w/ flat color */
 }
+
+body {
+  background-color: #56042C;
+  color: white;
+}
