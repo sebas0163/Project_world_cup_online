@@ -14,14 +14,36 @@ export const CreateUserAccount = () => {
         Nickname:"",
         Email:"",
         Password:"",
-        Birthdate:""
+        Birthdate:"",
+        confirm:""
     })
+    function validateDate(){
+        const newData = {...userData}
+        var date = newData.Birthdate.split("-")
+        var year = new Date().getFullYear()
+        console.log(date[0])
+        console.log("birthdate", newData.Birthdate)
+        if(parseInt(date[0]) <= (parseInt(year)-18)){
+            return true
+        }else{
+            return false
+        }
+        
+    }
     function handle(e){
         const newData = {...userData}
         newData[e.target.id] = e.target.value
         setData(newData)
         console.log(newData)
         
+    }
+    function validatePassword(){
+        const newData={...userData}
+        if(userData.confirm != userData.Password){
+            return false
+        }else{
+            return true
+        }
     }
     function validateUser(){
         const newData = {...userData}
@@ -40,18 +62,26 @@ export const CreateUserAccount = () => {
     function submit(e){
         e.preventDefault();
         if(validateUser()){
-            client.post('user', {
-                Name: userData.Name,
-                Nickname: userData.Nickname,
-                Nationality: userData.Nationality,
-                Email: userData.Email,
-                Password: userData.Password,
-                Birthdate: userData.Birthdate
-            })
-            .then(response =>{
-                console.log(response.status)
-            })
-            alert(`Cuenta creada correctamente`)
+            if(validateDate()){
+                if(validatePassword()){
+                    client.post('user', {
+                        Name: userData.Name,
+                        Nickname: userData.Nickname,
+                        Nationality: userData.Nationality,
+                        Email: userData.Email,
+                        Password: userData.Password,
+                        Birthdate: userData.Birthdate
+                    })
+                    .then(response =>{
+                        console.log(response.status)
+                    })
+                    alert(`Cuenta creada correctamente`)
+                }else{
+                    alert('Las contraseñas no coinciden')
+                }
+            }else{
+                alert('Tiene que ser mayor de edad para participar en el juego')
+            }
         }else{
             alert(`Por favor llene todos los espacios`)
         }
@@ -87,6 +117,10 @@ export const CreateUserAccount = () => {
         <div className='input-group mb-3'>
             <span id="span" className='input-group-text'>Contraseña</span>
             <input onChange={(e)=>handle(e)} id="Password" type="password" aria-label="Color" className='form-control' value={userData.Password}></input>
+        </div>
+        <div className='input-group mb-3'>
+            <span id="span" className='input-group-text'>Confirmar Contraseña</span>
+            <input onChange={(e)=>handle(e)} id="confirm" type="password" aria-label="Color" className='form-control' value={userData.confirm}></input>
         </div>
         <div className='d-grid gap-2 d-md-flex justify-content-md-end'>
             <button id='buttons' className='btn btn-primary me-md-2' type='button' onClick={()=> navigate("/login")}> Cancelar</button>
