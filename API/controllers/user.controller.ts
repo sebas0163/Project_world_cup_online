@@ -33,18 +33,18 @@ class UserController {
      */
     static async createUser(req: Request, res: Response) {
         try {
-            const { Name, FirstSurname, SecondSurname,
-                Nationality, Email, Password, Birthdate } = req.body;
-            if (Name == null || FirstSurname == null || SecondSurname == null
-                || Nationality == null || Email == null || Password == null
+            const { Name,
+                Nickname, Email, Password, Birthdate } = req.body;
+            if (Name == null
+                || Nickname == null || Email == null || Password == null
                 || Birthdate == null) {
                 res.status(400).json({ message: "Missing parameters" });
             }
             else {
                 const pool = await poolPromise;
                 const userRepository: IUserRepository = new UserRepository(pool);
-                const result = await userRepository.createUser(Name, FirstSurname, SecondSurname,
-                    Nationality, Email, Password, Birthdate);
+                const result = await userRepository.createUser(Name,
+                    Nickname, Email, Password, Birthdate);
                 if (result == 1) {
                     res.status(200).json(result);
                 }
