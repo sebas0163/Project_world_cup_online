@@ -12,6 +12,7 @@ import ParticipantTeams from './components/tournament/ParticipantTeams';
 import Login from './components/login';
 import CreatePrediction from './components/prediction/CreatePrediction';
 import Tournament from './components/tournament/Tournament';
+import ViewPredictions from './components/prediction/ViewPredictions';
 
 export default function App() {
 
