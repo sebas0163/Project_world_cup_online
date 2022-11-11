@@ -26,8 +26,9 @@ export class MatchRepository {
             .input('input_parameter', sql.VarChar, code)
             .query("SELECT" +
                 " s.Id, s.Stadium, s.StartDateTime, s.Tournament_ID, s.Stage_ID, s.[State], s.Score," +
-                " t.[Name] as 'HomeId'," +
-                " t1.[Name] as 'VisitId'" +
+                "t.[Name] as 'HomeName', t1.[Name] as 'VisitName'," +
+                " t.Id as 'HomeId'," +
+                " t1.Id as 'VisitId'" +
                 " FROM MATCH as s" +
                 " JOIN TEAM t on t.Id = s.HomeId" +
                 " JOIN TEAM t1 on t1.Id = s.VisitId" +

@@ -13,6 +13,23 @@ export class PredictionRepository {
         return result.recordset;
     }
 
+    public async getPredictionsByUser(userId: number): Promise<Prediction[]> {
+        const result = await this.pool.request()
+            .input('input_parameter', sql.Int, userId)
+            .query("SELECT * FROM PREDICTION WHERE Id_user = @input_parameter");
+        return result.recordset;
+    }
+
+    public async getFullPredictions(id: number): Promise<{
+        Player_Id: string,
+        Goals: string, Assists: string, Id_prediction: number
+    }[]> {
+        const result = await this.pool.request()
+            .input('input_parameter', sql.Int, id)
+            .query("SELECT * FROM PLAYERS_PREDICTION WHERE Id_prediction = @input_parameter");
+        return result.recordset;
+    }
+
     private async addGoalPrediction(PredictionList: {
         Player_Id: string, Goals: string, Assists: string
     }[], Id_prediction: number): Promise<number> {

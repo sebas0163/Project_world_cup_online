@@ -7,4 +7,12 @@ router
     .get(PredictionController.getPredictions)
     .post(PredictionController.createPrediction)
 
+router
+    .route('/user/:id')
+    .get(PredictionController.getPredictionsByUser)
+
+router
+    .route('/goals/:id')
+    .get(PredictionController.getFullPredictions)
+
 export default router;
