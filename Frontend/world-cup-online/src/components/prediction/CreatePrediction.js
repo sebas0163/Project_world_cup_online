@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import NumericInput from 'react-numeric-input';
+import { useNavigate } from "react-router-dom";
 import predictionImage from '../../assets/images/prediction.jpg';
 import './prediction.css';
 import Table from 'react-bootstrap/Table';
@@ -9,6 +10,7 @@ const CreatePrediction = props =>{
     const client = axios.create({
         baseURL: "http://localhost:5000/api/v1/"
     });
+    const navigate = useNavigate();
     const [HomePlayers, setHomePlayers] = useState([])
     const [VisitPlayers, setVisitPlayers] = useState([])
     const [players, setPlayers] = useState([])
@@ -34,6 +36,9 @@ const CreatePrediction = props =>{
         GoalList : []
     })
     
+    const [allGoals, setAllGoals] = useState([])
+    const [allAssists, setAllAssists] = useState([])
+
     useEffect(() => {
         console.log("Match", props.match)
         setCurrentMatch(props.match)
@@ -41,7 +46,6 @@ const CreatePrediction = props =>{
     }, [props.match,props.user]);
 /* Getting the tournament data from the API */
     useEffect(() => {
-        
         
         /*get de match que traiga todo lo del match, team names, */
         var temp = []
@@ -81,7 +85,6 @@ const CreatePrediction = props =>{
     }
     function setHomeGoalies(num, tag){
         
-       
         sethomeSelect(
             HomePlayers.map(player => {
                 return(
@@ -115,10 +118,10 @@ const CreatePrediction = props =>{
         
     }
     function handlePlayer(e){
-        
+        var selectTeam = e.target.name.split("-")[0]+"-"
         var selectTag = e.target.name.split("-")[1]
         var playerId = e.target.name.split("-")[2]
-        var Id = playerId
+        
         if(selectTag =="Goal")
         {
             
@@ -130,6 +133,17 @@ const CreatePrediction = props =>{
                 setGoals( goals => [...goals, {
                 
                     Player_Id : playerId,
+                    Goals: e.target.value
+                }])
+            }
+            setAllGoals(current =>
+                current.filter(object =>{
+                    return object.Player_Id != selectTeam+playerId
+                }))
+            if (e.target.value !='0' && e.target.value != ''){
+                setAllGoals( goals => [...goals, {
+                
+                    Player_Id : selectTeam+playerId,
                     Goals: e.target.value
                 }])
             }
@@ -145,6 +159,18 @@ const CreatePrediction = props =>{
                     
                     Player_Id : playerId,
                     Assists : e.target.value
+                }])
+            }
+
+            setAllAssists(current =>
+                current.filter(object =>{
+                    return object.Player_Id != selectTeam+playerId
+                }))
+            if (e.target.value !='0' && e.target.value != ''){
+                setAllAssists( goals => [...goals, {
+                
+                    Player_Id : selectTeam+playerId,
+                    Assists: e.target.value
                 }])
             }
         }
@@ -196,43 +222,108 @@ const CreatePrediction = props =>{
         console.log("homme", homeSelect)
         console.log("goals",goals)
         console.log("assistances",asistances)
+        
 
 
+    }
+    function validateScore(){
+        console.log("v allgoals", allGoals)
+        console.log("v allassists", allAssists)
+        console.log("v home score", prediction.Home_Score)
+        console.log("v visit score", prediction.Visit_Score)
+        var homeGoals = 0
+        var homeAssists = 0
+        var visitGoals = 0
+        var visitAssists = 0
+        allGoals.forEach(goal =>{
+            if(goal.Player_Id.split('-')[0]=="Home"){
+                homeGoals = homeGoals+ parseInt(goal.Goals)
+            }
+            if(goal.Player_Id.split('-')[0]=="Visit"){
+                visitGoals = visitGoals+ parseInt(goal.Goals)
+            }
+        })
+        allAssists.forEach(goal =>{
+            if(goal.Player_Id.split('-')[0]=="Home"){
+                homeAssists = homeAssists+ parseInt(goal.Assists)
+            }
+            if(goal.Player_Id.split('-')[0]=="Visit"){
+                visitAssists = visitAssists+ parseInt(goal.Assists)
+            }
+        })
+        if (prediction.Home_Score != homeGoals){//los goleadores de home no coinciden con el marcador
+            alert(`La cantidad de goleadores no coincide con el marcador de `+currentMatch.HomeName)
+            return false
+        }
+        if (prediction.Home_Score < homeAssists){
+            alert(`La cantidad de asistencias no coincide con el marcador de `+currentMatch.HomeName)
+            return false
+        }
+        if (prediction.Visit_Score != visitGoals){
+            alert(`La cantidad de goleadores no coincide con el marcador de `+currentMatch.VisitName)
+            return false
+        }
+        if (prediction.Visit_Score < visitAssists){
+            alert(`La cantidad de asistencias no coincide con el marcador de `+currentMatch.VisitName)
+            return false
+        }
+        else{return true}
+        console.log("v home goals", homeGoals)
+        console.log("v home assists", homeAssists)
+        console.log("v visit goals", visitGoals)
+        console.log("v visit assists", visitAssists)
+
+    }
+    function validateBestPlayer(){
+        if (prediction.Best_player.length == 0 ||
+            prediction.Home_Score.length == 0 ||
+            prediction.Visit_Score.length == 0 ) {
+            alert(`Llene quien va a ser el mejor jugador]`)
+            return false
+
+        }
+        return true
     }
     function submit(e){
         e.preventDefault();
         console.log("goals",goals)
         console.log("assistances",asistances)
+        if (validateBestPlayer() && validateScore()){
+            
+            const result = [
+                ...[...goals, ...asistances]
+                .reduce(
+                    (acc, curr) => acc.set(curr.Player_Id, { ...acc.get(curr.Player_Id), ...curr }),
+                    new Map()
+                )
+                .values(),
+            ];
+            const newData = { ...prediction }
+            newData["GoalList"] = result
+            newData["Id_match"] = currentMatch.Id
+            newData["Id_user"] = currentUser.Id
 
-        const result = [
-            ...[...goals, ...asistances]
-              .reduce(
-                (acc, curr) => acc.set(curr.Player_Id, { ...acc.get(curr.Player_Id), ...curr }),
-                new Map()
-              )
-              .values(),
-          ];
-        const newData = { ...prediction }
-        newData["GoalList"] = result
-        newData["Id_match"] = currentMatch.Id
-        newData["Id_user"] = currentUser
+            
+            setPrediction(newData)
 
+            client.post('prediction', {
+                Home_Score : newData.Home_Score,
+                Visit_Score : newData.Visit_Score,
+                Best_player: newData.Best_player,
+                Id_user : currentUser.Id,
+                Id_match : newData.Id_match,
+                GoalList: newData.GoalList
+            }).then(response => {
+                console.log(response)
+            })
+            console.log("submit", newData)
+            alert(`Se ha realizado la prediccion`)
+            navigate("/view-prediction");
+            
+        }else{
+            alert(`Error al hacer la prediccion, intente de nuevo`)
+        }
         
-        setPrediction(newData)
-
-        client.post('prediction', {
-            Home_Score : newData.Home_Score,
-            Visit_Score : newData.Visit_Score,
-            Best_player: newData.Best_player,
-            Id_user : currentUser.Id,
-            Id_match : newData.Id_match,
-            GoalList: newData.GoalList
-        }).then(response => {
-            console.log(response)
-        })
-        
-
-        console.log("submit", newData)
     }
     
     return(
