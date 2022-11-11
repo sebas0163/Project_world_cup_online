@@ -72,7 +72,7 @@ describe('TournamentController', () => {
             const tournamentData = generateTournamentsData(1);
             const spy = jest
                 .spyOn(TournamentRepository.prototype, 'createTournament')
-            //.mockResolvedValueOnce();
+                .mockResolvedValueOnce(tournamentData[0].CodeTournament);
             response = createResponse();
             request = createRequest({
                 method: 'POST',

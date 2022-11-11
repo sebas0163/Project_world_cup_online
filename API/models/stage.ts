@@ -1,5 +1,5 @@
 export type Stage = {
-    Id: Number;
+    Id: number;
     Name: string;
     Tournament_ID: string;
 }

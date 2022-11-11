@@ -55,7 +55,7 @@ function Assignment() {
      */
     function submitParticipantTeam(e) {
         e.preventDefault();
-            console.log(url2)
+        console.log(url2)
         console.log(assignmentdata)
         axios.post(url2, {
             Id_Team: assignmentdata.Id_Team,
