@@ -224,7 +224,7 @@ const CreatePrediction = props =>{
             Home_Score : newData.Home_Score,
             Visit_Score : newData.Visit_Score,
             Best_player: newData.Best_player,
-            Id_user : 1,
+            Id_user : currentUser.Id,
             Id_match : newData.Id_match,
             GoalList: newData.GoalList
         }).then(response => {

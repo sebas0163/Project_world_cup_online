@@ -8,6 +8,10 @@
     color: white;
 }
 
+#rightTitle {
+    text-align: right;
+}
+
 #tournamentDetailsImage {
     height: 10rem;
 }
@@ -21,4 +25,9 @@
 #lighterCard {
     background-color: #5b1a3a;
     color: white;
+}
+
+.table-hover tbody tr:hover td,
+.table-hover tbody tr:hover th {
+    color: #FEC310;
 }

@@ -187,109 +187,111 @@ function CreateMatch() {
                     <br />
                     <h4 id="titleLeft">Llene toda la información sobre el partido</h4>
                     <br />
-                    <form onSubmit={(e) => submit(e)}>
-                        <div className="row">
-                            <div className="col-auto">
-                                <label><strong>Fecha y hora: </strong></label>
-                            </div>
-                            <div className="col-3">
-                                <DateTimePicker
-                                    name="StartDateTime"
-                                    value={date}
-                                    onChange={(e) => handleDate(e)}
-                                    minDate={new Date(minDate)}
-                                    maxDate={new Date(maxDate)}
-                                    placeholderText="Select a date"
-                                />
-                            </div>
-                        </div>
-                        {/* <input onChange = {(e)=>handle(e)} id = "StartDateTime" value = {matchData.StartDateTime} placeholder ="StartDateTime" type="datetime-local"
+                    <div id="lighterCard" className="card">
+                        <div className="card-body">
+                            <form onSubmit={(e) => submit(e)}>
+                                <div className="row">
+                                    <div className="col-auto">
+                                        <label><strong>Fecha y hora: </strong></label>
+                                    </div>
+                                    <div className="col-3">
+                                        <DateTimePicker
+                                            name="StartDateTime"
+                                            value={date}
+                                            onChange={(e) => handleDate(e)}
+                                            minDate={new Date(minDate)}
+                                            maxDate={new Date(maxDate)}
+                                            placeholderText="Select a date"
+                                        />
+                                    </div>
+                                </div>
+                                {/* <input onChange = {(e)=>handle(e)} id = "StartDateTime" value = {matchData.StartDateTime} placeholder ="StartDateTime" type="datetime-local"
                     min = "2022-10-01" max ="2022-11-01"></input> */}
-                        <br /><br />
-                        <div></div>
-                        <div className="row">
-                            <div className="col-auto">
-                                <label><strong>Torneo: </strong></label>
-                            </div>
-                            <div className="col-3">
-                                <select onChange={(e) => updateTournament(e)} id="Tournament_ID" value={matchData.Tournament_ID}>
-                                    <option value=""> --Escoja un torneo--</option>
-                                    {tourneysData.map((option, index) => (
-                                        <option key={index} value={option.CodeTournament}>
-                                            {option.Name}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
-                        </div>
-                        <br /><br />
-                        <div></div>
-                        <div className="row">
-                            <div className="col-auto">
-                                <label><strong>Fase: </strong></label>
-                            </div>
-                            <div className="col-3">
-                                <select onChange={(e) => handle(e)} id="Stage_ID" value={matchData.Stage_ID}>
-                                    <option value=""> --Escoja una fase--</option>
-                                    {stageData.map((option, index) => (
-                                        <option key={index} value={option.Id}>
-                                            {option.Name}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
-                        </div>
+                                <br /><br />
+                                <div></div>
+                                <div className="row">
+                                    <div className="col-auto">
+                                        <label><strong>Torneo: </strong></label>
+                                    </div>
+                                    <div className="col-3">
+                                        <select onChange={(e) => updateTournament(e)} id="Tournament_ID" value={matchData.Tournament_ID}>
+                                            <option value=""> --Escoja un torneo--</option>
+                                            {tourneysData.map((option, index) => (
+                                                <option key={index} value={option.CodeTournament}>
+                                                    {option.Name}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                </div>
+                                <br /><br />
+                                <div></div>
+                                <div className="row">
+                                    <div className="col-auto">
+                                        <label><strong>Fase: </strong></label>
+                                    </div>
+                                    <div className="col-3">
+                                        <select onChange={(e) => handle(e)} id="Stage_ID" value={matchData.Stage_ID}>
+                                            <option value=""> --Escoja una fase--</option>
+                                            {stageData.map((option, index) => (
+                                                <option key={index} value={option.Id}>
+                                                    {option.Name}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                </div>
 
-                        <br /><br />
-                        <div></div>
-                        <div className="row">
-                            <div className="col-auto">
-                                <select onChange={(e) => handleTeams(e)} id="HomeId" value={matchData.HomeId}>
-                                    <option value=""> --Escoja el equipo 1--</option>
-                                    {team1Data.map((option, index) => (
-                                        <option key={index} value={option.Id}>
-                                            {option.Name}
-                                        </option>
-                                    ))}
-                                </select>
+                                <br /><br />
+                                <div></div>
+                                <div className="row">
+                                    <div className="col-auto">
+                                        <select onChange={(e) => handleTeams(e)} id="HomeId" value={matchData.HomeId}>
+                                            <option value=""> --Escoja el equipo 1--</option>
+                                            {team1Data.map((option, index) => (
+                                                <option key={index} value={option.Id}>
+                                                    {option.Name}
+                                                </option>
+                                            ))}
+                                        </select>
 
-                            </div>
-                            <div className="col-auto"><label> vs </label></div>
-                            <div className="col-auto">
-                                <select onChange={(e) => handle(e)} id="VisitId" value={matchData.VisitId}>
-                                    <option value=""> --Escoja el equipo 2--</option>
-                                    {team2Data.map((option, index) => (
-                                        <option key={index} value={option.Id}>
-                                            {option.Name}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
+                                    </div>
+                                    <div className="col-auto"><label> vs </label></div>
+                                    <div className="col-auto">
+                                        <select onChange={(e) => handle(e)} id="VisitId" value={matchData.VisitId}>
+                                            <option value=""> --Escoja el equipo 2--</option>
+                                            {team2Data.map((option, index) => (
+                                                <option key={index} value={option.Id}>
+                                                    {option.Name}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                </div>
+                                <br /><br />
+                                <div></div>
+                                <div className="row">
+                                    <div className="col-auto">
+                                        <label><strong>Sede: </strong></label>
+                                    </div>
+                                    <div className="col-3">
+                                        <input onChange={(e) => handle(e)} id="Stadium" value={matchData.Stadium} placeholder="Stadium" type="text"></input>
+                                    </div>
+                                </div>
+                                <br /><br />
+                                <div className="row">
+                                    <div className="col-auto">
+                                        <button id="goldBtn" className="btn btn-warning" type="submit"> Crear partido</button>
+                                    </div></div>
+                            </form>
                         </div>
-                        <br /><br />
-                        <div></div>
-                        <div className="row">
-                            <div className="col-auto">
-                                <label><strong>Sede: </strong></label>
-                            </div>
-                            <div className="col-3">
-                                <input onChange={(e) => handle(e)} id="Stadium" value={matchData.Stadium} placeholder="Stadium" type="text"></input>
-                            </div>
-                        </div>
-                        <br />
-                        <br />
-                        <div></div>
-
-                        <div className="row">
-                           <div className="col-auto">
-                                <button id="goldBtn" className="btn btn-warning" type="submit"> Crear partido</button>
-                            </div></div> 
-                    </form>
+                    </div>
                 </div>
                 <div className="col">
                     <img id="matchImage" src={matchImage} alt="match" />
                 </div>
             </div>
+            <br />
         </div>
     );
 }

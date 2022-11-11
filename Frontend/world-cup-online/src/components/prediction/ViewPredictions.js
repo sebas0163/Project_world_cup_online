@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import plusLGIcon from '../../assets/icons/plus-lg.svg';
 import { Link } from 'react-router-dom';
 
-function ViewPredictions() {
+const ViewPredictions= props =>{
     const navigate = useNavigate();
     /* All tournaments */
     
@@ -19,13 +19,14 @@ function ViewPredictions() {
     });
     /* Getting the prediction data from the API */
     useEffect(() => {
-        client.get('prediction/user/'+currentUser).then((response) => {
+        setCurrentUser(props.user)
+        client.get('prediction/user/'+props.user.Id).then((response) => {
             console.log("resp>",response.data)
             setUserPredictions(response.data);
 
         });
 
-    }, []);
+    }, [props.user]);
 
     /* Creating a table row for each element in the array. */
     const tableRows = userPredictions.map(

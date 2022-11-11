@@ -11,6 +11,7 @@ import Home from './components/home';
 import ViewMatches from './components/ViewMatches';
 import TournamentDisplay from './components/TournamentDisplay';
 import CreateStage from './components/CreateStage';
+import { CreateUserAccount } from './components/CreateUserAccount';
 
 function App() {
   return (
@@ -49,6 +50,8 @@ function App() {
           <Route path='/tournament-display' element={<TournamentDisplay />}>
           </Route>
           <Route path='/create-stage' element={<CreateStage />}>
+          </Route>
+          <Route path='/create-user' element={<CreateUserAccount />}>
           </Route>
         </Routes>
       </div>
