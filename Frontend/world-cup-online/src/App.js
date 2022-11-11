@@ -70,7 +70,7 @@ export default function App() {
           </Route>
           <Route path='/create-prediction' element={<CreatePrediction user={user} match={match} />}>
           </Route>
-          <Route path='/view-prediction' element={<ViewPredictions />}>
+          <Route path='/view-prediction' element={<ViewPredictions user={user}/>}>
           </Route>
           
         </Route>
