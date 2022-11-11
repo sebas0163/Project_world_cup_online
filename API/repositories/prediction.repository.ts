@@ -62,12 +62,35 @@ export class PredictionRepository {
             .query("DELETE FROM PREDICTION WHERE Id = @Id");
         return delete_prediction.rowsAffected[0];
     }
+    private async deletePlayersPrediction(id: number): Promise<number> {
+        const delete_prediction = await this.pool.request()
+            .input('Id', sql.Int, id)
+            .query("DELETE FROM PLAYERS_PREDICTION WHERE Id_prediction = @Id");
+        return delete_prediction.rowsAffected[0];
+    }
 
+    private async checkPrediction(Id_user: number, Id_match: number): Promise<{
+        Id: number
+        }[]> {
+        const check_prediction = await this.pool.request()
+        .input('Id_user', sql.Int, Id_user)
+        .input('Id_match', sql.Int, Id_match)
+        .query("SELECT Id FROM PREDICTION WHERE Id_user = @Id_user AND Id_match = @Id_match");
+        console.log("checkprediction in check",check_prediction.recordset);
+        return check_prediction.recordset;
+    }
     public async createPrediction(Home_Score: number, Visit_Score: number,
         Best_player: number, Id_user: number, Id_match: number,
         PredictionList: {
             Player_Id: string, Goals: string, Assists: string
         }[]): Promise<number> {
+        const existing_prediction = await this.checkPrediction(Id_user, Id_match)
+        if (existing_prediction.length != 0){
+            await this.deletePlayersPrediction(existing_prediction[0].Id);
+            await this.deletePrediction(existing_prediction[0].Id);
+        }
+        console.log("checkprediction in create",existing_prediction)
+
         const result = await this.pool.request()
             .input('Home_Score', sql.Int, Home_Score)
             .input('Visit_Score', sql.Int, Visit_Score)
@@ -79,7 +102,10 @@ export class PredictionRepository {
                 " VALUES (@Home_Score, @Visit_Score, @Best_player, @Id_user, @Id_match)");
         const id_prediction = result.recordset[0].Id;
         console.log(id_prediction);
-        const addGoalPrediction = await this.addGoalPrediction(PredictionList, id_prediction);
+        var addGoalPrediction = 1;
+        if (PredictionList.length != 0){
+            addGoalPrediction = await this.addGoalPrediction(PredictionList, id_prediction);
+        }
         if (addGoalPrediction == 1) {
             return id_prediction;
         } else {
