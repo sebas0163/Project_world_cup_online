@@ -40,6 +40,7 @@ const Login = props => {
             })
                 .then(response => {
                     console.log("Success")
+                    props.select(response.data)
                 })
             alert("Bienvenido")
             navigate("/home")
