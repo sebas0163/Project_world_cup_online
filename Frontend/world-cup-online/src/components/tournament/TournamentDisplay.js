@@ -78,7 +78,7 @@ const ViewTourneys = props => {
                     <img src={plusLGIcon} alt="plus icon" id="icon" />
                 </i>
             </a>
-            <Table hover>
+            <Table hover borderless>
                 <thead>
                     <tr>
                         <th>Id</th>

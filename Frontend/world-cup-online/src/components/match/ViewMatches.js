@@ -30,7 +30,7 @@ function ViewMatches() {
     /* Getting the tournament data from the API */
     useEffect(() => {
         client.get('tournament/').then((response) => {
-            console.log("resp>",response.data)
+            console.log("resp>", response.data)
             setTourneysData(response.data);
         });
 
@@ -113,7 +113,7 @@ function ViewMatches() {
                     </div>
                 </div>
                 <br />
-                <Table hover id='gamesTable'>
+                <Table hover id='gamesTable' borderless>
                     <thead>
                         <tr>
                             <th> Id</th>

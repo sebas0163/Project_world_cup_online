@@ -13,6 +13,9 @@ import Login from './components/login';
 import CreatePrediction from './components/prediction/CreatePrediction';
 import Tournament from './components/tournament/Tournament';
 import ViewPredictions from './components/prediction/ViewPredictions';
+import ActiveTournaments from './components/tournament/ActiveTournaments';
+import ActiveMatches from './components/match/ActiveMatches';
+import { CreateUserAccount } from './components/CreateUserAccount';
 
 export default function App() {
 
@@ -29,6 +32,7 @@ export default function App() {
   }
   async function selectUser(user = null) {
     setUser(user);
+    Nickname = user.NickName;
   }
   async function selectMatch(match = null) {
     setMatch(match);
@@ -41,10 +45,16 @@ export default function App() {
         <Route element={<InitContainer />}>
           <Route exact path="/" element={<Login select={selectUser} />} />
         </Route>
+        <Route path='/create-user' element={<CreateUserAccount />}>
+        </Route>
         <Route element={<DefaultContainer />}>
-          <Route path="/home" element={<Home user = {user} select={selectTournament} />}>
+          <Route path="/home" element={<Home user={user}
+            selectTournament={selectTournament} selectMatch={selectMatch} />}>
           </Route>
-          <Route path="/tournament" element={<Tournament tournament={tournament} select={selectMatch}/>}></Route>
+
+          <Route path="/tournament" element={<Tournament tournament={tournament} select={selectMatch} />}></Route>
+          <Route path="/tournaments" element={<ActiveTournaments selectTournament={selectTournament} />}></Route>
+          <Route path="/matches" element={<ActiveMatches selectMatch={selectMatch} />}></Route>
           <Route path="/create-match" element={<CreateMatch />}>
           </Route>
           <Route path='/create-tournament' element={<CreateTournament />}>
@@ -59,10 +69,11 @@ export default function App() {
           </Route>
           <Route path='/assignment' element={<ParticipantTeams />}>
           </Route>
-          <Route path='/create-prediction' element={<CreatePrediction user={user} match={match}/>}>
+          <Route path='/create-prediction' element={<CreatePrediction user={user} match={match} />}>
           </Route>
-          <Route path='/view-prediction' element={<ViewPredictions />}>
+          <Route path='/view-prediction' element={<ViewPredictions user={user} />}>
           </Route>
+
         </Route>
       </Routes>
     </div>
@@ -74,6 +85,8 @@ const InitContainer = () => (
     <Outlet />
   </div>
 )
+
+let Nickname = "Usuario";
 
 const DefaultContainer = () => (
   <>
@@ -90,15 +103,18 @@ const DefaultContainer = () => (
                 <Link class="nav-link active" aria-current="page" to="/home">Inicio</Link>
               </li>
               <li class="nav-item">
-                <Link class="nav-link" to="/tournament-display">Torneos</Link>
+                <Link class="nav-link" to="/tournaments">Torneos</Link>
               </li>
               <li class="nav-item">
-                <Link class="nav-link" to="/view-match">Partidos</Link>
+                <Link class="nav-link" to="/matches">Partidos</Link>
+              </li>
+              <li class="nav-item">
+                <Link class="nav-link" to="/view-prediction">Predicciones</Link>
               </li>
             </ul>
             <ul class="navbar-nav">
               <li class="nav-item">
-                <h5 id='nickname'>Nickname</h5>
+                <h5 id='nickname'>{Nickname}</h5>
               </li>
             </ul>
           </div>
