@@ -331,6 +331,10 @@ const CreatePrediction = props =>{
         }
         return true
     }
+
+    const validateAssit = () => {
+        
+    }
     /**
      * It takes the goals and assistances arrays, merges them into one array, and then creates a new
      * array with the merged data to assign to prediction GoalList. Then it validates best player and

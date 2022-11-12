@@ -102,7 +102,7 @@ const Login = props => {
                     <div className="btn btn-warning" onClick={(e) => submitLogin(e)}>Ingresar</div>
                     <br />
                     <br />
-                    <p>¿No tienes cuenta? <a href="/create-user">Resgistrate aqui.</a></p>
+                    <p>¿No tienes cuenta? <a href="/create-user">Registrate aqui.</a></p>
                 </div>
             </div>
         </>
