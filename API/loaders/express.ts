@@ -11,6 +11,7 @@ import tournamentRoute from "../routes/tournament.route";
 import userRoute from "../routes/user.route";
 import predictionRoute from "../routes/prediction.route";
 import playerRoute from "../routes/player.route";
+import { poolPromise } from "./db";
 
 export class ExpressLoader {
     server: any;
@@ -20,6 +21,8 @@ export class ExpressLoader {
         const port = process.env.PORT || 8000
         const app = express();
         const apiString = "/api/v1/";
+        poolPromise;
+        console.log("Connected to MSSQL");
 
         app.use(bodyParser.urlencoded({ extended: true }));
         app.use(bodyParser.json());

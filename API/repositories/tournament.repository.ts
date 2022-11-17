@@ -1,29 +1,14 @@
 import sql from 'mssql';
 import { Tournament } from '../models/tournament';
+import { generateRandomCode } from '../utils';
 
 export class TournamentRepository {
-
-    private pool: sql.ConnectionPool;
-
-    constructor(pool: sql.ConnectionPool) {
-        this.pool = pool;
-    }
-
-    private generateRandomCode = (num: number) => {
-        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        let result1 = '';
-        const charactersLength = characters.length;
-        for (let i = 0; i < num; i++) {
-            result1 += characters.charAt(Math.floor(Math.random() * charactersLength));
-        }
-        return result1;
-    }
 
     private async addStagesToTournament(StageList: string[], Tournament_ID: string): Promise<number> {
         const length = StageList.length;
         let result = 0;
         for (let i = 0; i < length; i++) {
-            const add_stage = await this.pool.request()
+            const add_stage = await new sql.Request()
                 .input('Name', sql.VarChar, StageList[i])
                 .input('Tournament_ID', sql.VarChar, Tournament_ID)
                 .query("INSERT INTO Stage (Name, Tournament_ID) VALUES (@Name, @Tournament_ID)");
@@ -43,7 +28,7 @@ export class TournamentRepository {
         const length = TeamList.length;
         let result = 0;
         for (let i = 0; i < length; i++) {
-            const add_team = await this.pool.request()
+            const add_team = await new sql.Request()
                 .input('Id_Team', sql.Int, +TeamList[i])
                 .input('TournamentCode', sql.VarChar, TournamentCode)
                 .query("INSERT INTO COMPETE (Id_Team, TournamentCode) VALUES (@Id_Team, @TournamentCode)");
@@ -59,7 +44,7 @@ export class TournamentRepository {
     }
 
     private deleteTournament = async (code: string): Promise<number> => {
-        const delete_tournament = await this.pool.request()
+        const delete_tournament = await new sql.Request()
             .input('CodeTournament', sql.VarChar, code)
             .query("DELETE FROM TOURNAMENT WHERE CodeTournament = @CodeTournament");
         return delete_tournament.rowsAffected[0];
@@ -69,7 +54,7 @@ export class TournamentRepository {
         const length = Stages.length;
         let result = 0;
         for (let i = 0; i < length; i++) {
-            const delete_stage = await this.pool.request()
+            const delete_stage = await new sql.Request()
                 .input('id', sql.Int, +Stages[i])
                 .query("DELETE FROM Stage WHERE Id = @id");
             if (delete_stage.rowsAffected[0] == 1) {
@@ -86,12 +71,12 @@ export class TournamentRepository {
 
 
     public async getTournaments(): Promise<Tournament[]> {
-        const result = await this.pool.request().query("SELECT * FROM TOURNAMENT");
+        const result = await new sql.Request().query("SELECT * FROM TOURNAMENT");
         return result.recordset;
     }
 
     public async getTournamentByCode(code: string): Promise<Tournament> {
-        const result = await this.pool.request()
+        const result = await new sql.Request()
             .input('input_parameter', sql.VarChar, code)
             .query("SELECT * FROM TOURNAMENT WHERE CodeTournament = @input_parameter");
         return result.recordset[0];
@@ -99,8 +84,8 @@ export class TournamentRepository {
 
     public async createTournament(Name: string, StartDate: string, EndDate: string,
         Rules: string, Type: string): Promise<string> {
-        const code = this.generateRandomCode(6);
-        const new_tournament = await this.pool.request()
+        const code = generateRandomCode(6);
+        const new_tournament = await new sql.Request()
             .input('CodeTournament', sql.VarChar, code)
             .input('Name', sql.VarChar, Name)
             .input('StartDate', sql.Date, StartDate)
@@ -114,7 +99,7 @@ export class TournamentRepository {
     }
 
     public async addTeamToTournament(Id_Team: number, TournamentCode: string): Promise<number> {
-        const add_team = await this.pool.request()
+        const add_team = await new sql.Request()
             .input('Id_Team', sql.Int, Id_Team)
             .input('TournamentCode', sql.VarChar, TournamentCode)
             .query("INSERT INTO COMPETE (Id_Team, TournamentCode) VALUES (@Id_Team, @TournamentCode)");
@@ -124,8 +109,8 @@ export class TournamentRepository {
     public async addFullTournament(Name: string, StartDate: string, EndDate: string,
         Rules: string, Type: string, StageList: string[],
         TeamList: string[]): Promise<number> {
-        const code = this.generateRandomCode(6);
-        const new_tournament = await this.pool.request()
+        const code = generateRandomCode(6);
+        const new_tournament = await new sql.Request()
             .input('CodeTournament', sql.VarChar, code)
             .input('Name', sql.VarChar, Name)
             .input('StartDate', sql.Date, StartDate)

@@ -1,9 +1,10 @@
 import { TournamentRepository } from '../repositories/tournament.repository';
-import { poolPromise } from '../loaders/db';
 import { ITournamentRepository } from '../repositories/interfaces/tournament.interface';
+import { validateBody } from '../utils';
+
+const tournamentRepository: ITournamentRepository = new TournamentRepository();
 
 class TournamentController {
-
 
     /**
      * This function gets all tournaments from the database and returns them as a JSON object.
@@ -12,8 +13,6 @@ class TournamentController {
      */
     static async getTournaments(req: any, res: any) {
         try {
-            const pool = await poolPromise;
-            const tournamentRepository: ITournamentRepository = new TournamentRepository(pool);
             const tournaments = await tournamentRepository.getTournaments();
             res.status(200).json(tournaments);
             return tournaments;
@@ -32,8 +31,6 @@ class TournamentController {
     static async getTournamentByCode(req: any, res: any) {
         try {
             let code = req.params.id || {}
-            const pool = await poolPromise
-            const tournamentRepository: ITournamentRepository = new TournamentRepository(pool);
             const tournament = await tournamentRepository.getTournamentByCode(code);
             res.status(200).json(tournament);
             return tournament;
@@ -51,12 +48,9 @@ class TournamentController {
     static async createTournament(req: any, res: any) {
         try {
             const { Name, StartDate, EndDate, Rules, Type } = req.body;
-            const pool = await poolPromise
-            const tournamentRepository: ITournamentRepository = new TournamentRepository(pool);
-            if (Name == null || StartDate == null || EndDate == null || Type == null) {
+            if (!validateBody(req.body, ['Name', 'StartDate', 'EndDate', 'Type'])) {
                 res.status(400).json({ message: "Bad request, missing parameters" });
             } else {
-
                 const result = await tournamentRepository.createTournament(Name, StartDate, EndDate, Rules, Type);
                 res.status(200).json(result);
                 return result;
@@ -77,9 +71,7 @@ class TournamentController {
     static async addTeamToTournament(req: any, res: any) {
         try {
             const { Id_Team, TournamentCode } = req.body;
-            const pool = await poolPromise
-            const tournamentRepository: ITournamentRepository = new TournamentRepository(pool);
-            if (Id_Team == null || TournamentCode == null) {
+            if (!validateBody(req.body, ['Id_Team', 'TournamentCode'])) {
                 res.status(400).json({ message: "Bad request, missing parameters" });
             } else {
                 const result = await tournamentRepository.addTeamToTournament(Id_Team, TournamentCode);
@@ -104,10 +96,7 @@ class TournamentController {
     static async addFullTournament(req: any, res: any) {
         try {
             const { Name, StartDate, EndDate, Rules, Type, StageList, TeamList } = req.body;
-            const pool = await poolPromise
-            const tournamentRepository: ITournamentRepository = new TournamentRepository(pool);
-            if (Name == null || StartDate == null || EndDate == null || Type == null
-                || StageList == null || TeamList == null) {
+            if (!validateBody(req.body, ['Name', 'StartDate', 'EndDate', 'Type', 'StageList', 'TeamList'])) {
                 res.status(400).json({ message: "Bad request, missing parameters" });
             } else {
                 const result = await tournamentRepository.addFullTournament(Name, StartDate, EndDate, Rules, Type, StageList, TeamList);

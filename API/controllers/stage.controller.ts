@@ -1,6 +1,8 @@
-import { poolPromise } from '../loaders/db';
 import { StageRepository } from '../repositories/stage.repository';
 import { IStageRepository } from '../repositories/interfaces/stage.interface';
+import { validateBody } from '../utils';
+
+const stageRepository: IStageRepository = new StageRepository();
 
 class StageController {
 
@@ -12,8 +14,6 @@ class StageController {
      */
     static async getStages(req: any, res: any) {
         try {
-            const pool = await poolPromise;
-            const stageRepository: IStageRepository = new StageRepository(pool);
             const stages = await stageRepository.getStages();
             res.status(200).json(stages);
             return stages;
@@ -32,8 +32,6 @@ class StageController {
     static async getStageById(req: any, res: any) {
         try {
             let id = req.params.id || {}
-            const pool = await poolPromise;
-            const stageRepository: IStageRepository = new StageRepository(pool);
             const stage = await stageRepository.getStageById(+id);
             res.status(200).json(stage);
             return stage;
@@ -52,8 +50,6 @@ class StageController {
     static async getStagesByTournamentCode(req: any, res: any) {
         try {
             let code = req.params.id || {}
-            const pool = await poolPromise;
-            const stageRepository: IStageRepository = new StageRepository(pool);
             const stages = await stageRepository.getStagesByTournamentCode(code);
             res.status(200).json(stages);
             return stages;
@@ -71,9 +67,7 @@ class StageController {
     static async createStage(req: any, res: any) {
         try {
             const { Name, Tournament_ID } = req.body;
-            const pool = await poolPromise;
-            const stageRepository: IStageRepository = new StageRepository(pool);
-            if (Name == null || Tournament_ID == null) {
+            if (!validateBody(req.body, ['Name', 'Tournament_ID'])) {
                 res.status(400).json({ message: "Bad Request, Please fill all the fields" });
             } else {
                 const result = await stageRepository.createStage(Name, Tournament_ID);
