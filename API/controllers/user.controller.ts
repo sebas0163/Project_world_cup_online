@@ -50,7 +50,7 @@ class UserController {
                 }
             }
         } catch (error) {
-            res.status(500);
+            res.status(500).json({message:"Error"});
             console.log(error);
         }
     }

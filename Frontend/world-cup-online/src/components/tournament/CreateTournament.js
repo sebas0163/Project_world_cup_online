@@ -73,6 +73,11 @@ function TourneyForm() {
     function submitTournament(e) {
         e.preventDefault();
         if (validateTournament()) {
+            if(teamsCache.length < 2){
+            alert(`Por favor agregue al menos 2 equipos`)
+            }else if(stageCache.length < 1){
+                alert(`Por favor agregue al menos una fase`)
+            }else{
             console.log(url)
             console.log("Chequeo de teams", teamsCache)
             console.log("Chequeo de Stages", stageCache)
@@ -90,6 +95,7 @@ function TourneyForm() {
                     console.log(response.tourneyData)
                 })
             alert(`Torneo creado correctamente`)
+            }
         } else {
             alert(`Por favor llene todos los espacios`)
         }

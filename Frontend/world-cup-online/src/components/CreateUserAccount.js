@@ -58,23 +58,33 @@ export const CreateUserAccount = () => {
         }
         return true
     }
-    function submit(e) {
+    async function submit(e) {
         e.preventDefault();
         if (validateUser()) {
             if (validateDate()) {
                 if (validatePassword()) {
-                    client.post('user', {
+                    const post = await client.post('user', {
                         Name: userData.Name,
                         Nickname: userData.Nickname,
                         Nationality: userData.Nationality,
                         Email: userData.Email,
                         Password: userData.Password,
                         Birthdate: userData.Birthdate
-                    })
-                        .then(response => {
+                    }).then(response => {
                             console.log(response.status)
+                            return Promise.resolve(true)
                         })
-                    alert(`Cuenta creada correctamente`)
+                        .catch((error) => {
+                            return Promise.resolve(false)
+                        })
+                        console.log(post);
+                    if(post){
+                        alert(`Cuenta creada correctamente`)
+                    }
+                    if (!post) {
+                        alert("Nickname o correo, ya en uso")
+                    }
+                    
                 } else {
                     alert('Las contraseñas no coinciden')
                 }
