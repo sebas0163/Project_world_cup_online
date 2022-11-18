@@ -47,6 +47,14 @@ export function createRandomPrediction(override = {}): Prediction {
     };
 }
 
+export function addRandomTeamToTournament(): { Id_Team: number, TournamentCode: string } {
+    const team: Team = createRandomTeam();
+    const tournament: Tournament = createRandomTournament();
+    const result: { Id_Team: number, TournamentCode: string } =
+        { Id_Team: team.Id, TournamentCode: tournament.CodeTournament };
+    return result;
+}
+
 export function createGoalPrediction(Goal_Scorer: string, Attendee: string, override = {}): { Goal_Scorer: string, Attendee: string } {
     return {
         Goal_Scorer,

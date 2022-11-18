@@ -32,6 +32,9 @@ class TournamentController {
         try {
             let code = req.params.id || {}
             const tournament = await tournamentRepository.getTournamentByCode(code);
+            if (tournament == null) {
+                res.status(404).json({ message: "Tournament not found" });
+            }
             res.status(200).json(tournament);
             return tournament;
         } catch (error) {
