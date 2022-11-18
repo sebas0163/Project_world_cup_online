@@ -16,6 +16,14 @@ export function createRandomTeam(override = {}): Team {
     };
 }
 
+export function createWrongPassword(password: string): string {
+    let wrongPassword = faker.internet.password();
+    while (wrongPassword === password) {
+        wrongPassword = faker.internet.password();
+    }
+    return wrongPassword;
+}
+
 export function createRandomPlayer(override = {}): Player {
     return {
         Id: faker.datatype.number(),

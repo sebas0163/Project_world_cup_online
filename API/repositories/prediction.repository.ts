@@ -72,7 +72,7 @@ export class PredictionRepository {
             .input('Id_user', sql.Int, Id_user)
             .input('Id_match', sql.Int, Id_match)
             .query("SELECT Id FROM PREDICTION WHERE Id_user = @Id_user AND Id_match = @Id_match");
-        console.log("checkprediction in check", check_prediction.recordset);
+        //console.log("checkprediction in check", check_prediction.recordset);
         return check_prediction.recordset;
     }
     public async createPrediction(Home_Score: number, Visit_Score: number,
@@ -85,7 +85,7 @@ export class PredictionRepository {
             await this.deletePlayersPrediction(existing_prediction[0].Id);
             await this.deletePrediction(existing_prediction[0].Id);
         }
-        console.log("checkprediction in create", existing_prediction)
+        //console.log("checkprediction in create", existing_prediction)
 
         const result = await new sql.Request()
             .input('Home_Score', sql.Int, Home_Score)
@@ -97,7 +97,7 @@ export class PredictionRepository {
                 " OUTPUT Inserted.Id" +
                 " VALUES (@Home_Score, @Visit_Score, @Best_player, @Id_user, @Id_match)");
         const id_prediction = result.recordset[0].Id;
-        console.log(id_prediction);
+        //console.log(id_prediction);
         var addGoalPrediction = 1;
         if (PredictionList.length != 0) {
             addGoalPrediction = await this.addGoalPrediction(PredictionList, id_prediction);

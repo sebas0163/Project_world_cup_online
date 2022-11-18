@@ -30,7 +30,7 @@ describe('Prediction Controller', () => {
         test('should return 200', async () => {
             const prediction = generateRandomPrediction();
             const spy = jest.spyOn(PredictionRepository.prototype, 'createPrediction')
-                .mockResolvedValue(prediction.Id);
+                .mockResolvedValueOnce(prediction.Id);
             //console.log(prediction);
             req = createRequest({
                 body: prediction

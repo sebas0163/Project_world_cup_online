@@ -69,9 +69,6 @@ class UserController {
                 if (user) {
                     res.status(200).json(user);
                 }
-                if (user == null) {
-                    res.status(400).json({ message: "Wrong credentials" })
-                }
             }
         } catch (error) {
             res.status(500).json({ message: "Wrong credentials" });
@@ -90,6 +87,9 @@ class UserController {
         try {
             let id = req.params.id || {}
             const user = await userRepository.getUserById(+id);
+            if (user == null) {
+                res.status(404).json({ message: "User not found" });
+            }
             res.status(200).json(user);
             return user;
         } catch (error) {

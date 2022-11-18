@@ -65,8 +65,8 @@ CREATE TABLE PREDICTION (
 CREATE TABLE PLAYERS_PREDICTION(
 						Id INT IDENTITY(1,1) NOT NULL,
 						Player_Id INT NOT NULL,
-						Goals INT NOT NULL,
-						Assists INT NOT NULL,
+						Goals INT NULL,
+						Assists INT NULL,
 						Id_prediction INT NOT NULL
 );
 
