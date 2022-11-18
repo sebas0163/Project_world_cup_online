@@ -55,6 +55,19 @@ export function addRandomTeamToTournament(): { Id_Team: number, TournamentCode: 
     return result;
 }
 
+export function addTeamsToRandomTournament(tournament: Tournament, n_teams: number): Team[] {
+    const teams: Team[] = generateTeamsData(n_teams);
+    const addTeams: { Id_Team: number, TournamentCode: string }[] = [];
+    teams.forEach((team) => {
+        addTeams.push({ Id_Team: team.Id, TournamentCode: tournament.CodeTournament });
+    });
+    if (teams.length == addTeams.length) {
+        return teams;
+    } else {
+        return [];
+    }
+}
+
 export function createGoalPrediction(Goal_Scorer: string, Attendee: string, override = {}): { Goal_Scorer: string, Attendee: string } {
     return {
         Goal_Scorer,
