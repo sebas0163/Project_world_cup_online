@@ -110,6 +110,11 @@ const CreatePrediction = props =>{
 
     }
 
+    /**
+     * If the score is a tie, set the winner to the select value. If the score is not a tie, set the winner to the
+     * team with the highest score.
+     * @param newData prediction data
+     */
     function setWinner(newData){
         console.log("Marcador", newData.Visit_Score, newData.Home_Score)
         if (newData.Visit_Score == newData.Home_Score){
@@ -399,7 +404,8 @@ const CreatePrediction = props =>{
                 Best_player: newData.Best_player,
                 Id_user : currentUser.Id,
                 Id_match : newData.Id_match,
-                GoalList: newData.GoalList
+                GoalList: newData.GoalList,
+                Id_Winner: newData.Id_Winner
             }).then(response => {
                 console.log(response)
             })
