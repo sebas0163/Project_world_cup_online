@@ -24,10 +24,11 @@ const CreatePrediction = props =>{
     const [homeSelect, sethomeSelect] = useState([])
     const [visitSelect, setvisitSelect] = useState([])
 
+    const [homeOwnGoals, sethomeOwnGoal] = useState(0)
+    const [visitOwnGoals, setvisitOwnGoal] = useState(0)
+
     /* Selected match*/
-    const [currentMatch, setCurrentMatch] = useState({
-        
-    })
+    const [currentMatch, setCurrentMatch] = useState({})
 
     /*Logged in user*/
     const [currentUser, setCurrentUser] = useState("admin")
@@ -39,12 +40,15 @@ const CreatePrediction = props =>{
         Best_player : "",
         Id_user : "",
         Id_match : "",
-        GoalList : []
+        GoalList : [],
+        Id_Winner : ""
     })
     
     /*All goals and assists to validate counter */
     const [allGoals, setAllGoals] = useState([])
     const [allAssists, setAllAssists] = useState([])
+
+    const [isTie, setIsTie] = useState(false)
 
     /* Setting the currentMatch and currentUser to the props.match and props.user. */
     useEffect(() => {
@@ -86,6 +90,7 @@ const CreatePrediction = props =>{
         setPrediction(newData)
         console.log(newData)
         setHomeGoalies()
+        setWinner(newData)
     }
     /**
       * When the user enters a number into the VisitHome_Score input field, the function will update the
@@ -100,8 +105,33 @@ const CreatePrediction = props =>{
         setPrediction(newData)
         console.log(newData)
         setVisitGoalies()
+        setWinner(newData)
         
 
+    }
+
+    function setWinner(newData){
+        console.log("Marcador", newData.Visit_Score, newData.Home_Score)
+        if (newData.Visit_Score == newData.Home_Score){
+            setIsTie(false)
+        }
+        else{
+            setIsTie(true)
+            if (newData.Visit_Score > newData.Home_Score){
+                newData["Id_Winner"] = currentMatch.VisitId
+                
+            }
+            if (newData.Visit_Score < newData.Home_Score){
+                newData["Id_Winner"] = currentMatch.HomeId
+            }
+        }
+        setPrediction(newData)
+    }
+    function handleHomeOwnGoals(e){
+        sethomeOwnGoal(e)
+    }
+    function handleVisitOwnGoals(e){
+        setvisitOwnGoal(e)
     }
     
     /**
@@ -283,9 +313,11 @@ const CreatePrediction = props =>{
             if(goal.Player_Id.split('-')[0]=="Home"){
                 homeGoals = homeGoals+ parseInt(goal.Goals)
             }
+            
             if(goal.Player_Id.split('-')[0]=="Visit"){
                 visitGoals = visitGoals+ parseInt(goal.Goals)
             }
+            
         })
         allAssists.forEach(goal =>{
             if(goal.Player_Id.split('-')[0]=="Home"){
@@ -295,20 +327,20 @@ const CreatePrediction = props =>{
                 visitAssists = visitAssists+ parseInt(goal.Assists)
             }
         })
-        if (prediction.Home_Score != homeGoals){//los goleadores de home no coinciden con el marcador
+        if ((prediction.Home_Score - homeOwnGoals + visitOwnGoals) != homeGoals){//los goleadores de home no coinciden con el marcador
             alert(`La cantidad de goleadores no coincide con el marcador de `+currentMatch.HomeName)
             return false
         }
         if (prediction.Home_Score < homeAssists){
-            alert(`La cantidad de asistencias no coincide con el marcador de `+currentMatch.HomeName)
+            alert(`La cantidad de asistencias debe ser menor que el marcador de `+currentMatch.HomeName)
             return false
         }
-        if (prediction.Visit_Score != visitGoals){
+        if ((prediction.Visit_Score - visitOwnGoals + homeOwnGoals) != visitGoals){
             alert(`La cantidad de goleadores no coincide con el marcador de `+currentMatch.VisitName)
             return false
         }
         if (prediction.Visit_Score < visitAssists){
-            alert(`La cantidad de asistencias no coincide con el marcador de `+currentMatch.VisitName)
+            alert(`La cantidad de asistencias debe ser menor que el marcador de `+currentMatch.VisitName)
             return false
         }
         else{return true}
@@ -332,9 +364,7 @@ const CreatePrediction = props =>{
         return true
     }
 
-    const validateAssit = () => {
-        
-    }
+    
     /**
      * It takes the goals and assistances arrays, merges them into one array, and then creates a new
      * array with the merged data to assign to prediction GoalList. Then it validates best player and
@@ -420,6 +450,16 @@ const CreatePrediction = props =>{
                                         {homeSelect}
                                     </tbody>
                                 </Table>
+                                <h6>Auto goles a favor</h6>
+                                <NumericInput 
+                                className="form-control"
+                                name = "HomeOwnGoals"
+                                value={homeOwnGoals}
+                                min ={0}  
+                                max ={prediction.Home_Score}
+                                strict
+                                onChange={(e) => handleHomeOwnGoals(e)}
+                                />
                             </div>
                             <div className="col-auto">
                                 <h4>vs</h4>
@@ -448,6 +488,16 @@ const CreatePrediction = props =>{
                                         {visitSelect}
                                     </tbody>
                                 </Table>
+                                <h6>Auto goles a favor</h6>
+                                <NumericInput 
+                                className="form-control"
+                                name = "VisitOwnGoals"
+                                value={visitOwnGoals}
+                                min ={0}  
+                                max ={prediction.Visit_Score}
+                                strict
+                                onChange={(e) => handleVisitOwnGoals(e)}
+                                />
                             </div>
                         </div>
                         <div className="row">
@@ -468,6 +518,19 @@ const CreatePrediction = props =>{
                                 ))}
                                 </select>
                             </div>
+                            <div className="col">
+                                <h3>Ganador del partido: </h3>
+                            </div>
+                            <div className="col=2">
+                                <select disabled = {isTie} onChange={(e) => handleBestPlayer(e)} id="Id_Winner" value={prediction.Id_Winner }>
+                                
+                                    <option value= {currentMatch.HomeId}>{currentMatch.HomeName}</option>
+                                    <option value= {currentMatch.VisitId}>{currentMatch.VisitName}</option>
+                                
+                                </select>
+                            </div>
+                            
+
                         </div>
                         <br />
                         <div className="col-auto">
