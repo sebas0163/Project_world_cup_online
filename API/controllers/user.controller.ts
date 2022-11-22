@@ -1,7 +1,9 @@
 import { UserRepository } from '../repositories/user.repository';
 import { IUserRepository } from '../repositories/interfaces/user.interface';
 import { Response, Request } from 'express';
-import { poolPromise } from '../loaders/db';
+import { validateBody } from '../utils';
+
+const userRepository: IUserRepository = new UserRepository();
 
 class UserController {
 
@@ -15,8 +17,6 @@ class UserController {
      */
     static async getUsers(req: Request, res: Response) {
         try {
-            const pool = await poolPromise;
-            const userRepository: IUserRepository = new UserRepository(pool);
             const users = await userRepository.getUsers();
             res.status(200).json(users);
             return users;
@@ -35,14 +35,10 @@ class UserController {
         try {
             const { Name,
                 Nickname, Email, Password, Birthdate } = req.body;
-            if (Name == null
-                || Nickname == null || Email == null || Password == null
-                || Birthdate == null) {
+            if (!validateBody(req.body, ['Name', 'Nickname', 'Email', 'Password', 'Birthdate'])) {
                 res.status(400).json({ message: "Missing parameters" });
             }
             else {
-                const pool = await poolPromise;
-                const userRepository: IUserRepository = new UserRepository(pool);
                 const result = await userRepository.createUser(Name,
                     Nickname, Email, Password, Birthdate);
                 if (result == 1) {
@@ -50,7 +46,7 @@ class UserController {
                 }
             }
         } catch (error) {
-            res.status(500).json({message:"Error"});
+            res.status(500).json({ message: "Error" });
             console.log(error);
         }
     }
@@ -66,21 +62,16 @@ class UserController {
     static async login(req: Request, res: Response) {
         try {
             const { Email, Password } = req.body;
-            if (Email == null || Password == null) {
+            if (!validateBody(req.body, ['Email', 'Password'])) {
                 res.status(400).json({ message: "Missing parameters" });
             } else {
-                const pool = await poolPromise;
-                const userRepository: IUserRepository = new UserRepository(pool);
                 const user = await userRepository.login(Email, Password);
                 if (user) {
                     res.status(200).json(user);
                 }
-                if (user == null){
-                    res.status(400).json({message: "Wrong credentials"})
-                }
             }
         } catch (error) {
-            res.status(500).json({message: "Wrong credentials"});
+            res.status(500).json({ message: "Wrong credentials" });
             console.log(error);
         }
     }
@@ -95,9 +86,10 @@ class UserController {
     static async getUserById(req: Request, res: Response) {
         try {
             let id = req.params.id || {}
-            const pool = await poolPromise;
-            const userRepository: IUserRepository = new UserRepository(pool);
             const user = await userRepository.getUserById(+id);
+            if (user == null) {
+                res.status(404).json({ message: "User not found" });
+            }
             res.status(200).json(user);
             return user;
         } catch (error) {

@@ -3,14 +3,8 @@ import { Match } from '../models/match';
 
 export class MatchRepository {
 
-    private pool: sql.ConnectionPool;
-
-    constructor(pool: sql.ConnectionPool) {
-        this.pool = pool;
-    }
-
     public async getMatches(): Promise<Match[]> {
-        const result = await this.pool.request().
+        const result = await new sql.Request().
             query("SELECT" +
                 " s.Id, s.Stadium, s.StartDateTime, s.Tournament_ID, s.Stage_ID, s.[State], s.Score," +
                 "t.[Name] as 'HomeName', t1.[Name] as 'VisitName'," +
@@ -24,14 +18,14 @@ export class MatchRepository {
     }
 
     public async getMatchById(id: number): Promise<Match> {
-        const result = await this.pool.request()
+        const result = await new sql.Request()
             .input('input_parameter', sql.Int, +id)
             .query("SELECT * FROM MATCH WHERE Id = @input_parameter");
         return result.recordset[0];
     }
 
     public async getMatchesByTournamentCode(code: string): Promise<Match[]> {
-        const result = await this.pool.request()
+        const result = await new sql.Request()
             .input('input_parameter', sql.VarChar, code)
             .query("SELECT" +
                 " s.Id, s.Stadium, s.StartDateTime, s.Tournament_ID, s.Stage_ID, s.[State], s.Score," +
@@ -48,7 +42,7 @@ export class MatchRepository {
     public async createMatch(Stadium: string, StartDateTime: string, State: string,
         Score: string, Tournament_ID: String, Stage_ID: number,
         HomeId: number, VisitId: number): Promise<number> {
-        const new_match = await this.pool.request()
+        const new_match = await new sql.Request()
             .input('Stadium', sql.VarChar, Stadium)
             .input('StartDateTime', sql.DateTime, StartDateTime)
             .input('State', sql.VarChar, State)
@@ -64,14 +58,14 @@ export class MatchRepository {
     }
 
     public async getMatchesByStageId(id: number): Promise<Match[]> {
-        const result = await this.pool.request()
+        const result = await new sql.Request()
             .input('input_parameter', sql.Int, id)
             .query("SELECT * FROM Match WHERE Stage_ID = @input_parameter ORDER BY StartDateTime ASC");
         return result.recordset;
     }
 
     public async addTeamToMatch(Id_Team: number, Id_Match: number): Promise<number> {
-        const add_team = await this.pool.request()
+        const add_team = await new sql.Request()
             .input('Id_Team', sql.Int, Id_Team)
             .input('Id_Match', sql.Int, Id_Match)
             .query("INSERT INTO TEAM_MATCH (Id_Team, Id_Match) VALUES"

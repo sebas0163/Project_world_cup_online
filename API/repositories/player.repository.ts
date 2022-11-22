@@ -3,18 +3,14 @@ import { Player } from '../models/player';
 
 
 export class PlayerRepository {
-    private pool: sql.ConnectionPool;
-    constructor(pool: sql.ConnectionPool) {
-        this.pool = pool;
-    }
 
     public async getPlayers(): Promise<Player[]> {
-        const result = await this.pool.request().query("SELECT * FROM PLAYER");
+        const result = await new sql.Request().query("SELECT * FROM PLAYER");
         return result.recordset;
     }
 
     public async getPlayersByTeam(id_team: number): Promise<{ Id: number, Name: string, Team: string, Rol: string }[]> {
-        const result = await this.pool.request()
+        const result = await new sql.Request()
             .input('id_team', sql.Int, id_team)
             .query("SELECT PLAYER.Id, PLAYER.[Name], TEAM.[Name] AS Team, PLAYER.Rol " +
                 "FROM ((PLAYER_TEAM " +

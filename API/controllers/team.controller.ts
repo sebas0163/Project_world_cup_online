@@ -1,6 +1,8 @@
-import { poolPromise } from '../loaders/db';
 import { TeamRepository } from '../repositories/team.repository';
 import { ITeamRepository } from '../repositories/interfaces/team.interface';
+import { validateBody } from '../utils';
+
+const teamRepository: ITeamRepository = new TeamRepository();
 
 class TeamController {
 
@@ -11,10 +13,7 @@ class TeamController {
      */
     static async getTeams(req: any, res: any) {
         try {
-            const pool = await poolPromise;
-            const teamRepository: ITeamRepository = new TeamRepository(pool);
             const teams = await teamRepository.getTeams();
-
             res.status(200).json(teams);
             return teams
 
@@ -33,8 +32,6 @@ class TeamController {
     static async getTeamsByTournamentCode(req: any, res: any) {
         try {
             let id = req.params.id || {}
-            const pool = await poolPromise;
-            const teamRepository: ITeamRepository = new TeamRepository(pool);
             const teams = await teamRepository.getTeamsByTournamentCode(id);
             res.status(200).json(teams);
             return teams;
@@ -63,9 +60,7 @@ class TeamController {
     static async createTeam(req: any, res: any) {
         try {
             const { Name, Type } = req.body;
-            const pool = await poolPromise;
-            const teamRepository: ITeamRepository = new TeamRepository(pool);
-            if (Name == null || Type == null) {
+            if (!validateBody(req.body, ['Name', 'Type'])) {
                 res.status(400).json({ message: "Please fill all fields" });
             } else {
                 const result = await teamRepository.createTeam(Name, Type);
@@ -89,8 +84,6 @@ class TeamController {
     static async getTeamsByType(req: any, res: any) {
         try {
             let type = req.params.type || {}
-            const pool = await poolPromise;
-            const teamRepository: ITeamRepository = new TeamRepository(pool);
             const teams = await teamRepository.getTeamsByType(type);
             res.status(200).json(teams);
             return teams;
@@ -109,8 +102,6 @@ class TeamController {
     static async getTeamById(req: any, res: any) {
         try {
             let id = req.params.id || {}
-            const pool = await poolPromise;
-            const teamRepository: ITeamRepository = new TeamRepository(pool);
             const team = await teamRepository.getTeamById(+id);
             res.status(200).json(team);
             return team;

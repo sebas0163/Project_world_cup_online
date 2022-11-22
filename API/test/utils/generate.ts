@@ -16,6 +16,14 @@ export function createRandomTeam(override = {}): Team {
     };
 }
 
+export function createWrongPassword(password: string): string {
+    let wrongPassword = faker.internet.password();
+    while (wrongPassword === password) {
+        wrongPassword = faker.internet.password();
+    }
+    return wrongPassword;
+}
+
 export function createRandomPlayer(override = {}): Player {
     return {
         Id: faker.datatype.number(),
@@ -37,6 +45,27 @@ export function createRandomPrediction(override = {}): Prediction {
         Id_match: faker.datatype.number(),
         ...override,
     };
+}
+
+export function addRandomTeamToTournament(): { Id_Team: number, TournamentCode: string } {
+    const team: Team = createRandomTeam();
+    const tournament: Tournament = createRandomTournament();
+    const result: { Id_Team: number, TournamentCode: string } =
+        { Id_Team: team.Id, TournamentCode: tournament.CodeTournament };
+    return result;
+}
+
+export function addTeamsToRandomTournament(tournament: Tournament, n_teams: number): Team[] {
+    const teams: Team[] = generateTeamsData(n_teams);
+    const addTeams: { Id_Team: number, TournamentCode: string }[] = [];
+    teams.forEach((team) => {
+        addTeams.push({ Id_Team: team.Id, TournamentCode: tournament.CodeTournament });
+    });
+    if (teams.length == addTeams.length) {
+        return teams;
+    } else {
+        return [];
+    }
 }
 
 export function createGoalPrediction(Goal_Scorer: string, Attendee: string, override = {}): { Goal_Scorer: string, Attendee: string } {

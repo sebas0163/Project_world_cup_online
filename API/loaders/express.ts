@@ -11,6 +11,9 @@ import tournamentRoute from "../routes/tournament.route";
 import userRoute from "../routes/user.route";
 import predictionRoute from "../routes/prediction.route";
 import playerRoute from "../routes/player.route";
+import { poolPromise } from "./db";
+import resultRoute from "../routes/result.route";
+import groupRoute from "../routes/group.route";
 
 export class ExpressLoader {
     server: any;
@@ -20,6 +23,8 @@ export class ExpressLoader {
         const port = process.env.PORT || 8000
         const app = express();
         const apiString = "/api/v1/";
+        poolPromise;
+        console.log("Connected to MSSQL");
 
         app.use(bodyParser.urlencoded({ extended: true }));
         app.use(bodyParser.json());
@@ -34,6 +39,8 @@ export class ExpressLoader {
         app.use(apiString + "user", userRoute);
         app.use(apiString + "prediction", predictionRoute);
         app.use(apiString + "player", playerRoute);
+        app.use(apiString + "result", resultRoute);
+        app.use(apiString + "group", groupRoute);
         app.use("*", (req: any, res: any) => res.status(404).json({ error: "not found" }))
 
         this.server = app.listen(port, () => console.log(`Server running on port ${port}`));
