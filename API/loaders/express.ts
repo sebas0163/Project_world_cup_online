@@ -13,6 +13,7 @@ import predictionRoute from "../routes/prediction.route";
 import playerRoute from "../routes/player.route";
 import { poolPromise } from "./db";
 import resultRoute from "../routes/result.route";
+import groupRoute from "../routes/group.route";
 
 export class ExpressLoader {
     server: any;
@@ -39,6 +40,7 @@ export class ExpressLoader {
         app.use(apiString + "prediction", predictionRoute);
         app.use(apiString + "player", playerRoute);
         app.use(apiString + "result", resultRoute);
+        app.use(apiString + "group", groupRoute);
         app.use("*", (req: any, res: any) => res.status(404).json({ error: "not found" }))
 
         this.server = app.listen(port, () => console.log(`Server running on port ${port}`));
