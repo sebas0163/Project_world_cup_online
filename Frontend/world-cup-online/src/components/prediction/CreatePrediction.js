@@ -12,26 +12,26 @@ const CreatePrediction = props =>{
     });
     const navigate = useNavigate();
     /*Lists with team players from a match*/
-    const [HomePlayers, setHomePlayers] = useState([])
-    const [VisitPlayers, setVisitPlayers] = useState([])
-    const [players, setPlayers] = useState([])
+    const [HomePlayers, setHomePlayers] = useState([]);
+    const [VisitPlayers, setVisitPlayers] = useState([]);
+    const [players, setPlayers] = useState([]);
 
     /* Lists with goals and asistances*/
-    const [goals, setGoals] = useState([])
-    const [asistances, setAsistances] = useState([])
+    const [goals, setGoals] = useState([]);
+    const [asistances, setAsistances] = useState([]);
 
     /*Header, goal number picker and asistances number picker for each player*/
-    const [homeSelect, sethomeSelect] = useState([])
-    const [visitSelect, setvisitSelect] = useState([])
+    const [homeSelect, sethomeSelect] = useState([]);
+    const [visitSelect, setvisitSelect] = useState([]);
 
-    const [homeOwnGoals, sethomeOwnGoal] = useState(0)
-    const [visitOwnGoals, setvisitOwnGoal] = useState(0)
+    const [homeOwnGoals, sethomeOwnGoal] = useState(0);
+    const [visitOwnGoals, setvisitOwnGoal] = useState(0);
 
     /* Selected match*/
-    const [currentMatch, setCurrentMatch] = useState({})
+    const [currentMatch, setCurrentMatch] = useState({});
 
     /*Logged in user*/
-    const [currentUser, setCurrentUser] = useState("admin")
+    const [currentUser, setCurrentUser] = useState("admin");
 
     /*Prediction to post */
     const [prediction, setPrediction] = useState({
@@ -42,13 +42,13 @@ const CreatePrediction = props =>{
         Id_match : "",
         GoalList : [],
         Id_Winner : ""
-    })
+    });
     
     /*All goals and assists to validate counter */
-    const [allGoals, setAllGoals] = useState([])
-    const [allAssists, setAllAssists] = useState([])
+    const [allGoals, setAllGoals] = useState([]);
+    const [allAssists, setAllAssists] = useState([]);
 
-    const [isTie, setIsTie] = useState(false)
+    const [isTie, setIsTie] = useState(false);
 
     /* Setting the currentMatch and currentUser to the props.match and props.user. */
     useEffect(() => {
@@ -85,12 +85,12 @@ const CreatePrediction = props =>{
     */
     function handleHomeScore(e)
     {
-        const newData = { ...prediction }
-        newData["Home_Score"] = e
-        setPrediction(newData)
-        console.log(newData)
-        setHomeGoalies()
-        setWinner(newData)
+        const newData = { ...prediction };
+        newData["Home_Score"] = e;
+        setPrediction(newData);
+        console.log(newData);
+        setHomeGoalies();
+        setWinner(newData);
     }
     /**
       * When the user enters a number into the VisitHome_Score input field, the function will update the
@@ -100,12 +100,12 @@ const CreatePrediction = props =>{
      */
     function handleVisitScore(e)
     {
-        const newData = { ...prediction }
-        newData["Visit_Score"] = e
-        setPrediction(newData)
-        console.log(newData)
-        setVisitGoalies()
-        setWinner(newData)
+        const newData = { ...prediction };
+        newData["Visit_Score"] = e;
+        setPrediction(newData);
+        console.log(newData);
+        setVisitGoalies();
+        setWinner(newData);
         
 
     }
@@ -116,27 +116,27 @@ const CreatePrediction = props =>{
      * @param newData prediction data
      */
     function setWinner(newData){
-        console.log("Marcador", newData.Visit_Score, newData.Home_Score)
+        console.log("Marcador", newData.Visit_Score, newData.Home_Score);
         if (newData.Visit_Score == newData.Home_Score){
-            setIsTie(false)
+            setIsTie(false);
         }
         else{
-            setIsTie(true)
+            setIsTie(true);
             if (newData.Visit_Score > newData.Home_Score){
-                newData["Id_Winner"] = currentMatch.VisitId
+                newData["Id_Winner"] = currentMatch.VisitId;
                 
             }
             if (newData.Visit_Score < newData.Home_Score){
-                newData["Id_Winner"] = currentMatch.HomeId
+                newData["Id_Winner"] = currentMatch.HomeId;
             }
         }
-        setPrediction(newData)
+        setPrediction(newData);
     }
     function handleHomeOwnGoals(e){
-        sethomeOwnGoal(e)
+        sethomeOwnGoal(e);
     }
     function handleVisitOwnGoals(e){
-        setvisitOwnGoal(e)
+        setvisitOwnGoal(e);
     }
     
     /**
@@ -171,9 +171,9 @@ const CreatePrediction = props =>{
                         />
                         </td>
                     </tr>
-                )
+                );
             })
-        )
+        );
         
         
     }
@@ -209,9 +209,9 @@ const CreatePrediction = props =>{
                         </td>
                     </tr>
                     
-                )
+                );
             })
-        )
+        );
         
         
     }
@@ -221,9 +221,9 @@ const CreatePrediction = props =>{
      * @param e - the event object
      */
     function handlePlayer(e){
-        var selectTeam = e.target.name.split("-")[0]+"-"
-        var selectTag = e.target.name.split("-")[1]
-        var playerId = e.target.name.split("-")[2]
+        var selectTeam = e.target.name.split("-")[0]+"-";
+        var selectTag = e.target.name.split("-")[1];
+        var playerId = e.target.name.split("-")[2];
         
         if(selectTag =="Goal")
         {
@@ -231,24 +231,24 @@ const CreatePrediction = props =>{
             setGoals(current =>
                 current.filter(object =>{
                     return object.Player_Id != playerId
-                }))
+                }));
             if (e.target.value !='0' && e.target.value != ''){
                 setGoals( goals => [...goals, {
                 
                     Player_Id : playerId,
                     Goals: e.target.value
-                }])
+                }]);
             }
             setAllGoals(current =>
                 current.filter(object =>{
                     return object.Player_Id != selectTeam+playerId
-                }))
+                }));
             if (e.target.value !='0' && e.target.value != ''){
                 setAllGoals( goals => [...goals, {
                 
                     Player_Id : selectTeam+playerId,
                     Goals: e.target.value
-                }])
+                }]);
             }
         }
         if(selectTag =="Asist")
@@ -256,31 +256,31 @@ const CreatePrediction = props =>{
             setAsistances(current =>
                 current.filter(object =>{
                     return object.Player_Id != playerId
-                }))
+                }));
             if (e.target.value !='0' && e.target.value != ''){
                 setAsistances( asistances => [...asistances, {
                     
                     Player_Id : playerId,
                     Assists : e.target.value
-                }])
+                }]);
             }
 
             setAllAssists(current =>
                 current.filter(object =>{
                     return object.Player_Id != selectTeam+playerId
-                }))
+                }));
             if (e.target.value !='0' && e.target.value != ''){
                 setAllAssists( goals => [...goals, {
                 
                     Player_Id : selectTeam+playerId,
                     Assists: e.target.value
-                }])
+                }]);
             }
         }
-        console.log("numPickId",e.target.name)
-        console.log("selectTag",selectTag)
-        console.log(e.target.name)
-        console.log(e.target.value)
+        console.log("numPickId",e.target.name);
+        console.log("selectTag",selectTag);
+        console.log(e.target.name);
+        console.log(e.target.value);
     }
 
     /**
@@ -288,14 +288,14 @@ const CreatePrediction = props =>{
      * @param e - the event object
      */
     function handleBestPlayer(e) {
-        const newData = { ...prediction }
-        newData[e.target.id] = e.target.value
-        setPrediction(newData)
-        console.log(newData)
-        console.log("vivsit",visitSelect)
-        console.log("homme", homeSelect)
-        console.log("goals",goals)
-        console.log("assistances",asistances)
+        const newData = { ...prediction };
+        newData[e.target.id] = e.target.value;
+        setPrediction(newData);
+        console.log(newData);
+        console.log("vivsit",visitSelect);
+        console.log("homme", homeSelect);
+        console.log("goals",goals);
+        console.log("assistances",asistances);
         
 
 
@@ -306,49 +306,49 @@ const CreatePrediction = props =>{
      * @return true if it matches, false otherwise
      */
     function validateScore(){
-        console.log("v allgoals", allGoals)
-        console.log("v allassists", allAssists)
-        console.log("v home score", prediction.Home_Score)
-        console.log("v visit score", prediction.Visit_Score)
-        var homeGoals = 0
-        var homeAssists = 0
-        var visitGoals = 0
-        var visitAssists = 0
+        console.log("v allgoals", allGoals);
+        console.log("v allassists", allAssists);
+        console.log("v home score", prediction.Home_Score);
+        console.log("v visit score", prediction.Visit_Score);
+        var homeGoals = 0;
+        var homeAssists = 0;
+        var visitGoals = 0;
+        var visitAssists = 0;
         allGoals.forEach(goal =>{
             if(goal.Player_Id.split('-')[0]=="Home"){
-                homeGoals = homeGoals+ parseInt(goal.Goals)
+                homeGoals = homeGoals+ parseInt(goal.Goals);
             }
             
             if(goal.Player_Id.split('-')[0]=="Visit"){
-                visitGoals = visitGoals+ parseInt(goal.Goals)
+                visitGoals = visitGoals+ parseInt(goal.Goals);
             }
             
         })
         allAssists.forEach(goal =>{
             if(goal.Player_Id.split('-')[0]=="Home"){
-                homeAssists = homeAssists+ parseInt(goal.Assists)
+                homeAssists = homeAssists+ parseInt(goal.Assists);
             }
             if(goal.Player_Id.split('-')[0]=="Visit"){
-                visitAssists = visitAssists+ parseInt(goal.Assists)
+                visitAssists = visitAssists+ parseInt(goal.Assists);
             }
         })
         if ((prediction.Home_Score - homeOwnGoals + visitOwnGoals) != homeGoals){//los goleadores de home no coinciden con el marcador
-            alert(`La cantidad de goleadores no coincide con el marcador de `+currentMatch.HomeName)
-            return false
+            alert(`La cantidad de goleadores no coincide con el marcador de `+currentMatch.HomeName);
+            return false;
         }
         if (prediction.Home_Score < homeAssists){
-            alert(`La cantidad de asistencias debe ser menor que el marcador de `+currentMatch.HomeName)
-            return false
+            alert(`La cantidad de asistencias debe ser menor que el marcador de `+currentMatch.HomeName);
+            return false;
         }
         if ((prediction.Visit_Score - visitOwnGoals + homeOwnGoals) != visitGoals){
-            alert(`La cantidad de goleadores no coincide con el marcador de `+currentMatch.VisitName)
-            return false
+            alert(`La cantidad de goleadores no coincide con el marcador de `+currentMatch.VisitName);
+            return false;
         }
         if (prediction.Visit_Score < visitAssists){
-            alert(`La cantidad de asistencias debe ser menor que el marcador de `+currentMatch.VisitName)
-            return false
+            alert(`La cantidad de asistencias debe ser menor que el marcador de `+currentMatch.VisitName);
+            return false;
         }
-        else{return true}
+        else{return true;}
         
 
     }
@@ -362,11 +362,11 @@ const CreatePrediction = props =>{
         if (prediction.Best_player.length == 0 ||
             prediction.Home_Score.length == 0 ||
             prediction.Visit_Score.length == 0 ) {
-            alert(`Llene quien va a ser el mejor jugador]`)
-            return false
+            alert(`Llene quien va a ser el mejor jugador]`);
+            return false;
 
         }
-        return true
+        return true;
     }
 
     
@@ -378,8 +378,8 @@ const CreatePrediction = props =>{
      */
     function submit(e){
         e.preventDefault();
-        console.log("goals",goals)
-        console.log("assistances",asistances)
+        console.log("goals",goals);
+        console.log("assistances",asistances);
         if (validateBestPlayer() && validateScore()){
             
             const result = [
@@ -390,13 +390,13 @@ const CreatePrediction = props =>{
                 )
                 .values(),
             ];
-            const newData = { ...prediction }
-            newData["GoalList"] = result
-            newData["Id_match"] = currentMatch.Id
-            newData["Id_user"] = currentUser.Id
+            const newData = { ...prediction };
+            newData["GoalList"] = result;
+            newData["Id_match"] = currentMatch.Id;
+            newData["Id_user"] = currentUser.Id;
 
             
-            setPrediction(newData)
+            setPrediction(newData);
 
             client.post('prediction', {
                 Home_Score : newData.Home_Score,
@@ -408,19 +408,19 @@ const CreatePrediction = props =>{
                 Id_Winner: newData.Id_Winner
             }).then(response => {
                 console.log(response)
-            })
-            console.log("submit", newData)
-            alert(`Se ha realizado la prediccion`)
+            });
+            console.log("submit", newData);
+            alert(`Se ha realizado la prediccion`);
             navigate("/view-prediction");
             
         }else{
-            alert(`Error al hacer la prediccion, intente de nuevo`)
+            alert(`Error al hacer la prediccion, intente de nuevo`);
         }
         
     }
     
     return(
-        <div>
+        <div data-testid = "prediction-test">
             <div className="row">
                 {/* <div className="col-auto">
                     <img id="predictionImage" src={predictionImage} alt="prediction" />
