@@ -76,7 +76,7 @@ export class PredictionRepository {
         return check_prediction.recordset;
     }
     public async createPrediction(Home_Score: number, Visit_Score: number,
-        Best_player: number, Id_user: number, Id_match: number,
+        Best_player: number, Id_user: number, Id_match: number, Id_Winner: number,
         PredictionList: {
             Player_Id: string, Goals: string, Assists: string
         }[]): Promise<number> {
@@ -93,9 +93,10 @@ export class PredictionRepository {
             .input('Best_player', sql.Int, Best_player)
             .input('Id_user', sql.Int, Id_user)
             .input('Id_match', sql.Int, Id_match)
-            .query("INSERT INTO PREDICTION (Home_Score, Visit_Score, Best_player, Id_user, Id_match)" +
+            .input('Id_Winner', sql.Int, Id_Winner)
+            .query("INSERT INTO PREDICTION (Home_Score, Visit_Score, Best_player, Id_user, Id_match, Id_Winner)" +
                 " OUTPUT Inserted.Id" +
-                " VALUES (@Home_Score, @Visit_Score, @Best_player, @Id_user, @Id_match)");
+                " VALUES (@Home_Score, @Visit_Score, @Best_player, @Id_user, @Id_match, @Id_Winner)");
         const id_prediction = result.recordset[0].Id;
         //console.log(id_prediction);
         var addGoalPrediction = 1;

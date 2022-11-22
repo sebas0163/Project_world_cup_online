@@ -43,13 +43,14 @@ export default class PredictionController {
     static async createPrediction(req: Request, res: Response) {
         try {
             const { Home_Score, Visit_Score, Best_player, Id_user, Id_match,
-                GoalList } = req.body;
-            if (!validateBody(req.body, ['Home_Score', 'Visit_Score', 'Best_player', 'Id_user', 'Id_match', 'GoalList'])) {
+                Id_Winner, GoalList } = req.body;
+            if (!validateBody(req.body, ['Home_Score', 'Visit_Score', 'Best_player', 'Id_user',
+                'Id_Winner', 'Id_match', 'GoalList'])) {
                 res.status(400).json({ msg: 'Please enter all fields' });
                 return;
             }
             const result = await predictionRepository.createPrediction(+Home_Score, +Visit_Score,
-                +Best_player, +Id_user, +Id_match, GoalList);
+                +Best_player, +Id_user, +Id_match, +Id_Winner, GoalList);
             res.status(200).json(result);
         }
         catch (err) {
