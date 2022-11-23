@@ -45,7 +45,7 @@ export default class PredictionController {
             const { Home_Score, Visit_Score, Best_player, Id_user, Id_match,
                 Id_Winner, GoalList } = req.body;
             if (!validateBody(req.body, ['Home_Score', 'Visit_Score', 'Best_player', 'Id_user',
-                'Id_Winner', 'Id_match', 'GoalList'])) {
+                'Id_Winner', 'Id_match'])) {
                 res.status(400).json({ msg: 'Please enter all fields' });
                 return;
             }
