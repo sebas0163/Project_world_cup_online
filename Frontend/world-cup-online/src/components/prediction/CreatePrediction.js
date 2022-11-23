@@ -33,6 +33,12 @@ const CreatePrediction = props =>{
     /*Logged in user*/
     const [currentUser, setCurrentUser] = useState();
     const [userType, setUserType] = useState("user");
+    const [setupLabels, setSetupLabels] = useState({
+        Post_Type: "",
+        Title : "",
+        Button_Text: ""
+
+    });
     /*Prediction to post */
     const [prediction, setPrediction] = useState({
         Home_Score : 0,
@@ -52,10 +58,11 @@ const CreatePrediction = props =>{
 
     /* Setting the currentMatch and currentUser to the props.match and props.user. */
     useEffect(() => {
-        console.log("Match", props.match)
+        console.log("Match", props.match, props.mode)
         setCurrentMatch(props.match)
         setCurrentUser(props.user)
-    }, [props.match,props.user]);
+        setUserType(props.mode)
+    }, [props.match,props.user, props.mode]);
 
     
     /* Getting the players from the database and setting them to the state. */
@@ -72,10 +79,24 @@ const CreatePrediction = props =>{
         client.get('player/team/'+props.match.VisitId).then((response) => {
             
             setVisitPlayers(response.data);
-            setPlayers(temp.concat(response.data))
+            setPlayers(temp.concat(response.data));
             
         });
-    }, [props.match,props.user]);
+        if (props.mode === "admin"){
+            setSetupLabels({
+                Post_Type: "result",
+                Title : "Resultados del partido",
+                Button_Text: "Enviar resultados"
+            });
+        }
+        if (props.mode === "user"){
+            setSetupLabels({
+                Post_Type: "prediction",
+                Title : "Hacer una prediccion",
+                Button_Text: "Hacer prediccion"
+            });
+        }
+    }, [props.match,props.user, props.mode]);
 
    /**
     * When the user enters a number into the Home_Score input field, the function will update the
@@ -390,15 +411,9 @@ const CreatePrediction = props =>{
 
             
             setPrediction(newData);
-            var postType = "";
-            if (userType == "admin"){
-                postType = 'result';
-            }
-            else{
-                postType = 'prediction';
-            }
-            console.log("postType", postType)
-            client.post('prediction', {
+            
+            console.log("postType", setupLabels.Post_Type)
+            client.post(setupLabels.Post_Type, {
                 Home_Score : newData.Home_Score,
                 Visit_Score : newData.Visit_Score,
                 Best_player: newData.Best_player,
@@ -411,7 +426,13 @@ const CreatePrediction = props =>{
             });
             console.log("submit", newData);
             alert(`Se ha realizado la prediccion`);
-            navigate("/view-prediction");
+
+            if(userType === "user"){
+                navigate("/view-prediction");
+            }
+            if(userType === "admin"){
+                navigate("/admin-dashboard");
+            }
             
         }else{
             alert(`Error al hacer la prediccion, intente de nuevo`);
@@ -428,9 +449,9 @@ const CreatePrediction = props =>{
                 <div className="col">
                     <form onSubmit={(e) => submit(e)}>
                         <div className="row">
-                            <h1>Hacer una prediccion</h1>
+                            <h1>{setupLabels.Title}</h1>
                             <br />                            
-                            <h3>¿Cual va a ser el marcador del partido?</h3>
+                            <h3>Escoja el marcador del partido</h3>
                             <br />
                             <div className="col">
                                 <h4> {currentMatch.HomeName}</h4>
@@ -540,7 +561,7 @@ const CreatePrediction = props =>{
                         </div>
                         <br />
                         <div className="col-auto">
-                            <button id="goldBtn" className="btn btn-warning" type="submit"> Hacer prediccion</button>
+                            <button id="goldBtn" className="btn btn-warning" type="submit"> {setupLabels.Button_Text}</button>
                         </div>
                     </form>
                 </div>
