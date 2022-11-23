@@ -73,28 +73,28 @@ function TourneyForm() {
     function submitTournament(e) {
         e.preventDefault();
         if (validateTournament()) {
-            if(teamsCache.length < 2){
-            alert(`Por favor agregue al menos 2 equipos`)
-            }else if(stageCache.length < 1){
+            if (teamsCache.length < 2) {
+                alert(`Por favor agregue al menos 2 equipos`)
+            } else if (stageCache.length < 1) {
                 alert(`Por favor agregue al menos una fase`)
-            }else{
-            console.log(url)
-            console.log("Chequeo de teams", teamsCache)
-            console.log("Chequeo de Stages", stageCache)
-            axios.post(url, {
-                Id: tourneyData.Id,
-                Name: tourneyData.Name,
-                StartDate: tourneyData.StartDate,
-                EndDate: tourneyData.EndDate,
-                Rules: tourneyData.Rules,
-                Type: tourneyData.Type,
-                StageList: stageCache,
-                TeamList: teamsCache
-            })
-                .then(response => {
-                    console.log(response.tourneyData)
+            } else {
+                console.log(url)
+                console.log("Chequeo de teams", teamsCache)
+                console.log("Chequeo de Stages", stageCache)
+                axios.post(url, {
+                    Id: tourneyData.Id,
+                    Name: tourneyData.Name,
+                    StartDate: tourneyData.StartDate,
+                    EndDate: tourneyData.EndDate,
+                    Rules: tourneyData.Rules,
+                    Type: tourneyData.Type,
+                    StageList: stageCache,
+                    TeamList: teamsCache
                 })
-            alert(`Torneo creado correctamente`)
+                    .then(response => {
+                        console.log(response.tourneyData)
+                    })
+                alert(`Torneo creado correctamente`)
             }
         } else {
             alert(`Por favor llene todos los espacios`)
@@ -170,7 +170,7 @@ function TourneyForm() {
         (element, key) => {
             return (
                 <tr>
-                    <td>{element}</td>
+                    <td style={{ color: "black", backgroundColor: "white" }}>{element}</td>
                 </tr>
             )
         }
@@ -180,18 +180,18 @@ function TourneyForm() {
         (element, key) => {
             return (
                 <tr>
-                    <td>{element}</td>
+                    <td style={{ color: "black", backgroundColor: "white" }}> {element}</td>
                 </tr>
             )
         }
     )
     return (
         <div>
-            <h1 id="leftTitle">Creacion de torneos</h1>
+            <h1 id="leftTitle" style={{ color: "black" }}>Creacion de torneos</h1>
             <br />
             <div className="row">
                 <div className="col-auto">
-                    <div id="lighterCard" className="card">
+                    <div className="card">
                         <div className="card-body">
                             <form onSubmit={(e) => submitTournament(e)}>
                                 <br />

@@ -58,13 +58,13 @@ const ViewTourneys = props => {
             return (
 
                 <tr style={hoverStyle} onClick={(e) => selectTournament(e, element)}>
-                    <td>{element.Id}</td>
-                    <td>{element.CodeTournament}</td>
-                    <td>{element.Name}</td>
-                    <td>{element.StartDate}</td>
-                    <td>{element.EndDate}</td>
-                    <td>{element.Rules}</td>
-                    <td>{element.Type}</td>
+                    <td style={{ color: "black", backgroundColor: "white" }}>{element.Id}</td>
+                    <td style={{ color: "black", backgroundColor: "white" }}>{element.CodeTournament}</td>
+                    <td style={{ color: "black", backgroundColor: "white" }}>{element.Name}</td>
+                    <td style={{ color: "black", backgroundColor: "white" }}>{element.StartDate}</td>
+                    <td style={{ color: "black", backgroundColor: "white" }}>{element.EndDate}</td>
+                    <td style={{ color: "black", backgroundColor: "white" }}>{element.Rules}</td>
+                    <td style={{ color: "black", backgroundColor: "white" }}>{element.Type}</td>
                 </tr>
             )
         }
@@ -95,9 +95,7 @@ const ViewTourneys = props => {
                 </tbody>
             </Table>
             <br /><br /><br /><br />
-            <button id="goldBtn" className="btn btn-warning" onClick={() => navigate("/create-stage")}>Crear etapas</button>
-            <br /><br />
-            <button id="goldBtn" className="btn btn-warning" onClick={() => navigate("/assignment")}>Asignar equipos</button>
+
         </div>
 
 
