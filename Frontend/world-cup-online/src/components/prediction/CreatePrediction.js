@@ -31,8 +31,8 @@ const CreatePrediction = props =>{
     const [currentMatch, setCurrentMatch] = useState({});
 
     /*Logged in user*/
-    const [currentUser, setCurrentUser] = useState("admin");
-
+    const [currentUser, setCurrentUser] = useState();
+    const [userType, setUserType] = useState("user");
     /*Prediction to post */
     const [prediction, setPrediction] = useState({
         Home_Score : 0,
@@ -277,8 +277,7 @@ const CreatePrediction = props =>{
                 }]);
             }
         }
-        console.log("numPickId",e.target.name);
-        console.log("selectTag",selectTag);
+        
         console.log(e.target.name);
         console.log(e.target.value);
     }
@@ -292,10 +291,7 @@ const CreatePrediction = props =>{
         newData[e.target.id] = e.target.value;
         setPrediction(newData);
         console.log(newData);
-        console.log("vivsit",visitSelect);
-        console.log("homme", homeSelect);
-        console.log("goals",goals);
-        console.log("assistances",asistances);
+        
         
 
 
@@ -306,10 +302,7 @@ const CreatePrediction = props =>{
      * @return true if it matches, false otherwise
      */
     function validateScore(){
-        console.log("v allgoals", allGoals);
-        console.log("v allassists", allAssists);
-        console.log("v home score", prediction.Home_Score);
-        console.log("v visit score", prediction.Visit_Score);
+        
         var homeGoals = 0;
         var homeAssists = 0;
         var visitGoals = 0;
@@ -397,7 +390,14 @@ const CreatePrediction = props =>{
 
             
             setPrediction(newData);
-
+            var postType = "";
+            if (userType == "admin"){
+                postType = 'result';
+            }
+            else{
+                postType = 'prediction';
+            }
+            console.log("postType", postType)
             client.post('prediction', {
                 Home_Score : newData.Home_Score,
                 Visit_Score : newData.Visit_Score,
@@ -529,7 +529,7 @@ const CreatePrediction = props =>{
                             </div>
                             <div className="col=2">
                                 <select disabled = {isTie} onChange={(e) => handleBestPlayer(e)} id="Id_Winner" value={prediction.Id_Winner }>
-                                
+                                    <option value=""> --Escoja al ganador--</option>
                                     <option value= {currentMatch.HomeId}>{currentMatch.HomeName}</option>
                                     <option value= {currentMatch.VisitId}>{currentMatch.VisitName}</option>
                                 
