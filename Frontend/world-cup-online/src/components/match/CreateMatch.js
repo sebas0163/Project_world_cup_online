@@ -187,7 +187,7 @@ function CreateMatch() {
                     <br />
                     <h4 id="titleLeft">Llene toda la información sobre el partido</h4>
                     <br />
-                    <div id="lighterCard" className="card">
+                    <div className="card">
                         <div className="card-body">
                             <form onSubmit={(e) => submit(e)}>
                                 <div className="row">
