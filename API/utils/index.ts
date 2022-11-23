@@ -11,7 +11,7 @@ export function generateRandomCode(num: number): string {
 
 export function validateBody(body: any, required: string[]): boolean {
     for (let i = 0; i < required.length; i++) {
-        if (body[required[i]] == null || body[required[i]] == "") {
+        if (body[required[i]] === null || body[required[i]] === "") {
             return false;
         }
     }
