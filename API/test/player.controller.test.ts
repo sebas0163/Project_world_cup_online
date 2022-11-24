@@ -26,6 +26,19 @@ describe('Player Controller', () => {
             expect(spy).toHaveBeenCalledWith();
             expect(spy).toHaveBeenCalledTimes(1);
         });
+
+        test('should return empty list', async () => {
+            const spy = jest.spyOn(PlayerRepository.prototype, 'getPlayers').mockResolvedValueOnce([]);
+            response = createResponse();
+            request = createRequest({
+                method: 'GET',
+                url: 'api/v1/player'
+            });
+            const playersList = await PlayerController.getPlayers(request, response);
+            expect(playersList).toEqual([]);
+            expect(spy).toHaveBeenCalledWith();
+            expect(spy).toHaveBeenCalledTimes(1);
+        });
     });
 
     describe('getPlayersByTeam', () => {
@@ -40,6 +53,19 @@ describe('Player Controller', () => {
             });
             const playersList = await PlayerController.getPlayersByTeam(request, response);
             expect(playersList).toEqual(teamPlayerList);
+            expect(spy).toHaveBeenCalledTimes(1);
+        });
+
+        test('should return empty list', async () => {
+            const team = createRandomTeam();
+            const spy = jest.spyOn(PlayerRepository.prototype, 'getPlayersByTeam').mockResolvedValueOnce([]);
+            response = createResponse();
+            request = createRequest({
+                method: 'GET',
+                url: 'api/v1/player/team/' + team.Id
+            });
+            const playersList = await PlayerController.getPlayersByTeam(request, response);
+            expect(playersList).toEqual([]);
             expect(spy).toHaveBeenCalledTimes(1);
         });
     });
