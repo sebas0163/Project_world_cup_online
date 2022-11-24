@@ -43,6 +43,7 @@ export function createRandomPrediction(override = {}): Prediction {
         Best_player: faker.datatype.number(),
         Id_user: faker.datatype.number(),
         Id_match: faker.datatype.number(),
+        Id_Winner: faker.datatype.number(),
         ...override,
     };
 }
