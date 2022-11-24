@@ -32,6 +32,9 @@ class MatchController {
         try {
             let id = req.params.id || {}
             const match = await matchRepository.getMatchById(+id);
+            if (match == null) {
+                res.status(404).json("Match not found");
+            }
             res.status(200).json(match);
             return match;
         } catch (error) {
