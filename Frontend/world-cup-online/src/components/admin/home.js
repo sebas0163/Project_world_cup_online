@@ -29,7 +29,7 @@ const AdminDashboard = props => {
         props.select(match);
         props.mode("admin");
         console.log("Match Tour", match);
-        navigate("/create-prediction");
+        navigate("/create-result");
 
     }
 
