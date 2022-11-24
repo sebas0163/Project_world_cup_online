@@ -84,7 +84,7 @@ export default function App() {
           <Route path="/home" element={<Home user={user} mode = {selectUserType}
             selectTournament={selectTournament} selectMatch={selectMatch}/>}>
           </Route>
-          <Route path="/tournament" element={<Tournament tournament={tournament} select={selectMatch} />}></Route>
+          <Route path="/tournament" element={<Tournament tournament={tournament} select={selectMatch}  mode = {selectUserType}/>}></Route>
           <Route path="/tournaments" element={<ActiveTournaments selectTournament={selectTournament} />}></Route>
           <Route path="/matches" element={<ActiveMatches selectMatch={selectMatch} />}></Route>
           <Route path='/create-prediction' element={<CreatePrediction user={user} match={match} mode={userType}/>}>
