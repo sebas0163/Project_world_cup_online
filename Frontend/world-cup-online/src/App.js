@@ -64,6 +64,8 @@ export default function App() {
           <Route path="/admin-dashboard" element={<AdminDashboard select = {selectMatch} mode = {selectUserType}/>}></Route>
           <Route path='/scoreboard' element={<PositionsTable />}>
           </Route>
+          <Route path='/create-result' element={<CreatePrediction user={user} match={match} mode={userType}/>}>
+          </Route>
           <Route path='/tournament-display' element={<TournamentDisplays select={selectTournament} />}>
           </Route>
           <Route path="/create-match" element={<CreateMatch />}>

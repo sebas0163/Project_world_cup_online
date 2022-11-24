@@ -19,7 +19,7 @@ BEGIN
 	DECLARE @winner_id_r INT
 	DECLARE @best_player_r INT
 
-	SELECT @a = SUM(pr.Goals)
+	SELECT @a = IsNULL(SUM(pr.Goals),0)
 	FROM
 	(SELECT * FROM PLAYERS_RESULTS
 	WHERE Id_result = @Result_Id) as pr
@@ -28,7 +28,7 @@ BEGIN
 	WHERE Id_prediction = @Prediction_Id) as pp
 	ON pr.Player_Id = pp.Player_Id AND pr.Goals >= pp.Goals
 
-	SELECT @b = SUM(pr.Assists)
+	SELECT @b = IsNull(SUM(pr.Assists), 0)
 	FROM
 	(SELECT * FROM PLAYERS_RESULTS
 	WHERE Id_result = @Result_Id) as pr
@@ -68,10 +68,20 @@ BEGIN
 	END
 
 	SET @Points = ( @Points + 5 * @a + 5 * @b )* (1+(@n-1)*0.25)
+
+	BEGIN TRY
+		 INSERT INTO USER_TOURNAMENT_POINTS
+		 VALUES(@Tournament_Id, @user_id_p, @Points)
+	END TRY
+	BEGIN CATCH
+		 UPDATE USER_TOURNAMENT_POINTS
+		 SET Point = Point + @Points
+		 WHERE [User_Id] = @user_id_p AND Tournament_ID = @Tournament_Id
+	END CATCH
+	
 	PRINT 'points'
 	PRINT @Points
-	PRINT 'n'
-	PRINT @n
+	
 END
 GO
 
@@ -104,4 +114,5 @@ BEGIN
 	
 END
 
---EXEC assignResults 2, 'zya0a4'
+
+--EXEC assignResults 7, 'xb2Yxh'
