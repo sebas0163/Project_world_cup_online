@@ -45,8 +45,8 @@ export const Create_group = props=>{
                 Name: GroupData.Name,
                 Tournament_code: GroupData.Tournament_code
             }).then(response => {
-                console.log(response.status)
-                alert(response)
+                console.log(response)
+                alert("Grupo creado con exito, el codigo para compartir es: " + response.data)
                 //return Promise.resolve(true)
             })
         }else{
