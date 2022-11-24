@@ -237,6 +237,27 @@ export function generatePredictionsData(n: number = 1, override = {}) {
     );
 }
 
+export function generatePredictionsForUser(n: number = 1, user: User) {
+    const predictions: Prediction[] = [];
+    for (let i = 0; i < n; i++) {
+        const prediction: Prediction = createRandomPredictionForUser(user.Id);
+        predictions.push(prediction);
+    }
+    return predictions;
+}
+
+export function createRandomPredictionForUser(userId: number): Prediction {
+    return {
+        Id: faker.datatype.number(),
+        Home_Score: faker.datatype.number({ min: 0, max: 3 }),
+        Visit_Score: faker.datatype.number({ min: 0, max: 3 }),
+        Best_player: faker.datatype.number(),
+        Id_user: userId,
+        Id_match: faker.datatype.number(),
+        Id_Winner: faker.datatype.number()
+    }
+}
+
 export function generateTeamWithPlayers(team: Team) {
     let teamPlayerList: { Id: number, Name: string, Team: string, Rol: string }[] = [];
     const players = generatePlayersData(11);

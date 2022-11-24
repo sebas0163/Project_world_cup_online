@@ -23,6 +23,7 @@ export default class PredictionController {
             const id = req.params.id || {};
             const predictions = await predictionRepository.getPredictionsByUser(+id);
             res.status(200).json(predictions);
+            return predictions;
         } catch (err) {
             res.status(500);
             console.log(err);
