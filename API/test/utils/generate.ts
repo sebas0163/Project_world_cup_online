@@ -1,5 +1,6 @@
 import { faker } from '@faker-js/faker';
 import { Admin } from '../../models/admin';
+import { Group } from '../../models/group';
 import { Match } from '../../models/match';
 import { Player } from '../../models/player';
 import { Prediction } from '../../models/prediction';
@@ -225,6 +226,26 @@ export function generatePlayersData(n: number = 1, override = {}) {
             return createRandomPlayer({ id: i, ...override });
         }
     );
+}
+
+export function generateGroupsData(n: number = 1, override = {}) {
+    return Array.from(
+        {
+            length: n,
+        },
+        (_, i) => {
+            return createRandomGroup({ id: i, ...override });
+        }
+    );
+}
+
+export function createRandomGroup(override = {}): Group {
+    return {
+        Code: faker.datatype.string(12),
+        Name: faker.address.city(),
+        Tournament_code: faker.datatype.string(6),
+        ...override,
+    };
 }
 
 export function createRandomAdmin(): Admin {
