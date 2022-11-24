@@ -143,6 +143,9 @@ const AdminContainer = () => (
               <li class="nav-item">
                 <Link class="nav-link" to="/view-prediction">Predicciones</Link>
               </li>
+              <li class="nav-item">
+                <Link class="nav-link" to="/admin-login">Cerrar sesión</Link>
+              </li>
             </ul>
             <ul class="navbar-nav">
               <li class="nav-item">
@@ -181,6 +184,9 @@ const DefaultContainer = () => (
               </li>
               <li class="nav-item">
                 <Link class="nav-link" to="/view-prediction">Predicciones</Link>
+              </li>
+              <li class="nav-item">
+                <Link class="nav-link" to="/">Cerrar sesión</Link>
               </li>
             </ul>
             <ul class="navbar-nav">
