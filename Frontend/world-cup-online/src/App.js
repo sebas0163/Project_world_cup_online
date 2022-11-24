@@ -18,6 +18,7 @@ import ActiveMatches from './components/match/ActiveMatches';
 import { CreateUserAccount } from './components/CreateUserAccount';
 import AdminDashboard from './components/admin/home';
 import { Helmet } from 'react-helmet';
+import { Create_group } from './components/Group/Create_group';
 
 export default function App() {
 
@@ -88,6 +89,9 @@ export default function App() {
           </Route>
           <Route path='/view-prediction' element={<ViewPredictions user={user} />}>
           </Route>
+          <Route path='/Create-group' element={<Create_group user={user}  tournament={tournament}/>}>
+          </Route>
+          
 
         </Route>
       </Routes>
