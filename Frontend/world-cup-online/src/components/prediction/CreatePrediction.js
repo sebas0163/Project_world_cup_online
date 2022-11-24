@@ -425,13 +425,15 @@ const CreatePrediction = props =>{
                 console.log(response)
             });
             console.log("submit", newData);
-            alert(`Se ha realizado la prediccion`);
+            
 
             if(userType === "user"){
                 navigate("/view-prediction");
+                alert(`Se ha realizado la prediccion`);
             }
             if(userType === "admin"){
                 navigate("/admin-dashboard");
+                alert(`Se han publicado los resultados`);
             }
             
         }else{
