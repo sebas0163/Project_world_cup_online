@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Navigate } from 'react-router-dom/dist';
 import axios from "axios";
-import "./CreateUserAccount.css";
 import { useNavigate } from "react-router-dom";
 
-export const Create_group = ()=>{
+export const Create_group = props=>{
     const navigate = useNavigate();
     const client = axios.create({
         baseURL: "http://localhost:5000/api/v1/"
@@ -12,9 +11,18 @@ export const Create_group = ()=>{
     const [GroupData, setData] = useState({
         User_ID: "", //agregar el id del usuario registrado
         Name: "",
-        TorunamentCode: "" //agregar codigo del torneo 
+        Tournament_code: "" //agregar codigo del torneo 
 
     })
+
+    useEffect(() => {
+        console.log("tournament, props", props.tournament)
+        console.log("User, props", props.user)
+        const newData = { ...GroupData }
+        newData["User_ID"] = props.user.Id
+        newData["Tournament_code"] = props.tournament.CodeTournament
+        setData(newData)
+    }, [props.tournament,props.user]);
     function ValidateName(){
         const newData = {...GroupData}
         if(GroupData.Name.length ==0){
@@ -35,7 +43,11 @@ export const Create_group = ()=>{
             const post = await client.post('group', {
                 User_ID:  GroupData.User_ID,
                 Name: GroupData.Name,
-                TorunamentCode: GroupData.TorunamentCode
+                Tournament_code: GroupData.Tournament_code
+            }).then(response => {
+                console.log(response.status)
+                alert(response)
+                //return Promise.resolve(true)
             })
         }else{
             alert('Debe indicar un nombre al grupo')
@@ -53,10 +65,6 @@ export const Create_group = ()=>{
             </div>
             <div className='col'>
                 <h3>Registro de Grupo</h3>
-                <div className='input-group mb-3'>
-                    <span id="span" className='input-group-text'>Código del Grupo</span>
-                    <input  id="Name" type="text" aria-label="Color" className='form-control' disabled></input>
-                </div>
                 <div className='input-group mb-3'>
                     <span id="span" className='input-group-text'>Nombre del grupo</span>
                     <input onChange={(e) => handle(e)} id="Name" type="text" aria-label="Color" className='form-control'></input>
