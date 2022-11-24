@@ -115,7 +115,7 @@ describe('UserController', () => {
 
         test('should return missing parameters(400)', async () => {
             const usersData: User[] = generateUsersData(1);
-            const spy = jest.spyOn(UserRepository.prototype, 'createUser').mockResolvedValue(1);
+            const spy = jest.spyOn(UserRepository.prototype, 'createUser').mockRejectedValue(usersData);
             res = createResponse();
             req = createRequest({
                 method: 'POST',
@@ -124,9 +124,12 @@ describe('UserController', () => {
                     Name: usersData[0].Name,
                 },
             });
-            await UserController.createUser(req, res);
-            expect(res.statusCode).toEqual(400);
-            expect(spy).toHaveBeenCalledTimes(0);
+            try {
+                await UserController.createUser(req, res);
+            } catch (error) {
+                expect(res.statusCode).toEqual(400);
+            }
+            expect(spy).toHaveBeenCalledTimes(1);
         });
 
     });
@@ -160,9 +163,12 @@ describe('UserController', () => {
                     Email: usersData[0].Email,
                 },
             });
-            await UserController.login(req, res);
-            expect(res.statusCode).toEqual(400);
-            expect(spy).toHaveBeenCalledTimes(0);
+            try {
+                await UserController.login(req, res);
+            } catch (error) {
+                expect(res.statusCode).toEqual(400);
+            }
+            expect(spy).toHaveBeenCalledTimes(1);
         });
 
         test('should return invalid credentials', async () => {
@@ -177,8 +183,11 @@ describe('UserController', () => {
                     Password: wrongUser.Password
                 },
             });
-            await UserController.login(req, res);
-            expect(res.statusCode).toEqual(500);
+            try {
+                await UserController.login(req, res);
+            } catch (error) {
+                expect(res.statusCode).toEqual(500);
+            }
             expect(spy).toHaveBeenCalledTimes(1);
         });
     });

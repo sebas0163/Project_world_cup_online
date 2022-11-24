@@ -1,4 +1,5 @@
 import { faker } from '@faker-js/faker';
+import { Admin } from '../../models/admin';
 import { Match } from '../../models/match';
 import { Player } from '../../models/player';
 import { Prediction } from '../../models/prediction';
@@ -224,6 +225,13 @@ export function generatePlayersData(n: number = 1, override = {}) {
             return createRandomPlayer({ id: i, ...override });
         }
     );
+}
+
+export function createRandomAdmin(): Admin {
+    return {
+        Email: faker.internet.email(),
+        Password: faker.internet.password()
+    }
 }
 
 export function generatePredictionsData(n: number = 1, override = {}) {
