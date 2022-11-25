@@ -1,12 +1,15 @@
 import React from "react";
 import { useState, useEffect } from 'react';
-import { useNavigate } from "react-router-dom";
 import placeholderPNG from '../../assets/images/grupos.jpg';
 import axios from "axios";
 
 const JoinGroup = props =>{
     const url = "http://localhost:5000/api/v1/group/join"
     const [user, setUser] = useState(null);
+
+    useEffect(()=>{
+        setUser(props.user)
+    },[props.user])
 
     const [joinData, setJoinData] = useState({
         Group_code: "",
@@ -22,7 +25,6 @@ const JoinGroup = props =>{
                 User_ID: user.Id
             })
                 .then(response => {
-                    props.select(response.data)
                     return Promise.resolve(true)
                 })
                 .catch((error) => {

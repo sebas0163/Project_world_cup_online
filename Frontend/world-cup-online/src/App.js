@@ -191,10 +191,10 @@ const DefaultContainer = () => (
                 <Link class="nav-link" to="/view-prediction">Predicciones</Link>
               </li>
               <li class="nav-item">
-                <Link class="nav-link" to="/">Cerrar sesión</Link>
+                <Link class="nav-link" to="/join-group">Grupos</Link>
               </li>
               <li class="nav-item">
-                <Link class="nav-link" to="/join-group">Grupos</Link>
+                <Link class="nav-link" to="/">Cerrar sesión</Link>
               </li>
             </ul>
             <ul class="navbar-nav">
