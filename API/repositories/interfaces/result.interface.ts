@@ -8,6 +8,10 @@ export interface IResultRepository {
             Player_Id: string, Goals: string, Assists: string
         }[]): Promise<number>;
     getResultByMatch(id: number): Promise<Result>;
-    getLeaderboardByTournament(Tournament_code: string): Promise<Result[]>;
-    getLeaderboardByGroup(Tournament_code: string, Group_name: string): Promise<Result[]>;
+    getLeaderboardByTournament(Tournament_code: string): Promise<{
+        NickName: string, Point: number
+    }[]>;
+    getLeaderboardByGroup(Tournament_code: string, Group_name: string): Promise<{
+        NickName: string, Point: number
+    }[]>;
 }
