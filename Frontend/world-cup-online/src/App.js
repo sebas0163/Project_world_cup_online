@@ -63,8 +63,6 @@ export default function App() {
 
         <Route element={<AdminContainer />}>
           <Route path="/admin-dashboard" element={<AdminDashboard select = {selectMatch} mode = {selectUserType}/>}></Route>
-          <Route path='/scoreboard' element={<PositionsTable />}>
-          </Route>
           <Route path='/create-result' element={<CreatePrediction user={user} match={match} mode={userType}/>}>
           </Route>
           <Route path='/tournament-display' element={<TournamentDisplays select={selectTournament} />}>
@@ -89,6 +87,8 @@ export default function App() {
           <Route path="/tournaments" element={<ActiveTournaments selectTournament={selectTournament} />}></Route>
           <Route path="/matches" element={<ActiveMatches selectMatch={selectMatch} />}></Route>
           <Route path='/create-prediction' element={<CreatePrediction user={user} match={match} mode={userType}/>}>
+          </Route>
+          <Route path='/scoreboard' element={<PositionsTable tournament={tournament}/>}>
           </Route>
           <Route path='/view-prediction' element={<ViewPredictions user={user} />}>
           </Route>
@@ -191,10 +191,10 @@ const DefaultContainer = () => (
                 <Link class="nav-link" to="/view-prediction">Predicciones</Link>
               </li>
               <li class="nav-item">
-                <Link class="nav-link" to="/">Cerrar sesión</Link>
+                <Link class="nav-link" to="/join-group">Grupos</Link>
               </li>
               <li class="nav-item">
-                <Link class="nav-link" to="/join-group">Grupos</Link>
+                <Link class="nav-link" to="/">Cerrar sesión</Link>
               </li>
             </ul>
             <ul class="navbar-nav">
