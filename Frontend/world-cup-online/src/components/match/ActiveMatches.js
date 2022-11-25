@@ -22,6 +22,7 @@ const ActiveMatches = props => {
     const goToPrediction = (e, match) => {
         e.preventDefault();
         props.selectMatch(match);
+        props.mode("user");
         navigate("/create-prediction");
     }
 

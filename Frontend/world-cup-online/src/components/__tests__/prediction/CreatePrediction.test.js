@@ -1,11 +1,14 @@
 import ReactDOM from 'react-dom';
 import React from 'react';
 import CreatePrediction from '../../prediction/CreatePrediction';
-import { render, screen } from '@testing-library/react';
+import { render, screen, cleanup } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { userDummy, matchDummy } from '../utils/dummies';
 const mockChildComponent = jest.fn();
 
+afterEach(() => {
+  cleanup(); 
+})
 
 jest.mock("../../prediction/CreatePrediction", () => (props) => {
   mockChildComponent(props);
@@ -17,10 +20,10 @@ test("should render CreatePrediction component", () =>{
     ReactDOM.render(<BrowserRouter>
                      <CreatePrediction/>
                     </BrowserRouter>,div)
-    //render(<CreatePrediction user={user} match={match} mode={userType}/>)
+    
 });
 
-test("If ParentComponent is passed open and has data, ChildComponent is called with prop open and data", () => {
+test("if ParentComponent is passed open and has data, ChildComponent is called with prop open and data", () => {
     const div = document.createElement('div');
     ReactDOM.render(<BrowserRouter>
         <CreatePrediction user = {userDummy()} match = {matchDummy()} mode = "user" />
@@ -36,3 +39,23 @@ test("If ParentComponent is passed open and has data, ChildComponent is called w
       }) 
     ); 
   });
+
+describe("Button Component" ,() => {
+  const setToggle= jest.fn(); 
+  const div = document.createElement('div');
+  render(<BrowserRouter>
+      <CreatePrediction user = {userDummy()} match = {matchDummy()} mode = "user" />
+      </BrowserRouter>)
+
+  const button = screen.queryByTestId("button-prediction"); 
+    
+  // Test 1n 
+  test("Button Rendering", () => {
+      expect(button).toBeInTheDocument(); 
+  })
+
+  // Test 2 
+  test("Button Text", () => {
+      expect(button).toHaveTextContent("Click Me!"); 
+  })
+})
