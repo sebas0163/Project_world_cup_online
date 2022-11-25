@@ -40,7 +40,9 @@ export class ResultRepository {
 
     }
 
-    public async getLeaderboardByGroup(Group_code: string): Promise<Result[]> {
+    public async getLeaderboardByGroup(Group_code: string): Promise<{
+        NickName: string, Point: number
+    }[]> {
         const result = await new sql.Request()
             .input('Group_code', sql.VarChar, Group_code)
             .query("SELECT u.NickName,utp.Point " +
@@ -49,19 +51,21 @@ export class ResultRepository {
                 "ON u.Id = utp.[User_Id] " +
                 "INNER JOIN USER_GROUP as up " +
                 "ON up.[User_ID] = u.Id " +
-                "WHERE up.Group_code = @Group_code" +
+                "WHERE up.Group_code = @Group_code " +
                 "ORDER BY utp.Point DESC");
         return result.recordset;
     }
 
-    public async getLeaderboardByTournament(Tournament_code: string): Promise<Result[]> {
+    public async getLeaderboardByTournament(Tournament_code: string): Promise<{
+        NickName: string, Point: number
+    }[]> {
         const result = await new sql.Request()
             .input('Tournament_code', sql.VarChar, Tournament_code)
             .query("SELECT u.NickName,utp.Point " +
                 "FROM [USER] as u " +
                 "INNER JOIN USER_TOURNAMENT_POINTS as utp " +
                 "ON u.Id = utp.[User_Id] " +
-                "WHERE utp.Tournament_ID = @Tournament_code" +
+                "WHERE utp.Tournament_ID = @Tournament_code " +
                 "ORDER BY utp.Point DESC");
         return result.recordset;
     }

@@ -11,6 +11,7 @@ export default class ResultController {
         try {
             const results = await resultRepository.getResults();
             res.status(200).json(results);
+            return results;
         } catch (err) {
             res.status(500);
             console.log(err);
@@ -21,7 +22,12 @@ export default class ResultController {
         try {
             const id = req.params.id || {};
             const result = await resultRepository.getResultByMatch(+id);
+            if (result == null) {
+                res.status(404).json({ msg: 'Result not found' });
+                return;
+            }
             res.status(200).json(result);
+            return result;
         } catch (err) {
             res.status(500);
             console.log(err);
@@ -32,7 +38,12 @@ export default class ResultController {
         try {
             const code = req.params.code;
             const leaderboard = await resultRepository.getLeaderboardByTournament(code);
+            if (leaderboard.length == 0) {
+                res.status(404).json({ msg: 'Leaderboard not found' });
+                return;
+            }
             res.status(200).json(leaderboard);
+            return leaderboard;
         } catch (err) {
             res.status(500);
             console.log(err);
@@ -44,7 +55,12 @@ export default class ResultController {
             const group_id = req.params.code;
             const Group_name: string = "";
             const leaderboard = await resultRepository.getLeaderboardByGroup(group_id, Group_name);
+            if (leaderboard.length == 0) {
+                res.status(404).json({ msg: 'Leaderboard not found' });
+                return;
+            }
             res.status(200).json(leaderboard);
+            return leaderboard;
         } catch (err) {
             res.status(500);
             console.log(err);
