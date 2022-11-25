@@ -40,8 +40,40 @@ export class ResultRepository {
 
     }
 
+    public async getLeaderboardByGroup(Group_code: string): Promise<Result[]> {
+        const result = await new sql.Request()
+            .input('Group_code', sql.VarChar, Group_code)
+            .query("SELECT u.NickName,utp.Point " +
+                "FROM [USER] as u " +
+                "INNER JOIN USER_TOURNAMENT_POINTS as utp " +
+                "ON u.Id = utp.[User_Id] " +
+                "INNER JOIN USER_GROUP as up " +
+                "ON up.[User_ID] = u.Id " +
+                "WHERE up.Group_code = @Group_code");
+        return result.recordset;
+    }
+
+    public async getLeaderboardByTournament(Tournament_code: string): Promise<Result[]> {
+        const result = await new sql.Request()
+            .input('Tournament_code', sql.VarChar, Tournament_code)
+            .query("SELECT u.NickName,utp.Point " +
+                "FROM [USER] as u " +
+                "INNER JOIN USER_TOURNAMENT_POINTS as utp " +
+                "ON u.Id = utp.[User_Id] " +
+                "WHERE utp.Tournament_ID = @Tournament_code");
+        return result.recordset;
+    }
+
+    private async assignPointsToUsers(Id_result: number, Tournament_code: string): Promise<number> {
+        const result = await new sql.Request()
+            .input('Id_result', sql.Int, Id_result)
+            .input('Tournament_code', sql.VarChar, Tournament_code)
+            .query("EXECUTE assignResults @Id_result, @Tournament_code");
+        return result.rowsAffected[0];
+    }
+
     public async postResult(Home_Score: number, Visit_Score: number,
-        Best_player: number, Id_match: number, Id_Winner: number,
+        Best_player: number, Id_match: number, Id_Winner: number, Tournament_code: string,
         ResultList: {
             Player_Id: string, Goals: string, Assists: string
         }[]): Promise<number> {
@@ -57,7 +89,8 @@ export class ResultRepository {
                 " VALUES (@Home_Score, @Visit_Score, @Best_player, @Id_match, @Id_Winner);");
         const id_result = result.recordset[0].Id;
         const add_goal_result = await this.addGoalResult(ResultList, id_result);
-        if (result.rowsAffected[0] == 1 && add_goal_result == 1) {
+        const assign_points = await this.assignPointsToUsers(id_result, Tournament_code);
+        if (result.rowsAffected[0] == 1 && add_goal_result == 1 && assign_points == 1) {
             return result.recordset[0];
         } else {
             return 0;

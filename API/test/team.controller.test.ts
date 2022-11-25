@@ -143,14 +143,20 @@ describe("TeamController", () => {
 
         test('should return status code 400', async () => {
             const teamsData = generateTeamsData(1);
+            const spy = jest.spyOn(TeamRepository.prototype, "createTeam")
+                .mockRejectedValueOnce(teamsData);
             response = createResponse();
             request = createRequest({
                 method: 'POST',
                 url: 'api/v1/team',
                 body: { Name: teamsData[0].Name },
             });
-            await TeamController.createTeam(request, response);
-            expect(response.statusCode).toBe(400);
+            try {
+                await TeamController.createTeam(request, response);
+            } catch (error) {
+                expect(response.statusCode).toBe(400);
+            }
+            expect(spy).toHaveBeenCalledTimes(1);
         });
     });
 

@@ -33,6 +33,9 @@ class StageController {
         try {
             let id = req.params.id || {}
             const stage = await stageRepository.getStageById(+id);
+            if (stage == null) {
+                res.status(404).json({ message: "Stage not found" });
+            }
             res.status(200).json(stage);
             return stage;
         } catch (error) {

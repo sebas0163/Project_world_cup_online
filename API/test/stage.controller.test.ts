@@ -40,6 +40,9 @@ describe('StageController', () => {
             expect(spy).toHaveBeenCalledWith();
             expect(spy).toHaveBeenCalledTimes(1);
         });
+    });
+
+    describe('getStageById', () => {
 
         test('should return stage', async () => {
             const stagesData = generateStagesData(1);
@@ -53,6 +56,30 @@ describe('StageController', () => {
             expect(stage).toEqual(stagesData[0]);
             expect(spy).toHaveBeenCalledTimes(1);
         });
+
+        test('should return 404', async () => {
+            const tournament = generateTournamentsData(1)[0];
+            const missingStage = generateStagesForTournament(1, tournament.CodeTournament)[0];
+            const spy = jest.spyOn(StageRepository.prototype, 'getStageById')
+                .mockRejectedValueOnce(missingStage);
+
+            response = createResponse();
+            request = createRequest({
+                method: 'GET',
+                url: 'api/v1/stage/' + missingStage.Id,
+            });
+            try {
+                await StageController.getStageById(request, response);
+            } catch (error) {
+                console.log(error);
+                expect(response.statusCode).toEqual(404);
+            }
+            expect(spy).toHaveBeenCalledTimes(1);
+        });
+
+    });
+
+    describe('getStagesByTournamentCode', () => {
 
         test('should return stage list', async () => {
             const tournament = generateTournamentsData(1)[0];
@@ -68,21 +95,57 @@ describe('StageController', () => {
             expect(spy).toHaveBeenCalledTimes(1);
         });
 
-        //Integration test?
-        // test('should return status 200', async () => {
-        //     const tournament = generateTournamentsData(1)[0];
-        //     const stagesData = generateStagesForTournament(1, tournament.CodeTournament);
-        //     const spy = jest
-        //         .spyOn(StageRepository.prototype, 'createStage')
-        //     response = createResponse();
-        //     request = createRequest({
-        //         method: 'POST',
-        //         url: 'api/v1/stage',
-        //         body: stagesData[0],
-        //     });
-        //     await StageController.createStage(request, response);
-        //     expect(response.statusCode).toBe(200);
-        //     expect(spy).toHaveBeenCalledTimes(1);
-        // });
+        test('should return empty list', async () => {
+            const tournament = generateTournamentsData(1)[0];
+            const stagesData = generateStagesForTournament(2, tournament.CodeTournament);
+            const spy = jest.spyOn(StageRepository.prototype, 'getStagesByTournamentCode').mockResolvedValueOnce([]);
+            response = createResponse();
+            request = createRequest({
+                method: 'GET',
+                url: 'api/v1/stage/tournament/' + stagesData[0].Tournament_ID,
+            });
+            const stages = await StageController.getStagesByTournamentCode(request, response);
+            expect(stages).toEqual([]);
+            expect(spy).toHaveBeenCalledTimes(1);
+        });
+
     });
+
+    describe('createStage', () => {
+
+        test('should create stage', async () => {
+            const tournament = generateTournamentsData(1)[0];
+            const stageData = generateStagesForTournament(1, tournament.CodeTournament)[0];
+            const spy = jest.spyOn(StageRepository.prototype, 'createStage').mockResolvedValueOnce(1);
+            response = createResponse();
+            request = createRequest({
+                method: 'POST',
+                url: 'api/v1/stage',
+                body: stageData,
+            });
+            await StageController.createStage(request, response);
+            expect(response.statusCode).toEqual(200);
+            expect(spy).toHaveBeenCalledTimes(1);
+        });
+
+        test('should return 400', async () => {
+            const tournament = generateTournamentsData(1)[0];
+            const stageData = generateStagesForTournament(1, tournament.CodeTournament)[0];
+            const spy = jest.spyOn(StageRepository.prototype, 'createStage').mockRejectedValueOnce(stageData);
+            response = createResponse();
+            request = createRequest({
+                method: 'POST',
+                url: 'api/v1/stage',
+                body: stageData,
+            });
+            try {
+                await StageController.createStage(request, response);
+            } catch (error) {
+                expect(response.statusCode).toEqual(400);
+            }
+            expect(spy).toHaveBeenCalledTimes(1);
+        });
+
+    });
+
 });
