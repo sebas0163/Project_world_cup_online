@@ -47,7 +47,8 @@ const CreatePrediction = props =>{
         Id_user : "",
         Id_match : "",
         GoalList : [],
-        Id_Winner : ""
+        Id_Winner : "",
+        Tournament_code : ""
     });
     
     /*All goals and assists to validate counter */
@@ -420,7 +421,8 @@ const CreatePrediction = props =>{
                 Id_user : currentUser.Id,
                 Id_match : newData.Id_match,
                 GoalList: newData.GoalList,
-                Id_Winner: newData.Id_Winner
+                Id_Winner: newData.Id_Winner,
+                Tournament_code : currentMatch.Tournament_ID
             }).then(response => {
                 console.log(response)
             });
