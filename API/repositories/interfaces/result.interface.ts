@@ -4,8 +4,10 @@ export interface IResultRepository {
     getResults(): Promise<Result[]>;
     postResult(Home_Score: number, Visit_Score: number,
         Best_player: number, Id_match: number,
-        Id_Winner: number, ResultList: {
+        Id_Winner: number, Tournament_code: string, ResultList: {
             Player_Id: string, Goals: string, Assists: string
         }[]): Promise<number>;
     getResultByMatch(id: number): Promise<Result>;
+    getLeaderboardByTournament(Tournament_code: string): Promise<Result[]>;
+    getLeaderboardByGroup(Tournament_code: string, Group_name: string): Promise<Result[]>;
 }
