@@ -40,22 +40,22 @@ test("if ParentComponent is passed open and has data, ChildComponent is called w
     ); 
   });
 
-describe("Button Component" ,() => {
-  const setToggle= jest.fn(); 
-  const div = document.createElement('div');
-  render(<BrowserRouter>
-      <CreatePrediction user = {userDummy()} match = {matchDummy()} mode = "user" />
-      </BrowserRouter>)
+// describe("Button Component" ,() => {
+//   const setToggle= jest.fn(); 
+//   const div = document.createElement('div');
+//   render(<BrowserRouter>
+//       <CreatePrediction user = {userDummy()} match = {matchDummy()} mode = "user" />
+//       </BrowserRouter>)
 
-  const button = screen.queryByTestId("button-prediction"); 
+//   const button = screen.queryByTestId("button-prediction"); 
     
-  // Test 1n 
-  test("Button Rendering", () => {
-      expect(button).toBeInTheDocument(); 
-  })
+//   // Test 1n 
+//   test("Button Rendering", () => {
+//       expect(button).toBeInTheDocument(); 
+//   })
 
-  // Test 2 
-  test("Button Text", () => {
-      expect(button).toHaveTextContent("Click Me!"); 
-  })
-})
+//   // Test 2 
+//   test("Button Text", () => {
+//       expect(button).toHaveTextContent("Click Me!"); 
+//   })
+// })
