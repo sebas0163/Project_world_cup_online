@@ -49,7 +49,8 @@ export class ResultRepository {
                 "ON u.Id = utp.[User_Id] " +
                 "INNER JOIN USER_GROUP as up " +
                 "ON up.[User_ID] = u.Id " +
-                "WHERE up.Group_code = @Group_code");
+                "WHERE up.Group_code = @Group_code" +
+                "ORDER BY utp.Point DESC");
         return result.recordset;
     }
 
@@ -60,7 +61,8 @@ export class ResultRepository {
                 "FROM [USER] as u " +
                 "INNER JOIN USER_TOURNAMENT_POINTS as utp " +
                 "ON u.Id = utp.[User_Id] " +
-                "WHERE utp.Tournament_ID = @Tournament_code");
+                "WHERE utp.Tournament_ID = @Tournament_code" +
+                "ORDER BY utp.Point DESC");
         return result.recordset;
     }
 

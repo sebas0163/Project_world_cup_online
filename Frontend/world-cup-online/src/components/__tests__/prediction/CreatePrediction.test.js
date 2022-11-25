@@ -1,8 +1,13 @@
-import{render, screen, cleanup} from '@testing-library/react';
+import ReactDOM from 'react-dom';
+import React from 'react';
 import CreatePrediction from '../../prediction/CreatePrediction';
 
+import { BrowserRouter } from 'react-router-dom';
+
 test("should render CreatePrediction component", () =>{
-    render(<CreatePrediction />);
-    //const prediction_element = screen.getByTestId("prediction-test");
-    //expect(prediction_element).toBeInTheDocument();
+    const div = document.createElement('div');
+    ReactDOM.render(<BrowserRouter>
+                     <CreatePrediction/>
+                    </BrowserRouter>,div)
+
 })
