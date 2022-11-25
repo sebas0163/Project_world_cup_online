@@ -18,12 +18,14 @@ import ActiveMatches from './components/match/ActiveMatches';
 import { CreateUserAccount } from './components/CreateUserAccount';
 import AdminDashboard from './components/admin/home';
 import { Helmet } from 'react-helmet';
+import { Create_group } from './components/Group/Create_group';
 
 export default function App() {
 
   const [tournament, setTournament] = useState(null);
   const [user, setUser] = useState(null);
   const [match, setMatch] = useState(null);
+  const [userType, setUserType] = useState(null);
 
   /**
    * When the user clicks on a tournament, set the tournament to the one that was clicked on.
@@ -38,6 +40,9 @@ export default function App() {
   }
   async function selectMatch(match = null) {
     setMatch(match);
+  }
+  async function selectUserType(userType = null) {
+    setUserType(userType);
   }
 
   return (
@@ -56,8 +61,10 @@ export default function App() {
         </Route>
 
         <Route element={<AdminContainer />}>
-          <Route path="/admin-dashboard" element={<AdminDashboard />}></Route>
+          <Route path="/admin-dashboard" element={<AdminDashboard select = {selectMatch} mode = {selectUserType}/>}></Route>
           <Route path='/scoreboard' element={<PositionsTable />}>
+          </Route>
+          <Route path='/create-result' element={<CreatePrediction user={user} match={match} mode={userType}/>}>
           </Route>
           <Route path='/tournament-display' element={<TournamentDisplays select={selectTournament} />}>
           </Route>
@@ -74,16 +81,19 @@ export default function App() {
         </Route>
 
         <Route element={<DefaultContainer />}>
-          <Route path="/home" element={<Home user={user}
-            selectTournament={selectTournament} selectMatch={selectMatch} />}>
+          <Route path="/home" element={<Home user={user} mode = {selectUserType}
+            selectTournament={selectTournament} selectMatch={selectMatch}/>}>
           </Route>
           <Route path="/tournament" element={<Tournament tournament={tournament} select={selectMatch} />}></Route>
           <Route path="/tournaments" element={<ActiveTournaments selectTournament={selectTournament} />}></Route>
           <Route path="/matches" element={<ActiveMatches selectMatch={selectMatch} />}></Route>
-          <Route path='/create-prediction' element={<CreatePrediction user={user} match={match} />}>
+          <Route path='/create-prediction' element={<CreatePrediction user={user} match={match} mode={userType}/>}>
           </Route>
           <Route path='/view-prediction' element={<ViewPredictions user={user} />}>
           </Route>
+          <Route path='/Create-group' element={<Create_group user={user}  tournament={tournament}/>}>
+          </Route>
+          
 
         </Route>
       </Routes>

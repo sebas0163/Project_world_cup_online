@@ -31,3 +31,10 @@
 .table-hover tbody tr:hover th {
     color: #FEC310;
 }
+#rw{
+    width: 150px;
+}
+#btn{
+    background-color:#FEC310 ;
+    padding: 10px;
+}

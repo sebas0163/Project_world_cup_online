@@ -27,8 +27,9 @@ const AdminDashboard = props => {
     function handlePrediction(e, match) {
         e.preventDefault();
         props.select(match);
+        props.mode("admin");
         console.log("Match Tour", match);
-        navigate("/create-prediction");
+        navigate("/create-result");
 
     }
 
