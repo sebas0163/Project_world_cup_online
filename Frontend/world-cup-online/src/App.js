@@ -15,6 +15,7 @@ import Tournament from './components/tournament/Tournament';
 import ViewPredictions from './components/prediction/ViewPredictions';
 import ActiveTournaments from './components/tournament/ActiveTournaments';
 import ActiveMatches from './components/match/ActiveMatches';
+import JoinGroup from './components/Groups/JoinGroup';
 import { CreateUserAccount } from './components/CreateUserAccount';
 import AdminDashboard from './components/admin/home';
 import { Helmet } from 'react-helmet';
@@ -87,6 +88,8 @@ export default function App() {
           <Route path='/create-prediction' element={<CreatePrediction user={user} match={match} mode={userType}/>}>
           </Route>
           <Route path='/view-prediction' element={<ViewPredictions user={user} />}>
+          </Route>
+          <Route path='/join-group' element={<JoinGroup />}>
           </Route>
 
         </Route>
@@ -177,6 +180,9 @@ const DefaultContainer = () => (
               </li>
               <li class="nav-item">
                 <Link class="nav-link" to="/view-prediction">Predicciones</Link>
+              </li>
+              <li class="nav-item">
+                <Link class="nav-link" to="/join-group">Grupos</Link>
               </li>
             </ul>
             <ul class="navbar-nav">
