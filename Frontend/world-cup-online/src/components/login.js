@@ -33,7 +33,7 @@ const Login = props => {
             setHomeRoute("/admin-dashboard");
             setUrl("http://localhost:5000/api/v1/admin/login");
         }
-        else {
+        if (props.mode === "user") {
             setTitle("Bienvenido a World Cup Online");
             setHomeRoute("/home");
             setUrl("http://localhost:5000/api/v1/user/login");
@@ -56,19 +56,19 @@ const Login = props => {
     async function submitLogin(e) {
         e.preventDefault()
         if (validateLogin()) {
-            console.log(url)
+            //console.log(url)
             const post = await axios.post(url, {
                 Email: loginData.Email,
                 Password: loginData.Password
+            }).then(response => {
+                props.select(response.data)
+                return Promise.resolve(true)
             })
-                .then(response => {
-                    props.select(response.data)
-                    return Promise.resolve(true)
-                })
                 .catch((error) => {
+                    console.log(error)
                     return Promise.resolve(false)
                 })
-            //console.log(post)
+            console.log(post)
             if (post) {
                 alert("Bienvenido")
                 navigate(homeRoute)

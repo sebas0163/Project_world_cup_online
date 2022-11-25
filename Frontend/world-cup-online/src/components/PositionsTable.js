@@ -57,9 +57,9 @@ const ViewPositions = props => {
         (element, key) => {
             return (
                 <tr>
-                    <td style={{ color: "black", backgroundColor: "white" }}>{n + key}</td>
-                    <td style={{ color: "black", backgroundColor: "white" }}>{element.NickName}</td>
-                    <td style={{ color: "black", backgroundColor: "white" }}>{element.Point}</td>
+                    <td>{n + key}</td>
+                    <td>{element.NickName}</td>
+                    <td>{element.Point}</td>
                 </tr>
             )
         }
@@ -80,7 +80,7 @@ const ViewPositions = props => {
             <div class="tab-content" id="myTabContent">
 
                 <div class="tab-pane fade show active" id="Global" role="tabpanel" aria-labelledby="global-tab">
-                    <Table hover>
+                    <Table hover borderless>
                         <thead>
                             <tr>
                                 <th>Posicion</th>
@@ -94,7 +94,7 @@ const ViewPositions = props => {
                     </Table>
                 </div>
                 <div class="tab-pane fade" id="Grupos" role="tabpanel" aria-labelledby="grupos-tab">
-                    <Table hover>
+                    <Table hover borderless>
                         <thead>
                             <tr>
                                 <th>Posicion</th>
