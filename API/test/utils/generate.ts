@@ -4,6 +4,7 @@ import { Group } from '../../models/group';
 import { Match } from '../../models/match';
 import { Player } from '../../models/player';
 import { Prediction } from '../../models/prediction';
+import { Result } from '../../models/result';
 import { Stage } from '../../models/stage';
 import { Team } from '../../models/team';
 import { Tournament } from '../../models/tournament';
@@ -44,6 +45,18 @@ export function createRandomPrediction(override = {}): Prediction {
         Visit_Score: faker.datatype.number({ min: 0, max: 3 }),
         Best_player: faker.datatype.number(),
         Id_user: faker.datatype.number(),
+        Id_match: faker.datatype.number(),
+        Id_Winner: faker.datatype.number(),
+        ...override,
+    };
+}
+
+export function createRandomResult(override = {}): Result {
+    return {
+        Id: faker.datatype.number(),
+        Home_Score: faker.datatype.number({ min: 0, max: 3 }),
+        Visit_Score: faker.datatype.number({ min: 0, max: 3 }),
+        Best_player: faker.datatype.number(),
         Id_match: faker.datatype.number(),
         Id_Winner: faker.datatype.number(),
         ...override,
@@ -262,6 +275,43 @@ export function generatePredictionsData(n: number = 1, override = {}) {
         },
         (_, i) => {
             return createRandomPrediction({ id: i, ...override });
+        }
+    );
+}
+
+export function createRandomLeaderboard(override = {}): { NickName: string, Point: number } {
+    return {
+        NickName: faker.internet.userName(),
+        Point: faker.datatype.number(),
+    }
+}
+
+export function generateLeadearboard(n: number = 1, override = {}) {
+    return Array.from(
+        {
+            length: n,
+        },
+        (_, i) => {
+            return createRandomLeaderboard({ id: i, ...override });
+        }
+    );
+}
+
+export function createRandomResults(n: number): Result[] {
+    const results: Result[] = [];
+    for (let i = 0; i < n; i++) {
+        results.push(createRandomResult());
+    }
+    return results;
+}
+
+export function generateResultsData(n: number = 1, override = {}): Result[] {
+    return Array.from(
+        {
+            length: n,
+        },
+        (_, i) => {
+            return createRandomResult({ id: i, ...override });
         }
     );
 }

@@ -40,7 +40,9 @@ export class ResultRepository {
 
     }
 
-    public async getLeaderboardByGroup(Group_code: string): Promise<Result[]> {
+    public async getLeaderboardByGroup(Group_code: string): Promise<{
+        NickName: string, Point: number
+    }[]> {
         const result = await new sql.Request()
             .input('Group_code', sql.VarChar, Group_code)
             .query("SELECT u.NickName,utp.Point " +
@@ -54,7 +56,9 @@ export class ResultRepository {
         return result.recordset;
     }
 
-    public async getLeaderboardByTournament(Tournament_code: string): Promise<Result[]> {
+    public async getLeaderboardByTournament(Tournament_code: string): Promise<{
+        NickName: string, Point: number
+    }[]> {
         const result = await new sql.Request()
             .input('Tournament_code', sql.VarChar, Tournament_code)
             .query("SELECT u.NickName,utp.Point " +
