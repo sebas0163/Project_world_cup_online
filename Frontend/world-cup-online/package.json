@@ -2,6 +2,14 @@
   "name": "world-cup-online",
   "version": "0.1.0",
   "private": true,
+  "jest": {
+    "moduleNameMapper": {
+      "axios": "axios/dist/node/axios.cjs"
+    },
+    "transformIgnorePatterns": [
+      "<rootDir>/node_modules/(?!react-router-dom/.*)"
+    ]
+  },
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/user-event": "^13.5.0",
