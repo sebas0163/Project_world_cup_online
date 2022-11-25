@@ -5,6 +5,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 const ViewPositions = props => {
 
+    const n = 1;
+
     const [rankingData, setRankingData] = useState([])
 
     const client = axios.create({
@@ -27,7 +29,7 @@ const ViewPositions = props => {
         (element, key) => {
             return (
                 <tr>
-                    <td style={{ color: "black", backgroundColor: "white" }}>1</td>
+                    <td style={{ color: "black", backgroundColor: "white" }}>{n + key}</td>
                     <td style={{ color: "black", backgroundColor: "white" }}>{element.NickName}</td>
                     <td style={{ color: "black", backgroundColor: "white" }}>{element.Point}</td>
                 </tr>
@@ -44,7 +46,7 @@ const ViewPositions = props => {
                 <button role="tab" aria-controls="Global" aria-selected="true" data-bs-toggle="tab" data-bs-target="#Global" id= "global-tab" class="nav-link active">Global</button>
             </li>
             <li class="nav-item" role="presentation">
-                <button onClick={} role="tab" aria-controls="Grupos" aria-selected="false" data-bs-toggle="tab" data-bs-target="#Grupos" id="grupos-tab" class="nav-link">Grupo</button>
+                <button role="tab" aria-controls="Grupos" aria-selected="false" data-bs-toggle="tab" data-bs-target="#Grupos" id="grupos-tab" class="nav-link">Grupo</button>
             </li>
             </ul>
             <div class="tab-content" id="myTabContent">
