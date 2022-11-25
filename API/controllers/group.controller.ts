@@ -21,7 +21,11 @@ export default class GroupController {
         try {
             const code = req.params.code;
             const group = await groupRepository.getGroup(code);
+            if (group == null) {
+                res.status(404).json({ message: 'Group not found' });
+            }
             res.status(200).json(group);
+            return group;
         } catch (error) {
             res.status(500).json(error);
             console.log(error);

@@ -12,4 +12,11 @@ router
     .route('/match/:id')
     .get(ResultController.getResultByMatch)
 
+router
+    .route('/leaderboards/group/:code')
+    .get(ResultController.getLeaderboardByGroup)
+router
+    .route('/leaderboards/tournament/:code')
+    .get(ResultController.getLeaderboardByTournament)
+
 export default router;

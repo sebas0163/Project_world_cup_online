@@ -19,6 +19,7 @@ import JoinGroup from './components/Groups/JoinGroup';
 import { CreateUserAccount } from './components/CreateUserAccount';
 import AdminDashboard from './components/admin/home';
 import { Helmet } from 'react-helmet';
+import { Create_group } from './components/Group/Create_group';
 
 export default function App() {
 
@@ -64,6 +65,8 @@ export default function App() {
           <Route path="/admin-dashboard" element={<AdminDashboard select = {selectMatch} mode = {selectUserType}/>}></Route>
           <Route path='/scoreboard' element={<PositionsTable />}>
           </Route>
+          <Route path='/create-result' element={<CreatePrediction user={user} match={match} mode={userType}/>}>
+          </Route>
           <Route path='/tournament-display' element={<TournamentDisplays select={selectTournament} />}>
           </Route>
           <Route path="/create-match" element={<CreateMatch />}>
@@ -82,13 +85,16 @@ export default function App() {
           <Route path="/home" element={<Home user={user} mode = {selectUserType}
             selectTournament={selectTournament} selectMatch={selectMatch}/>}>
           </Route>
-          <Route path="/tournament" element={<Tournament tournament={tournament} select={selectMatch} />}></Route>
+          <Route path="/tournament" element={<Tournament tournament={tournament} select={selectMatch}  mode = {selectUserType}/>}></Route>
           <Route path="/tournaments" element={<ActiveTournaments selectTournament={selectTournament} />}></Route>
           <Route path="/matches" element={<ActiveMatches selectMatch={selectMatch} />}></Route>
           <Route path='/create-prediction' element={<CreatePrediction user={user} match={match} mode={userType}/>}>
           </Route>
           <Route path='/view-prediction' element={<ViewPredictions user={user} />}>
           </Route>
+          <Route path='/Create-group' element={<Create_group user={user}  tournament={tournament}/>}>
+          </Route>
+          
           <Route path='/join-group' element={<JoinGroup user = {user}/>}>
           </Route>
 
@@ -142,6 +148,9 @@ const AdminContainer = () => (
               <li class="nav-item">
                 <Link class="nav-link" to="/view-prediction">Predicciones</Link>
               </li>
+              <li class="nav-item">
+                <Link class="nav-link" to="/admin-login">Cerrar sesión</Link>
+              </li>
             </ul>
             <ul class="navbar-nav">
               <li class="nav-item">
@@ -180,6 +189,9 @@ const DefaultContainer = () => (
               </li>
               <li class="nav-item">
                 <Link class="nav-link" to="/view-prediction">Predicciones</Link>
+              </li>
+              <li class="nav-item">
+                <Link class="nav-link" to="/">Cerrar sesión</Link>
               </li>
               <li class="nav-item">
                 <Link class="nav-link" to="/join-group">Grupos</Link>

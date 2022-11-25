@@ -42,6 +42,10 @@ describe('MatchController', () => {
             expect(spy).toHaveBeenCalledTimes(1);
         });
 
+    });
+
+    describe('getMatchById', () => {
+
         test('should return a match', async () => {
             const tournament = createRandomTournament();
             const stage = createRandomStageForTournament(tournament.Id.toString());
@@ -61,6 +65,29 @@ describe('MatchController', () => {
             expect(spy).toHaveBeenCalledTimes(1);
         }
         );
+
+        test('should return a 404 error', async () => {
+            const tournament = createRandomTournament();
+            const stage = createRandomStageForTournament(tournament.Id.toString());
+            const matchesData: Match[] = generateMatchesData(tournament.Id, stage.Id, 1);
+            const spy = jest.spyOn(MatchRepository.prototype, 'getMatchById').mockRejectedValue(matchesData[0]);
+            const matchId = matchesData[0].Id;
+
+            res = createResponse();
+            req = createRequest({
+                method: 'GET',
+                url: 'api/v1/match/' + matchId,
+            });
+            try {
+                await MatchController.getMatchById(req, res);
+            } catch (error) {
+                expect(res.statusCode).toEqual(404);
+            }
+            expect(spy).toHaveBeenCalledTimes(1);
+        });
+    });
+
+    describe('getMatchesByTournamentCode', () => {
 
         test('should get a match list by tournament code', async () => {
             const tournament = createRandomTournament();
@@ -82,6 +109,29 @@ describe('MatchController', () => {
 
         });
 
+        test('should return an empty list', async () => {
+            const tournament = createRandomTournament();
+            const stage = createRandomStageForTournament(tournament.Id.toString());
+            const matchesData: Match[] = generateMatchesData(tournament.Id, stage.Id, 3);
+            const spy = jest.spyOn(MatchRepository.prototype, 'getMatchesByTournamentCode').mockResolvedValue([]);
+            const tournamentCode = matchesData[0].Tournament_ID;
+            res = createResponse();
+            req = createRequest({
+                method: 'GET',
+                url: 'api/v1/match/tournament/' + tournamentCode,
+                params: {
+                    tournamentCode: tournamentCode,
+                },
+            });
+            const matches = await MatchController.getMatchesByTournamentCode(req, res);
+            expect(matches).toEqual([]);
+            expect(spy).toHaveBeenCalledTimes(1);
+
+        });
+    });
+
+    describe('getMatchesByStageId', () => {
+
         test('should get a match list by stage id', async () => {
             const tournament = createRandomTournament();
             const stage = createRandomStageForTournament(tournament.Id.toString());
@@ -101,6 +151,28 @@ describe('MatchController', () => {
             expect(spy).toHaveBeenCalledTimes(1);
         });
 
+        test('should return an empty list', async () => {
+            const tournament = createRandomTournament();
+            const stage = createRandomStageForTournament(tournament.Id.toString());
+            const matchesData: Match[] = generateMatchesData(tournament.Id, stage.Id, 3);
+            const spy = jest.spyOn(MatchRepository.prototype, 'getMatchesByStageId').mockResolvedValue([]);
+            const stageId = matchesData[0].Stage_ID;
+            res = createResponse();
+            req = createRequest({
+                method: 'GET',
+                url: 'api/v1/match/stage/' + stageId,
+                params: {
+                    stageId: stageId,
+                },
+            });
+            const matches = await MatchController.getMatchesByStageId(req, res);
+            expect(matches).toEqual([]);
+            expect(spy).toHaveBeenCalledTimes(1);
+        });
+    });
+
+    describe('createMatch', () => {
+
         test('should return status 200', async () => {
             const tournament = createRandomTournament();
             const stage = createRandomStageForTournament(tournament.Id.toString());
@@ -117,6 +189,24 @@ describe('MatchController', () => {
             expect(spy).toHaveBeenCalledTimes(1);
         });
 
-        //TODO: Integration test for add team to math?
+        test('should return status 400', async () => {
+            const tournament = createRandomTournament();
+            const stage = createRandomStageForTournament(tournament.Id.toString());
+            const matchesData: Match[] = generateMatchesData(tournament.Id, stage.Id, 1);
+            const spy = jest.spyOn(MatchRepository.prototype, 'createMatch').mockRejectedValueOnce(matchesData[0]);
+            res = createResponse();
+            req = createRequest({
+                method: 'POST',
+                url: 'api/v1/match',
+                body: matchesData[0],
+            });
+            try {
+                await MatchController.createMatch(req, res);
+            } catch (error) {
+                expect(res.statusCode).toEqual(400);
+            }
+            expect(spy).toHaveBeenCalledTimes(1);
+        });
     });
+
 });

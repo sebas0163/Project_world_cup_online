@@ -111,9 +111,13 @@ describe('TournamentController', () => {
                 url: 'api/v1/tournament',
                 body: { Name: tournamentData.Name },
             });
+            try {
+                await TournamentController.createTournament(request, response);
+            } catch (error) {
+                expect(response.statusCode).toEqual(400);
+            }
 
-            await TournamentController.createTournament(request, response);
-            expect(response.statusCode).toEqual(400);
+
         });
     });
 
@@ -141,8 +145,11 @@ describe('TournamentController', () => {
                 url: 'api/v1/tournament/compete/',
                 body: { Id_Team: addedTeam.Id_Team },
             });
-            await TournamentController.addTeamToTournament(request, response);
-            expect(response.statusCode).toEqual(400);
+            try {
+                await TournamentController.addTeamToTournament(request, response);
+            } catch (error) {
+                expect(response.statusCode).toEqual(400);
+            }
         });
 
     });

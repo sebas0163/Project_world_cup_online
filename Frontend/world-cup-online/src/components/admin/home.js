@@ -29,7 +29,7 @@ const AdminDashboard = props => {
         props.select(match);
         props.mode("admin");
         console.log("Match Tour", match);
-        navigate("/create-prediction");
+        navigate("/create-result");
 
     }
 
@@ -89,8 +89,8 @@ const AdminDashboard = props => {
                     <div className="card">
                         <div className="card-body">
                             <h5>Torneos</h5>
-                            <button id="blueBtn" className="btn btn-primary" style={{ marginRight: "10px" }}>Mostrar Torneos</button>
-                            <button id="blueBtn" className="btn btn-primary">Crear Torneo</button>
+                            <button id="blueBtn" className="btn btn-primary" style={{ marginRight: "10px" }} onClick={() => { navigate("/tournament-display") }}>Mostrar Torneos</button>
+                            <button id="blueBtn" className="btn btn-primary" onClick={() => { navigate("/create-tournament") }}>Crear Torneo</button>
                         </div>
                     </div>
                 </div>
@@ -98,8 +98,8 @@ const AdminDashboard = props => {
                     <div className="card">
                         <div className="card-body">
                             <h5>Partidos</h5>
-                            <button id="blueBtn" className="btn btn-primary" style={{ marginRight: "10px" }}>Mostrar Partidos</button>
-                            <button id="blueBtn" className="btn btn-primary">Crear Partido</button>
+                            <button id="blueBtn" className="btn btn-primary" style={{ marginRight: "10px" }} onClick={() => { navigate("/view-match") }}>Mostrar Partidos</button>
+                            <button id="blueBtn" className="btn btn-primary" onClick={() => { navigate("/create-match") }}>Crear Partido</button>
                         </div>
                     </div>
                 </div>

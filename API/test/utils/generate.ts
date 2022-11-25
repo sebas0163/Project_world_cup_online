@@ -1,4 +1,6 @@
 import { faker } from '@faker-js/faker';
+import { Admin } from '../../models/admin';
+import { Group } from '../../models/group';
 import { Match } from '../../models/match';
 import { Player } from '../../models/player';
 import { Prediction } from '../../models/prediction';
@@ -43,6 +45,7 @@ export function createRandomPrediction(override = {}): Prediction {
         Best_player: faker.datatype.number(),
         Id_user: faker.datatype.number(),
         Id_match: faker.datatype.number(),
+        Id_Winner: faker.datatype.number(),
         ...override,
     };
 }
@@ -225,6 +228,33 @@ export function generatePlayersData(n: number = 1, override = {}) {
     );
 }
 
+export function generateGroupsData(n: number = 1, override = {}) {
+    return Array.from(
+        {
+            length: n,
+        },
+        (_, i) => {
+            return createRandomGroup({ id: i, ...override });
+        }
+    );
+}
+
+export function createRandomGroup(override = {}): Group {
+    return {
+        Code: faker.datatype.string(12),
+        Name: faker.address.city(),
+        Tournament_code: faker.datatype.string(6),
+        ...override,
+    };
+}
+
+export function createRandomAdmin(): Admin {
+    return {
+        Email: faker.internet.email(),
+        Password: faker.internet.password()
+    }
+}
+
 export function generatePredictionsData(n: number = 1, override = {}) {
     return Array.from(
         {
@@ -234,6 +264,27 @@ export function generatePredictionsData(n: number = 1, override = {}) {
             return createRandomPrediction({ id: i, ...override });
         }
     );
+}
+
+export function generatePredictionsForUser(n: number = 1, user: User) {
+    const predictions: Prediction[] = [];
+    for (let i = 0; i < n; i++) {
+        const prediction: Prediction = createRandomPredictionForUser(user.Id);
+        predictions.push(prediction);
+    }
+    return predictions;
+}
+
+export function createRandomPredictionForUser(userId: number): Prediction {
+    return {
+        Id: faker.datatype.number(),
+        Home_Score: faker.datatype.number({ min: 0, max: 3 }),
+        Visit_Score: faker.datatype.number({ min: 0, max: 3 }),
+        Best_player: faker.datatype.number(),
+        Id_user: userId,
+        Id_match: faker.datatype.number(),
+        Id_Winner: faker.datatype.number()
+    }
 }
 
 export function generateTeamWithPlayers(team: Team) {
