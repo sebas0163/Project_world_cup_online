@@ -89,7 +89,7 @@ export default function App() {
           </Route>
           <Route path='/view-prediction' element={<ViewPredictions user={user} />}>
           </Route>
-          <Route path='/join-group' element={<JoinGroup />}>
+          <Route path='/join-group' element={<JoinGroup user = {user}/>}>
           </Route>
 
         </Route>

@@ -5,18 +5,58 @@ import placeholderPNG from '../../assets/images/grupos.jpg';
 import axios from "axios";
 
 const JoinGroup = props =>{
+    const url = "http://localhost:5000/api/v1/group/join"
+    const [user, setUser] = useState(null);
 
-    const [joinData, setLoginData] = useState({
+    const [joinData, setJoinData] = useState({
         Group_code: "",
         User_ID: ""
     })
 
     async function join(e){
+        e.preventDefault()
+        if (validateJoin()) {
+            console.log(url)
+            const post = await axios.post(url, {
+                Group_code: joinData.Group_code,
+                User_ID: user.Id
+            })
+                .then(response => {
+                    props.select(response.data)
+                    return Promise.resolve(true)
+                })
+                .catch((error) => {
+                    return Promise.resolve(false)
+                })
+            //console.log(post)
+            if (post) {
+                alert("Se ha agregado al grupo")
+            }
+            //console.log("usuario")
+            if (!post) {
+                alert("El codigo de grupo no es valido")
+            }
+        }
+        else {
+            alert(`Por favor ingrese un codigo`)
+        }
 
     }
 
     async function handleJoinInput(e){
+        const newData = { ...joinData }
+        newData[e.target.id] = e.target.value
+        setJoinData(newData)
+        console.log(newData)
+    }
 
+    function validateJoin() {
+        if (joinData.Group_code.length == 0) {
+
+            return false
+
+        }
+        return true
     }
 
 return(
