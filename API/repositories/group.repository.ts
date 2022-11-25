@@ -24,6 +24,21 @@ export class GroupRepository {
         return result.rowsAffected[0];
     }
 
+    public async getGroupByTournament(code: string, user_id: number): Promise<{ Group_code: string }> {
+        const result = await new sql.Request()
+            .input("code", sql.VarChar, code)
+            .input("user_id", sql.Int, user_id)
+            .query("SELECT g.Code " +
+                "FROM TOURNAMENT as t " +
+                "INNER JOIN [GROUP] as g " +
+                "ON t.CodeTournament = g.Tournament_code " +
+                "INNER JOIN [USER_GROUP] as ug " +
+                "ON ug.Group_code = g.Code " +
+                "WHERE ug.[User_ID] = @user_id AND t.CodeTournament = @code");
+        return result.recordset[0];
+    }
+
+
     public async createGroup(User_ID: number, Name: string, Tournament_code: string): Promise<string> {
         const groupSingleCode = generateRandomCode(6);
         const Code = groupSingleCode + Tournament_code;

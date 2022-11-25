@@ -16,4 +16,8 @@ router
     .route("/join")
     .post(GroupController.joinGroup);
 
+router
+    .route("/user/tournament/:code/:id")
+    .get(GroupController.getGroupByTournament);
+
 export default router;
