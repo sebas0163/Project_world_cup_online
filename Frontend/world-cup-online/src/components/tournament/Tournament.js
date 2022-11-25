@@ -35,6 +35,7 @@ const Tournament = props => {
     function handlePrediction(e, match) {
         e.preventDefault();
         props.select(match);
+        props.mode("user");
         console.log("Match Tour", match);
         navigate("/create-prediction");
 
