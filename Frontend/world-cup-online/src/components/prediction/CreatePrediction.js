@@ -6,7 +6,7 @@ import predictionImage from '../../assets/images/prediction.jpg';
 import './prediction.css';
 import Table from 'react-bootstrap/Table';
 
-const CreatePrediction = props =>{
+const CreatePrediction = props => {
     const client = axios.create({
         baseURL: "http://localhost:5000/api/v1/"
     });
@@ -15,6 +15,9 @@ const CreatePrediction = props =>{
     const [HomePlayers, setHomePlayers] = useState([]);
     const [VisitPlayers, setVisitPlayers] = useState([]);
     const [players, setPlayers] = useState([]);
+
+    const [style, setStyle] = useState({});
+    const [inputStyle, setInputStyle] = useState({});
 
     /* Lists with goals and asistances*/
     const [goals, setGoals] = useState([]);
@@ -35,21 +38,22 @@ const CreatePrediction = props =>{
     const [userType, setUserType] = useState("user");
     const [setupLabels, setSetupLabels] = useState({
         Post_Type: "",
-        Title : "",
+        Title: "",
         Button_Text: ""
 
     });
     /*Prediction to post */
     const [prediction, setPrediction] = useState({
-        Home_Score : 0,
-        Visit_Score : 0,
-        Best_player : "",
-        Id_user : "",
-        Id_match : "",
-        GoalList : [],
-        Id_Winner : ""
+        Home_Score: 0,
+        Visit_Score: 0,
+        Best_player: "",
+        Id_user: "",
+        Id_match: "",
+        GoalList: [],
+        Id_Winner: "",
+        Tournament_code: ""
     });
-    
+
     /*All goals and assists to validate counter */
     const [allGoals, setAllGoals] = useState([]);
     const [allAssists, setAllAssists] = useState([]);
@@ -62,50 +66,53 @@ const CreatePrediction = props =>{
         setCurrentMatch(props.match)
         setCurrentUser(props.user)
         setUserType(props.mode)
-    }, [props.match,props.user, props.mode]);
+    }, [props.match, props.user, props.mode]);
 
-    
+
     /* Getting the players from the database and setting them to the state. */
     useEffect(() => {
-        
+
         /*get de match que traiga todo lo del match, team names, */
         var temp = []
-        client.get('player/team/'+props.match.HomeId).then((response) => {
-            
+        client.get('player/team/' + props.match.HomeId).then((response) => {
+
             setHomePlayers(response.data);
             temp = temp.concat(response.data);
-            
+
         });
-        client.get('player/team/'+props.match.VisitId).then((response) => {
-            
+        client.get('player/team/' + props.match.VisitId).then((response) => {
+
             setVisitPlayers(response.data);
             setPlayers(temp.concat(response.data));
-            
+
         });
-        if (props.mode === "admin"){
+        if (props.mode === "admin") {
             setSetupLabels({
                 Post_Type: "result",
-                Title : "Resultados del partido",
+                Title: "Resultados del partido",
                 Button_Text: "Enviar resultados"
             });
+            setStyle(adminStyle);
+            setInputStyle(inputAdminStyle);
         }
-        if (props.mode === "user"){
+        if (props.mode === "user") {
             setSetupLabels({
                 Post_Type: "prediction",
-                Title : "Hacer una prediccion",
+                Title: "Hacer una prediccion",
                 Button_Text: "Hacer prediccion"
             });
+            setStyle({});
+            setInputStyle({});
         }
-    }, [props.match,props.user, props.mode]);
+    }, [props.match, props.user, props.mode]);
 
-   /**
-    * When the user enters a number into the Home_Score input field, the function will update the
-    * Home_Score property of the prediction object with the value entered by the user, and then call
-    * the setHomeGoalies function
-    * @param e - the value of the input field
-    */
-    function handleHomeScore(e)
-    {
+    /**
+     * When the user enters a number into the Home_Score input field, the function will update the
+     * Home_Score property of the prediction object with the value entered by the user, and then call
+     * the setHomeGoalies function
+     * @param e - the value of the input field
+     */
+    function handleHomeScore(e) {
         const newData = { ...prediction };
         newData["Home_Score"] = e;
         setPrediction(newData);
@@ -119,16 +126,19 @@ const CreatePrediction = props =>{
     * the setVisitGoalies function
      * @param e - the value of the input field
      */
-    function handleVisitScore(e)
-    {
+    function handleVisitScore(e) {
         const newData = { ...prediction };
         newData["Visit_Score"] = e;
         setPrediction(newData);
         console.log(newData);
         setVisitGoalies();
         setWinner(newData);
-        
 
+
+    }
+
+    const inputAdminStyle = {
+        backgroundColor: 'rgb(228, 227, 227)',
     }
 
     /**
@@ -136,169 +146,171 @@ const CreatePrediction = props =>{
      * team with the highest score.
      * @param newData prediction data
      */
-    function setWinner(newData){
+    function setWinner(newData) {
         console.log("Marcador", newData.Visit_Score, newData.Home_Score);
-        if (newData.Visit_Score == newData.Home_Score){
+        if (newData.Visit_Score == newData.Home_Score) {
             setIsTie(false);
         }
-        else{
+        else {
             setIsTie(true);
-            if (newData.Visit_Score > newData.Home_Score){
+            if (newData.Visit_Score > newData.Home_Score) {
                 newData["Id_Winner"] = currentMatch.VisitId;
-                
+
             }
-            if (newData.Visit_Score < newData.Home_Score){
+            if (newData.Visit_Score < newData.Home_Score) {
                 newData["Id_Winner"] = currentMatch.HomeId;
             }
         }
         setPrediction(newData);
     }
-    function handleHomeOwnGoals(e){
+    function handleHomeOwnGoals(e) {
         sethomeOwnGoal(e);
     }
-    function handleVisitOwnGoals(e){
+    function handleVisitOwnGoals(e) {
         setvisitOwnGoal(e);
     }
-    
+
     /**
      * It takes creates the list of home players, each with a header, a goal counter 
      * and an asistances counter.
      */
-    function setHomeGoalies(){
-        
+    function setHomeGoalies() {
+
         sethomeSelect(
             HomePlayers.map(player => {
-                return(
+                return (
                     <tr>
-                        <td>
-                        <h7>{player.Id +"-"+ player.Name}</h7>
+                        <td style={style}>
+                            <h7>{player.Id + "-" + player.Name}</h7>
                         </td>
-                        <td>
-                        <input 
-                            className="form-control"
-                            name = {"Home-Goal-"+player.Id}
-                            type = "number"
-                            onChange={(e) => handlePlayer(e)}
-                            
-                        />
+                        <td style={style}>
+                            <input
+                                className="form-control"
+                                name={"Home-Goal-" + player.Id}
+                                type="number"
+                                onChange={(e) => handlePlayer(e)}
+                                style={inputStyle}
+
+                            />
                         </td>
-                        <td>
-                        <input 
-                            className="form-control"
-                            name = {"Home-Asist-"+player.Id}
-                            type = "number"
-                            onChange={(e) => handlePlayer(e)}
-                            
-                        />
+                        <td style={style}>
+                            <input
+                                className="form-control"
+                                name={"Home-Asist-" + player.Id}
+                                type="number"
+                                onChange={(e) => handlePlayer(e)}
+                                style={inputStyle}
+
+                            />
                         </td>
                     </tr>
                 );
             })
         );
-        
-        
+
+
     }
     /**
      * It takes creates the list of visit players, each with a header, a goal counter 
      * and an asistances counter.
      */
-    function setVisitGoalies(){
+    function setVisitGoalies() {
         setvisitSelect(
             VisitPlayers.map(player => {
-                return(
+                return (
                     <tr>
-                        <td>
-                        <h7>{player.Id +"-"+ player.Name}</h7>
+                        <td style={style}>
+                            <h7>{player.Id + "-" + player.Name}</h7>
                         </td>
-                        <td>
-                        <input 
-                            className="form-control"
-                            name = {"Visit-Goal-"+player.Id}
-                            type = "number"
-                            onChange={(e) => handlePlayer(e)}
-                            
-                        />
+                        <td style={style}>
+                            <input
+                                className="form-control"
+                                name={"Visit-Goal-" + player.Id}
+                                type="number"
+                                onChange={(e) => handlePlayer(e)}
+                                style={inputStyle}
+
+                            />
                         </td>
-                        <td>
-                        <input 
-                            className="form-control"
-                            name = {"Visit-Asist-"+player.Id}
-                            type = "number"
-                            onChange={(e) => handlePlayer(e)}
-                            
-                        />
+                        <td style={style}>
+                            <input
+                                className="form-control"
+                                name={"Visit-Asist-" + player.Id}
+                                type="number"
+                                onChange={(e) => handlePlayer(e)}
+                                style={inputStyle}
+
+                            />
                         </td>
                     </tr>
-                    
+
                 );
             })
         );
-        
-        
+
+
     }
 
     /**
      * When the user inputs a number of asistances or goals it saves the number on a list with the player id and the amount .
      * @param e - the event object
      */
-    function handlePlayer(e){
-        var selectTeam = e.target.name.split("-")[0]+"-";
+    function handlePlayer(e) {
+        var selectTeam = e.target.name.split("-")[0] + "-";
         var selectTag = e.target.name.split("-")[1];
         var playerId = e.target.name.split("-")[2];
-        
-        if(selectTag =="Goal")
-        {
-            
+
+        if (selectTag == "Goal") {
+
             setGoals(current =>
-                current.filter(object =>{
+                current.filter(object => {
                     return object.Player_Id != playerId
                 }));
-            if (e.target.value !='0' && e.target.value != ''){
-                setGoals( goals => [...goals, {
-                
-                    Player_Id : playerId,
+            if (e.target.value != '0' && e.target.value != '') {
+                setGoals(goals => [...goals, {
+
+                    Player_Id: playerId,
                     Goals: e.target.value
                 }]);
             }
             setAllGoals(current =>
-                current.filter(object =>{
-                    return object.Player_Id != selectTeam+playerId
+                current.filter(object => {
+                    return object.Player_Id != selectTeam + playerId
                 }));
-            if (e.target.value !='0' && e.target.value != ''){
-                setAllGoals( goals => [...goals, {
-                
-                    Player_Id : selectTeam+playerId,
+            if (e.target.value != '0' && e.target.value != '') {
+                setAllGoals(goals => [...goals, {
+
+                    Player_Id: selectTeam + playerId,
                     Goals: e.target.value
                 }]);
             }
         }
-        if(selectTag =="Asist")
-        {
+        if (selectTag == "Asist") {
             setAsistances(current =>
-                current.filter(object =>{
+                current.filter(object => {
                     return object.Player_Id != playerId
                 }));
-            if (e.target.value !='0' && e.target.value != ''){
-                setAsistances( asistances => [...asistances, {
-                    
-                    Player_Id : playerId,
-                    Assists : e.target.value
+            if (e.target.value != '0' && e.target.value != '') {
+                setAsistances(asistances => [...asistances, {
+
+                    Player_Id: playerId,
+                    Assists: e.target.value
                 }]);
             }
 
             setAllAssists(current =>
-                current.filter(object =>{
-                    return object.Player_Id != selectTeam+playerId
+                current.filter(object => {
+                    return object.Player_Id != selectTeam + playerId
                 }));
-            if (e.target.value !='0' && e.target.value != ''){
-                setAllAssists( goals => [...goals, {
-                
-                    Player_Id : selectTeam+playerId,
+            if (e.target.value != '0' && e.target.value != '') {
+                setAllAssists(goals => [...goals, {
+
+                    Player_Id: selectTeam + playerId,
                     Assists: e.target.value
                 }]);
             }
         }
-        
+
         console.log(e.target.name);
         console.log(e.target.value);
     }
@@ -312,8 +324,8 @@ const CreatePrediction = props =>{
         newData[e.target.id] = e.target.value;
         setPrediction(newData);
         console.log(newData);
-        
-        
+
+
 
 
     }
@@ -322,48 +334,48 @@ const CreatePrediction = props =>{
      * assists by player. It alerts the user when it doesnt
      * @return true if it matches, false otherwise
      */
-    function validateScore(){
-        
+    function validateScore() {
+
         var homeGoals = 0;
         var homeAssists = 0;
         var visitGoals = 0;
         var visitAssists = 0;
-        allGoals.forEach(goal =>{
-            if(goal.Player_Id.split('-')[0]=="Home"){
-                homeGoals = homeGoals+ parseInt(goal.Goals);
+        allGoals.forEach(goal => {
+            if (goal.Player_Id.split('-')[0] == "Home") {
+                homeGoals = homeGoals + parseInt(goal.Goals);
             }
-            
-            if(goal.Player_Id.split('-')[0]=="Visit"){
-                visitGoals = visitGoals+ parseInt(goal.Goals);
+
+            if (goal.Player_Id.split('-')[0] == "Visit") {
+                visitGoals = visitGoals + parseInt(goal.Goals);
             }
-            
+
         })
-        allAssists.forEach(goal =>{
-            if(goal.Player_Id.split('-')[0]=="Home"){
-                homeAssists = homeAssists+ parseInt(goal.Assists);
+        allAssists.forEach(goal => {
+            if (goal.Player_Id.split('-')[0] == "Home") {
+                homeAssists = homeAssists + parseInt(goal.Assists);
             }
-            if(goal.Player_Id.split('-')[0]=="Visit"){
-                visitAssists = visitAssists+ parseInt(goal.Assists);
+            if (goal.Player_Id.split('-')[0] == "Visit") {
+                visitAssists = visitAssists + parseInt(goal.Assists);
             }
         })
-        if ((prediction.Home_Score - homeOwnGoals + visitOwnGoals) != homeGoals){//los goleadores de home no coinciden con el marcador
-            alert(`La cantidad de goleadores no coincide con el marcador de `+currentMatch.HomeName);
+        if ((prediction.Home_Score - homeOwnGoals + visitOwnGoals) != homeGoals) {//los goleadores de home no coinciden con el marcador
+            alert(`La cantidad de goleadores no coincide con el marcador de ` + currentMatch.HomeName);
             return false;
         }
-        if (prediction.Home_Score < homeAssists){
-            alert(`La cantidad de asistencias debe ser menor que el marcador de `+currentMatch.HomeName);
+        if (prediction.Home_Score < homeAssists) {
+            alert(`La cantidad de asistencias debe ser menor que el marcador de ` + currentMatch.HomeName);
             return false;
         }
-        if ((prediction.Visit_Score - visitOwnGoals + homeOwnGoals) != visitGoals){
-            alert(`La cantidad de goleadores no coincide con el marcador de `+currentMatch.VisitName);
+        if ((prediction.Visit_Score - visitOwnGoals + homeOwnGoals) != visitGoals) {
+            alert(`La cantidad de goleadores no coincide con el marcador de ` + currentMatch.VisitName);
             return false;
         }
-        if (prediction.Visit_Score < visitAssists){
-            alert(`La cantidad de asistencias debe ser menor que el marcador de `+currentMatch.VisitName);
+        if (prediction.Visit_Score < visitAssists) {
+            alert(`La cantidad de asistencias debe ser menor que el marcador de ` + currentMatch.VisitName);
             return false;
         }
-        else{return true;}
-        
+        else { return true; }
+
 
     }
     /**
@@ -372,10 +384,10 @@ const CreatePrediction = props =>{
      * an alert and return false. Otherwise, return true.
      * @returns true if the best player was chosen, false otherwise
      */
-    function validateBestPlayer(){
+    function validateBestPlayer() {
         if (prediction.Best_player.length == 0 ||
             prediction.Home_Score.length == 0 ||
-            prediction.Visit_Score.length == 0 ) {
+            prediction.Visit_Score.length == 0) {
             alert(`Llene quien va a ser el mejor jugador]`);
             return false;
 
@@ -383,67 +395,72 @@ const CreatePrediction = props =>{
         return true;
     }
 
-    
+
+    const adminStyle = { color: "black", backgroundColor: "white" }
+
+
+
     /**
      * It takes the goals and assistances arrays, merges them into one array, and then creates a new
      * array with the merged data to assign to prediction GoalList. Then it validates best player and
      * validate score, if its correct the posts a prediction to the API
      * @param e - the event object
      */
-    function submit(e){
+    function submit(e) {
         e.preventDefault();
-        console.log("goals",goals);
-        console.log("assistances",asistances);
-        if (validateBestPlayer() && validateScore()){
-            
+        console.log("goals", goals);
+        console.log("assistances", asistances);
+        if (validateBestPlayer() && validateScore()) {
+
             const result = [
                 ...[...goals, ...asistances]
-                .reduce(
-                    (acc, curr) => acc.set(curr.Player_Id, { ...acc.get(curr.Player_Id), ...curr }),
-                    new Map()
-                )
-                .values(),
+                    .reduce(
+                        (acc, curr) => acc.set(curr.Player_Id, { ...acc.get(curr.Player_Id), ...curr }),
+                        new Map()
+                    )
+                    .values(),
             ];
             const newData = { ...prediction };
             newData["GoalList"] = result;
             newData["Id_match"] = currentMatch.Id;
             newData["Id_user"] = currentUser.Id;
 
-            
+
             setPrediction(newData);
-            
+
             console.log("postType", setupLabels.Post_Type)
             client.post(setupLabels.Post_Type, {
-                Home_Score : newData.Home_Score,
-                Visit_Score : newData.Visit_Score,
+                Home_Score: newData.Home_Score,
+                Visit_Score: newData.Visit_Score,
                 Best_player: newData.Best_player,
-                Id_user : currentUser.Id,
-                Id_match : newData.Id_match,
+                Id_user: currentUser.Id,
+                Id_match: newData.Id_match,
                 GoalList: newData.GoalList,
-                Id_Winner: newData.Id_Winner
+                Id_Winner: newData.Id_Winner,
+                Tournament_code: currentMatch.Tournament_ID
             }).then(response => {
                 console.log(response)
             });
             console.log("submit", newData);
-            
 
-            if(userType === "user"){
+
+            if (userType === "user") {
                 navigate("/view-prediction");
                 alert(`Se ha realizado la prediccion`);
             }
-            if(userType === "admin"){
+            if (userType === "admin") {
                 navigate("/admin-dashboard");
                 alert(`Se han publicado los resultados`);
             }
-            
-        }else{
+
+        } else {
             alert(`Error al hacer la prediccion, intente de nuevo`);
         }
-        
+
     }
-    
-    return(
-        <div data-testid = "prediction-test">
+
+    return (
+        <div data-testid="prediction-test">
             <div className="row">
                 {/* <div className="col-auto">
                     <img id="predictionImage" src={predictionImage} alt="prediction" />
@@ -452,19 +469,19 @@ const CreatePrediction = props =>{
                     <form onSubmit={(e) => submit(e)}>
                         <div className="row">
                             <h1>{setupLabels.Title}</h1>
-                            <br />                            
+                            <br />
                             <h3>Escoja el marcador del partido</h3>
                             <br />
                             <div className="col">
                                 <h4> {currentMatch.HomeName}</h4>
-                                <NumericInput 
-                                className="form-control"
-                                name = "ScoreHome"
-                                value={prediction.Home_Score}
-                                min ={0}  
-                                max ={99}
-                                strict
-                                onChange={(e) => handleHomeScore(e)}
+                                <NumericInput
+                                    className="form-control"
+                                    name="ScoreHome"
+                                    value={prediction.Home_Score}
+                                    min={0}
+                                    max={99}
+                                    strict
+                                    onChange={(e) => handleHomeScore(e)}
                                 />
                                 <br />
                                 <Table hover id='gamesTable'>
@@ -480,14 +497,14 @@ const CreatePrediction = props =>{
                                     </tbody>
                                 </Table>
                                 <h6>Auto goles a favor</h6>
-                                <NumericInput 
-                                className="form-control"
-                                name = "HomeOwnGoals"
-                                value={homeOwnGoals}
-                                min ={0}  
-                                max ={prediction.Home_Score}
-                                strict
-                                onChange={(e) => handleHomeOwnGoals(e)}
+                                <NumericInput
+                                    className="form-control"
+                                    name="HomeOwnGoals"
+                                    value={homeOwnGoals}
+                                    min={0}
+                                    max={prediction.Home_Score}
+                                    strict
+                                    onChange={(e) => handleHomeOwnGoals(e)}
                                 />
                             </div>
                             <div className="col-auto">
@@ -495,14 +512,14 @@ const CreatePrediction = props =>{
                             </div>
                             <div className="col">
                                 <h4> {currentMatch.VisitName}</h4>
-                                <NumericInput 
-                                className="form-control"
-                                name = "ScoreVisit"
-                                value={prediction.Visit_Score}  
-                                min ={0}  
-                                max ={99}
-                                strict
-                                onChange={(e) => handleVisitScore(e)}
+                                <NumericInput
+                                    className="form-control"
+                                    name="ScoreVisit"
+                                    value={prediction.Visit_Score}
+                                    min={0}
+                                    max={99}
+                                    strict
+                                    onChange={(e) => handleVisitScore(e)}
                                 />
                                 <br />
                                 <Table hover id='gamesTable'>
@@ -518,19 +535,19 @@ const CreatePrediction = props =>{
                                     </tbody>
                                 </Table>
                                 <h6>Auto goles a favor</h6>
-                                <NumericInput 
-                                className="form-control"
-                                name = "VisitOwnGoals"
-                                value={visitOwnGoals}
-                                min ={0}  
-                                max ={prediction.Visit_Score}
-                                strict
-                                onChange={(e) => handleVisitOwnGoals(e)}
+                                <NumericInput
+                                    className="form-control"
+                                    name="VisitOwnGoals"
+                                    value={visitOwnGoals}
+                                    min={0}
+                                    max={prediction.Visit_Score}
+                                    strict
+                                    onChange={(e) => handleVisitOwnGoals(e)}
                                 />
                             </div>
                         </div>
                         <div className="row">
-                            
+
                         </div>
                         <br />
                         <div className="row">
@@ -538,27 +555,27 @@ const CreatePrediction = props =>{
                                 <h3>Mejor jugador del partido: </h3>
                             </div>
                             <div className="col=2">
-                                <select onChange={(e) => handleBestPlayer(e)} id="Best_player" value={prediction.Best_player }>
-                                <option value=""> --Escoja al mejor jugador--</option>
-                                {players.map((option, index) => (
-                                    <option key={index} value={option.Id}>
-                                        {option.Name}
-                                    </option>
-                                ))}
+                                <select onChange={(e) => handleBestPlayer(e)} id="Best_player" value={prediction.Best_player}>
+                                    <option value=""> --Escoja al mejor jugador--</option>
+                                    {players.map((option, index) => (
+                                        <option key={index} value={option.Id}>
+                                            {option.Name}
+                                        </option>
+                                    ))}
                                 </select>
                             </div>
                             <div className="col">
                                 <h3>Ganador del partido: </h3>
                             </div>
                             <div className="col=2">
-                                <select disabled = {isTie} onChange={(e) => handleBestPlayer(e)} id="Id_Winner" value={prediction.Id_Winner }>
+                                <select disabled={isTie} onChange={(e) => handleBestPlayer(e)} id="Id_Winner" value={prediction.Id_Winner}>
                                     <option value=""> --Escoja al ganador--</option>
-                                    <option value= {currentMatch.HomeId}>{currentMatch.HomeName}</option>
-                                    <option value= {currentMatch.VisitId}>{currentMatch.VisitName}</option>
-                                
+                                    <option value={currentMatch.HomeId}>{currentMatch.HomeName}</option>
+                                    <option value={currentMatch.VisitId}>{currentMatch.VisitName}</option>
+
                                 </select>
                             </div>
-                            
+
 
                         </div>
                         <br />
@@ -567,7 +584,7 @@ const CreatePrediction = props =>{
                         </div>
                     </form>
                 </div>
-                
+
             </div>
         </div>
 

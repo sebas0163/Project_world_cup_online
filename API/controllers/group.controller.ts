@@ -64,4 +64,16 @@ export default class GroupController {
         }
     }
 
+    static async getGroupByTournament(req: Request, res: Response) {
+        try {
+            const code = req.params.code;
+            const user_id = req.params.id;
+            const group = await groupRepository.getGroupByTournament(code, +user_id);
+            res.status(200).json(group);
+        } catch (error) {
+            res.status(500).json(error);
+            console.log(error);
+        }
+    }
+
 }

@@ -35,6 +35,7 @@ const Tournament = props => {
     function handlePrediction(e, match) {
         e.preventDefault();
         props.select(match);
+        props.mode("user");
         console.log("Match Tour", match);
         navigate("/create-prediction");
 
@@ -43,9 +44,12 @@ const Tournament = props => {
         <>
             <h1 id="leftTitle">{tournament.Name}</h1>
             <h4 id="leftTitle">Detalles</h4> 
-            <div id="rw" className="row">
+            <div className="row">
                 <div id="rw"className="col-6">
                     <button onClick={(e) => goToGroups(e, tournament)} id="btn" className="btn btn-warning" type="submit"> Crear grupo</button>
+                </div>
+                <div id="rw"className="col-6">
+                    <button className="btn btn-warning" onClick={()=>navigate('/scoreboard')} id="btn">Ver posiciones</button>
                 </div>
                 <div id="rw"className="col-6">
                     <br />
