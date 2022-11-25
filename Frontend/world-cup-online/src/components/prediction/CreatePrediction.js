@@ -190,6 +190,8 @@ const CreatePrediction = props => {
                                 type="number"
                                 onChange={(e) => handlePlayer(e)}
                                 style={inputStyle}
+                                min={0}
+                                max={99}
 
                             />
                         </td>
@@ -200,6 +202,8 @@ const CreatePrediction = props => {
                                 type="number"
                                 onChange={(e) => handlePlayer(e)}
                                 style={inputStyle}
+                                min={0}
+                                max={99}
 
                             />
                         </td>
@@ -229,6 +233,8 @@ const CreatePrediction = props => {
                                 type="number"
                                 onChange={(e) => handlePlayer(e)}
                                 style={inputStyle}
+                                min={0}
+                                max={99}
 
                             />
                         </td>
@@ -239,6 +245,8 @@ const CreatePrediction = props => {
                                 type="number"
                                 onChange={(e) => handlePlayer(e)}
                                 style={inputStyle}
+                                min={0}
+                                max={99}
 
                             />
                         </td>
