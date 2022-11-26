@@ -16,12 +16,12 @@ export class GroupRepository {
         return result.recordset[0];
     }
 
-    public async joinGroup(Group_code: string, User_ID: number): Promise<number> {
+    public async joinGroup(Group_code: string, User_ID: number): Promise<{Group_code: string, User_ID: number}> {
         const result = await new sql.Request()
             .input('Group_code', sql.VarChar, Group_code)
             .input('User_ID', sql.Int, User_ID)
             .query('EXEC InsertGroup @User_ID, @Group_code');
-        return result.rowsAffected[0];
+        return result.recordset[0];
     }
 
     public async getGroupByTournament(code: string, user_id: number): Promise<{ Group_code: string }> {
@@ -61,7 +61,7 @@ export class GroupRepository {
 
         const addOwnerToGroup = await this.joinGroup(groupCode, User_ID);
 
-        if (addOwnerToGroup == 1) {
+        if (!addOwnerToGroup) {
             return groupCode;
         } else {
             return 'Error creando grupo';

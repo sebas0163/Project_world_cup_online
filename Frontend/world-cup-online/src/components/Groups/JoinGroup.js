@@ -25,6 +25,7 @@ const JoinGroup = props =>{
                 User_ID: user.Id
             })
                 .then(response => {
+                    console.log("Response", response.statusText)
                     return Promise.resolve(true)
                 })
                 .catch((error) => {
@@ -36,7 +37,7 @@ const JoinGroup = props =>{
             }
             //console.log("usuario")
             if (!post) {
-                alert("El codigo de grupo no es valido")
+                alert("El codigo de grupo no es valido o ya es miembro del grupo")
             }
         }
         else {

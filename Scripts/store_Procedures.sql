@@ -117,20 +117,17 @@ GO
 
 CREATE PROCEDURE InsertGroup @userId INT, @groupId VARCHAR(12)
 AS 
-BEGIN TRAN
-     IF EXISTS(
+SELECT *
+        FROM USER_GROUP
+        WHERE [User_ID] =@userId AND [Group_code] = @groupId
+     IF NOT EXISTS(
         SELECT [User_ID]
         FROM USER_GROUP
-        WHERE [User_ID] =@userId
+        WHERE [User_ID] =@userId AND [Group_code] = @groupId
      )
      BEGIN
-        ROLLBACK TRAN
-     END;
-     ELSE
-     BEGIN
-      INSERT INTO USER_GROUP VALUES  (@groupId, @userId)
-      COMMIT TRAN
+	 INSERT INTO USER_GROUP VALUES  (@groupId, @userId)
      END;
 
---EXEC InsertGroup 3, 'em0vAAekPMX'
+EXEC InsertGroup 3, 'dIFm6vAEDn8K'
 --EXEC assignResults 7, 'xb2Yxh'

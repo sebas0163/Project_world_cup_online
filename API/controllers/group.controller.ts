@@ -88,11 +88,11 @@ export default class GroupController {
                 res.status(400).json({ message: 'Missing required fields' });
                 return;
             }
-            const rowsAffected = await groupRepository.joinGroup(Group_code, +User_ID);
-            if (rowsAffected == 1) {
+            const joinGroup = await groupRepository.joinGroup(Group_code, +User_ID);
+            if (!joinGroup) {
                 res.status(200).json({ message: 'Joined group' });
             }
-            if (rowsAffected == 0) {
+            if (joinGroup) {
                 res.status(404).json({ message: 'Group not found' });
             }
         } catch (error) {
