@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import axios from "axios";
 import Table from 'react-bootstrap/Table';
+import { useNavigate } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const ViewPositions = props => {
-
+    const navigate = useNavigate();
     const n = 1;
     let currentPos = 0
     let currentPoints = ""
@@ -38,6 +39,7 @@ const ViewPositions = props => {
 
     async function getGroups(e) {
         e.preventDefault();
+        setRankingData([]);
         client.get('result/leaderboards/group/' + groupCode.Code).then((response) => {
             setRankingData(response.data);
         });
@@ -62,6 +64,13 @@ const ViewPositions = props => {
             currentPoints = element.Point
             currentPos = n + key;
         }
+    }
+
+    async function leaveGroup(e){
+        e.preventDefault();
+        client.delete('group/left/' + groupCode.Code + '/' + props.user.Id).then((response) => {
+            setRankingData(response.data);
+        });
     }
 
     const tableRows = rankingData.map(
@@ -89,7 +98,7 @@ const ViewPositions = props => {
                     <h5>Codigo de invitacion del grupo: {groupCode.Code}</h5>
                 </div>
                 <div className='col'>
-                <button id="btn" className="btn btn-warning" type="submit"> Abandonar Grupo</button>
+                <button onClick={(e)=> {leaveGroup(e); navigate('/home')}} id="btn" className="btn btn-warning" type="submit"> Abandonar Grupo</button>
                 </div>
             </div>
             </>:<>
