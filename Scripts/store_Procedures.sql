@@ -113,6 +113,23 @@ BEGIN
 	DEALLOCATE MY_CURSOR
 	
 END
+GO
+
+CREATE PROCEDURE InsertGroup @userId INT, @groupId VARCHAR(12)
+AS 
+BEGIN TRAN
+	 IF EXISTS(
+		SELECT [User_ID]
+		FROM USER_GROUP
+		WHERE [User_ID] =@userId
+	 )
+	 BEGIN
+		ROLLBACK TRAN
+	 END;
+	 ELSE
+	 BEGIN
+	  INSERT INTO USER_GROUP VALUES (@userId, @groupId)
+	 END;
 
 
 --EXEC assignResults 7, 'xb2Yxh'
