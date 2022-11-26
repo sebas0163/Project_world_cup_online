@@ -7,6 +7,11 @@ const groupRepository: IGroupRepository = new GroupRepository();
 
 export default class GroupController {
 
+    /**
+     * It gets all the groups from the database and returns them in the response.
+     * @param {Request} req - Request - this is the request object that is passed to the route handler.
+     * @param {Response} res - Response - the response object
+     */
     static async getGroups(req: Request, res: Response) {
         try {
             const groups = await groupRepository.getGroups();
@@ -17,6 +22,12 @@ export default class GroupController {
         }
     }
 
+    /**
+     * It gets a group from the database based on the code passed in the request.
+     * @param {Request} req - Request - The request object
+     * @param {Response} res - Response - the response object
+     * @returns The group object
+     */
     static async getGroup(req: Request, res: Response) {
         try {
             const code = req.params.code;
@@ -32,6 +43,18 @@ export default class GroupController {
         }
     }
 
+    /**
+     * It takes in a request, and a response, and then it tries to create a group. 
+     * 
+     * If it fails, it sends a 500 error. 
+     * 
+     * If it succeeds, it sends a 200 success. 
+     * 
+     * If it fails, it also logs the error to the console.
+     * @param {Request} req - Request, res: Response
+     * @param {Response} res - Response
+     * @returns The code is being returned.
+     */
     static async createGroup(req: Request, res: Response) {
         try {
             const { User_ID, Name, Tournament_code } = req.body;
@@ -47,6 +70,13 @@ export default class GroupController {
         }
     }
 
+    /**
+     * It takes a group code and a user ID, and if the group code exists, it adds the user ID to the
+     * group.
+     * @param {Request} req - Request
+     * @param {Response} res - Response
+     * @returns The number of rows affected.
+     */
     static async joinGroup(req: Request, res: Response) {
         try {
             const { Group_code, User_ID } = req.body;
@@ -64,6 +94,11 @@ export default class GroupController {
         }
     }
 
+    /**
+     * It gets the group by tournament code and user id.
+     * @param {Request} req - Request, res: Response
+     * @param {Response} res - Response
+     */
     static async getGroupByTournament(req: Request, res: Response) {
         try {
             const code = req.params.code;
@@ -76,6 +111,11 @@ export default class GroupController {
         }
     }
 
+    /**
+     * It deletes a user from a group.
+     * @param {Request} req - Request, res: Response
+     * @param {Response} res - Response
+     */
     static async getOutOfGroup(req: Request, res: Response) {
         try {
             const code = req.params.code;

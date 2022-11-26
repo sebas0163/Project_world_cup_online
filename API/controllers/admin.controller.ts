@@ -7,6 +7,19 @@ const adminRepository: IAdminRepository = new AdminRepository();
 
 export default class AdminController {
 
+    /**
+     * It takes a request and a response, and then it tries to log in an admin.
+     * 
+     * If the request body is missing parameters, it returns a 400 error.
+     * 
+     * If the admin is found, it returns a 200 status code and the admin.
+     * 
+     * If the admin is not found, it returns a 404 status code and a message.
+     * 
+     * If there's an error, it returns a 500 status code and a message.
+     * @param {Request} req - Request - The request object
+     * @param {Response} res - Response - The response object
+     */
     static async login(req: Request, res: Response) {
         try {
             const { Email, Password } = req.body;

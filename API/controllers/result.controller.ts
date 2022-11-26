@@ -7,6 +7,13 @@ const resultRepository: IResultRepository = new ResultRepository();
 
 export default class ResultController {
 
+    /**
+     * It gets the results from the database and returns them to the user.
+     * @param {Request} req - Request - this is the request object that is passed to the route handler.
+     * @param {Response} res - Response - this is the response object that will be sent back to the
+     * client.
+     * @returns The results of the query.
+     */
     static async getResults(req: Request, res: Response) {
         try {
             const results = await resultRepository.getResults();
@@ -18,6 +25,12 @@ export default class ResultController {
         }
     }
 
+    /**
+     * It takes a match id, and returns the result of that match.
+     * @param {Request} req - Request - the request object
+     * @param {Response} res - Response - the response object
+     * @returns The result of the query.
+     */
     static async getResultByMatch(req: Request, res: Response) {
         try {
             const id = req.params.id || {};
@@ -34,6 +47,12 @@ export default class ResultController {
         }
     }
 
+    /**
+     * It gets the leaderboard of a tournament by its code.
+     * @param {Request} req - Request - the request object
+     * @param {Response} res - Response - the response object
+     * @returns The leaderboard is being returned.
+     */
     static async getLeaderboardByTournament(req: Request, res: Response) {
         try {
             const code = req.params.code;
@@ -50,6 +69,12 @@ export default class ResultController {
         }
     }
 
+    /**
+     * It takes a group_id and a Group_name as parameters, and returns a leaderboard.
+     * @param {Request} req - Request - The request object
+     * @param {Response} res - Response - the response object
+     * @returns The leaderboard is being returned.
+     */
     static async getLeaderboardByGroup(req: Request, res: Response) {
         try {
             const group_id = req.params.code;
@@ -67,6 +92,11 @@ export default class ResultController {
         }
     }
 
+    /**
+     * It takes a request, validates the body, and then creates a new result.
+     * @param {Request} req - Request
+     * @param {Response} res - Response
+     */
     static async postResult(req: Request, res: Response) {
         try {
             const { Home_Score, Visit_Score, Best_player, Id_match,

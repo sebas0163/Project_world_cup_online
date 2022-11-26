@@ -7,6 +7,12 @@ const predictionRepository: IPredictionRepository = new PredictionRepository();
 
 export default class PredictionController {
 
+    /**
+     * It gets predictions from the database and returns them to the user.
+     * @param {Request} req - Request - this is the request object that is passed to the function.
+     * @param {Response} res - Response - the response object
+     * @returns The predictions array.
+     */
     static async getPredictions(req: Request, res: Response) {
         try {
             const predictions = await predictionRepository.getPredictions();
@@ -18,6 +24,12 @@ export default class PredictionController {
         }
     }
 
+    /**
+     * It gets predictions by user.
+     * @param {Request} req - Request - this is the request object that is passed to the function.
+     * @param {Response} res - Response - the response object
+     * @returns The predictions are being returned.
+     */
     static async getPredictionsByUser(req: Request, res: Response) {
         try {
             const id = req.params.id || {};
@@ -30,6 +42,11 @@ export default class PredictionController {
         }
     }
 
+    /**
+     * It gets the predictions from an id.
+     * @param {Request} req - Request - this is the request object that is passed to the function.
+     * @param {Response} res - Response - the response object
+     */
     static async getFullPredictions(req: Request, res: Response) {
         try {
             const id = req.params.id || {};
@@ -41,6 +58,12 @@ export default class PredictionController {
         }
     }
 
+    /**
+     * It creates a prediction in the database.
+     * @param {Request} req - Request, res: Response
+     * @param {Response} res - Response
+     * @returns The result of the query.
+     */
     static async createPrediction(req: Request, res: Response) {
         try {
             const { Home_Score, Visit_Score, Best_player, Id_user, Id_match,
