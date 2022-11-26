@@ -366,7 +366,7 @@ const CreatePrediction = props => {
                 visitAssists = visitAssists + parseInt(goal.Assists);
             }
         })
-        if ((prediction.Home_Score - homeOwnGoals + visitOwnGoals) != homeGoals) {//los goleadores de home no coinciden con el marcador
+        if (prediction.Home_Score != homeGoals) {//los goleadores de home no coinciden con el marcador
             alert(`La cantidad de goleadores no coincide con el marcador de ` + currentMatch.HomeName);
             return false;
         }
@@ -374,7 +374,7 @@ const CreatePrediction = props => {
             alert(`La cantidad de asistencias debe ser menor que el marcador de ` + currentMatch.HomeName);
             return false;
         }
-        if ((prediction.Visit_Score - visitOwnGoals + homeOwnGoals) != visitGoals) {
+        if (prediction.Visit_Score != visitGoals) {
             alert(`La cantidad de goleadores no coincide con el marcador de ` + currentMatch.VisitName);
             return false;
         }
@@ -396,9 +396,13 @@ const CreatePrediction = props => {
         if (prediction.Best_player.length == 0 ||
             prediction.Home_Score.length == 0 ||
             prediction.Visit_Score.length == 0) {
-            alert(`Llene quien va a ser el mejor jugador]`);
+            alert(`Llene quien va a ser el mejor jugador`);
             return false;
 
+        }
+        if(prediction.Id_Winner.length == 0){
+            alert(`Llene quien va a ser el ganador`);
+            return false;
         }
         return true;
     }
@@ -462,7 +466,7 @@ const CreatePrediction = props => {
             }
 
         } else {
-            alert(`Error al hacer la prediccion, intente de nuevo`);
+            alert(`Error, intente de nuevo`);
         }
 
     }
