@@ -20,7 +20,7 @@ export class GroupRepository {
         const result = await new sql.Request()
             .input('Group_code', sql.VarChar, Group_code)
             .input('User_ID', sql.Int, User_ID)
-            .query('INSERT INTO USER_GROUP (Group_code, User_ID) VALUES (@Group_code, @User_ID)');
+            .query('EXEC InsertGroup @User_ID, @Group_code');
         return result.rowsAffected[0];
     }
 
