@@ -70,7 +70,7 @@ export const Create_group = props=>{
                     <input onChange={(e) => handle(e)} id="Name" type="text" aria-label="Color" className='form-control'></input>
                 </div>
                 <div className='d-grid gap-2 d-md-flex justify-content-md-end'>
-                    <button id='buttons' className='btn btn-primary me-md-2' type='button' onClick={() => navigate("/")}> Cancelar</button>
+                    <button id='buttons' className='btn btn-primary me-md-2' type='button' onClick={() => navigate("/home")}> Cancelar</button>
                     <button id='buttons' className='btn btn-primary me-md-2' onClick={(e) => submit(e)}> Crear Grupo</button>
                 </div>
             </div>
