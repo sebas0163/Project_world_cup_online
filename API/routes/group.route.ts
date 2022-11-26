@@ -20,4 +20,8 @@ router
     .route("/user/tournament/:code/:id")
     .get(GroupController.getGroupByTournament);
 
+router
+    .route("/left/:code/:id")
+    .delete(GroupController.getOutOfGroup);
+
 export default router;
