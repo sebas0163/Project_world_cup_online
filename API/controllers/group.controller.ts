@@ -63,6 +63,10 @@ export default class GroupController {
                 return;
             }
             const code = await groupRepository.createGroup(+User_ID, Name, Tournament_code);
+            if (code === 'Error creando grupo') {
+                res.status(400).json({ message: 'Error creando grupo' });
+                return;
+            }
             res.status(200).json(code);
         } catch (error) {
             res.status(500).json(error);
@@ -87,6 +91,9 @@ export default class GroupController {
             const rowsAffected = await groupRepository.joinGroup(Group_code, +User_ID);
             if (rowsAffected == 1) {
                 res.status(200).json({ message: 'Joined group' });
+            }
+            if (rowsAffected == 0) {
+                res.status(404).json({ message: 'Group not found' });
             }
         } catch (error) {
             res.status(500).json(error);
