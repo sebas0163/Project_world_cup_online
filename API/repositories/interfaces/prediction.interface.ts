@@ -4,7 +4,7 @@ export interface IPredictionRepository {
     getPredictions(): Promise<Prediction[]>;
     createPrediction(Home_Score: number, Visit_Score: number,
         Best_player: number, Id_user: number, Id_match: number,
-        PredictionList: {
+        Id_Winner: number, PredictionList: {
             Player_Id: string, Goals: string, Assists: string
         }[]): Promise<number>;
     getPredictionsByUser(userId: number): Promise<Prediction[]>;

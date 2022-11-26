@@ -1,0 +1,1 @@
+INSERT INTO [ADMIN] VALUES ('admin@xfifa.com',PWDENCRYPT('admin'));

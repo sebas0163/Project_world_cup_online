@@ -1,8 +1,8 @@
-export type User = {
+import { Admin } from "./admin";
+
+export interface User extends Admin {
     Id: number,
     Name: string,
     Nickname: string,
-    Email: string,
-    Password: string,
     Birthdate: string
 }

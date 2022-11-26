@@ -1,11 +1,12 @@
 import TournamentController from '../controllers/tournament.controller';
 import { TournamentRepository } from '../repositories/tournament.repository';
-import { generateTeamsData, generateTournamentsData } from './utils/generate';
+import { addRandomTeamToTournament, generateTeamsData, generateTournamentsData } from './utils/generate';
 import { Request, Response } from 'express';
 import {
     createRequest, createResponse, MockRequest, MockResponse,
 } from 'node-mocks-http';
 import TeamController from '../controllers/team.controller';
+import { Tournament } from '../models/tournament';
 
 afterEach(() => {
     jest.resetAllMocks();
@@ -66,7 +67,25 @@ describe('TournamentController', () => {
             expect(spy).toHaveBeenCalledWith({});
             expect(spy).toHaveBeenCalledTimes(1);
         });
+
+        test('should return 404', async () => {
+            const missingTournament: Tournament = generateTournamentsData(1)[0];
+            const spy = jest.spyOn(TournamentRepository.prototype, 'getTournamentByCode')
+                .mockRejectedValueOnce(missingTournament);
+            response = createResponse();
+            request = createRequest({
+                method: 'GET',
+                url: 'api/v1/tournament/' + missingTournament.CodeTournament,
+            });
+            try {
+                await TournamentController.getTournamentByCode(request, response);
+            } catch (error) {
+                expect(response.statusCode).toEqual(404);
+            }
+            expect(spy).toHaveBeenCalledTimes(1);
+        });
     });
+
     describe('createTournament', () => {
         test('should return status 200', async () => {
             const tournamentData = generateTournamentsData(1);
@@ -83,29 +102,56 @@ describe('TournamentController', () => {
             expect(tournament).toEqual(tournamentData[0].CodeTournament);
             expect(spy).toHaveBeenCalledTimes(1);
         });
-    });
-    //TODO: integration test?
-    // describe('add team to a tournament', () => {
-    //     test('should return status 200', async () => {
-    //         const tournamentData = generateTournamentsData(1);
-    //         const teamData = generateTeamsData(1);
-    //         const spy = jest
-    //             .spyOn(TournamentRepository.prototype, 'addTeamToTournament')
-    //         const body = {
-    //             Id_Team: teamData[0].Id,
-    //             TournamentCode: tournamentData[0].CodeTournament
-    //         };
-    //         response = createResponse();
-    //         request = createRequest({
-    //             method: 'POST',
-    //             url: 'api/v1/tournament/compete',
-    //             body: body,
-    //         });
-    //         const result = await TournamentController.addTeamToTournament(request, response);
-    //         expect(result).toEqual(1);
-    //         expect(spy).toHaveBeenCalledTimes(1);
-    //     });
-    // });
 
+        test('should return status 400', async () => {
+            const tournamentData = generateTournamentsData(1)[0];
+            response = createResponse();
+            request = createRequest({
+                method: 'POST',
+                url: 'api/v1/tournament',
+                body: { Name: tournamentData.Name },
+            });
+            try {
+                await TournamentController.createTournament(request, response);
+            } catch (error) {
+                expect(response.statusCode).toEqual(400);
+            }
+
+
+        });
+    });
+
+    describe('addTeamToTournament', () => {
+        test('should return status 200', async () => {
+            const addedTeam = addRandomTeamToTournament();
+            const spy = jest.spyOn(TournamentRepository.prototype, 'addTeamToTournament')
+                .mockResolvedValueOnce(1);
+            response = createResponse();
+            request = createRequest({
+                method: 'POST',
+                url: 'api/v1/tournament/compete/',
+                body: addedTeam,
+            });
+            const result = await TournamentController.addTeamToTournament(request, response);
+            expect(result).toEqual(1);
+            expect(spy).toHaveBeenCalledTimes(1);
+        });
+
+        test('should return status 400', async () => {
+            const addedTeam = addRandomTeamToTournament();
+            response = createResponse();
+            request = createRequest({
+                method: 'POST',
+                url: 'api/v1/tournament/compete/',
+                body: { Id_Team: addedTeam.Id_Team },
+            });
+            try {
+                await TournamentController.addTeamToTournament(request, response);
+            } catch (error) {
+                expect(response.statusCode).toEqual(400);
+            }
+        });
+
+    });
 
 });

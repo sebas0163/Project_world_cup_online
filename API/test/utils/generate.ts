@@ -1,7 +1,10 @@
 import { faker } from '@faker-js/faker';
+import { Admin } from '../../models/admin';
+import { Group } from '../../models/group';
 import { Match } from '../../models/match';
 import { Player } from '../../models/player';
 import { Prediction } from '../../models/prediction';
+import { Result } from '../../models/result';
 import { Stage } from '../../models/stage';
 import { Team } from '../../models/team';
 import { Tournament } from '../../models/tournament';
@@ -14,6 +17,14 @@ export function createRandomTeam(override = {}): Team {
         Type: "Local",
         ...override,
     };
+}
+
+export function createWrongPassword(password: string): string {
+    let wrongPassword = faker.internet.password();
+    while (wrongPassword === password) {
+        wrongPassword = faker.internet.password();
+    }
+    return wrongPassword;
 }
 
 export function createRandomPlayer(override = {}): Player {
@@ -35,8 +46,42 @@ export function createRandomPrediction(override = {}): Prediction {
         Best_player: faker.datatype.number(),
         Id_user: faker.datatype.number(),
         Id_match: faker.datatype.number(),
+        Id_Winner: faker.datatype.number(),
         ...override,
     };
+}
+
+export function createRandomResult(override = {}): Result {
+    return {
+        Id: faker.datatype.number(),
+        Home_Score: faker.datatype.number({ min: 0, max: 3 }),
+        Visit_Score: faker.datatype.number({ min: 0, max: 3 }),
+        Best_player: faker.datatype.number(),
+        Id_match: faker.datatype.number(),
+        Id_Winner: faker.datatype.number(),
+        ...override,
+    };
+}
+
+export function addRandomTeamToTournament(): { Id_Team: number, TournamentCode: string } {
+    const team: Team = createRandomTeam();
+    const tournament: Tournament = createRandomTournament();
+    const result: { Id_Team: number, TournamentCode: string } =
+        { Id_Team: team.Id, TournamentCode: tournament.CodeTournament };
+    return result;
+}
+
+export function addTeamsToRandomTournament(tournament: Tournament, n_teams: number): Team[] {
+    const teams: Team[] = generateTeamsData(n_teams);
+    const addTeams: { Id_Team: number, TournamentCode: string }[] = [];
+    teams.forEach((team) => {
+        addTeams.push({ Id_Team: team.Id, TournamentCode: tournament.CodeTournament });
+    });
+    if (teams.length == addTeams.length) {
+        return teams;
+    } else {
+        return [];
+    }
 }
 
 export function createGoalPrediction(Goal_Scorer: string, Attendee: string, override = {}): { Goal_Scorer: string, Attendee: string } {
@@ -196,6 +241,33 @@ export function generatePlayersData(n: number = 1, override = {}) {
     );
 }
 
+export function generateGroupsData(n: number = 1, override = {}) {
+    return Array.from(
+        {
+            length: n,
+        },
+        (_, i) => {
+            return createRandomGroup({ id: i, ...override });
+        }
+    );
+}
+
+export function createRandomGroup(override = {}): Group {
+    return {
+        Code: faker.datatype.string(12),
+        Name: faker.address.city(),
+        Tournament_code: faker.datatype.string(6),
+        ...override,
+    };
+}
+
+export function createRandomAdmin(): Admin {
+    return {
+        Email: faker.internet.email(),
+        Password: faker.internet.password()
+    }
+}
+
 export function generatePredictionsData(n: number = 1, override = {}) {
     return Array.from(
         {
@@ -205,6 +277,64 @@ export function generatePredictionsData(n: number = 1, override = {}) {
             return createRandomPrediction({ id: i, ...override });
         }
     );
+}
+
+export function createRandomLeaderboard(override = {}): { NickName: string, Point: number } {
+    return {
+        NickName: faker.internet.userName(),
+        Point: faker.datatype.number(),
+    }
+}
+
+export function generateLeadearboard(n: number = 1, override = {}) {
+    return Array.from(
+        {
+            length: n,
+        },
+        (_, i) => {
+            return createRandomLeaderboard({ id: i, ...override });
+        }
+    );
+}
+
+export function createRandomResults(n: number): Result[] {
+    const results: Result[] = [];
+    for (let i = 0; i < n; i++) {
+        results.push(createRandomResult());
+    }
+    return results;
+}
+
+export function generateResultsData(n: number = 1, override = {}): Result[] {
+    return Array.from(
+        {
+            length: n,
+        },
+        (_, i) => {
+            return createRandomResult({ id: i, ...override });
+        }
+    );
+}
+
+export function generatePredictionsForUser(n: number = 1, user: User) {
+    const predictions: Prediction[] = [];
+    for (let i = 0; i < n; i++) {
+        const prediction: Prediction = createRandomPredictionForUser(user.Id);
+        predictions.push(prediction);
+    }
+    return predictions;
+}
+
+export function createRandomPredictionForUser(userId: number): Prediction {
+    return {
+        Id: faker.datatype.number(),
+        Home_Score: faker.datatype.number({ min: 0, max: 3 }),
+        Visit_Score: faker.datatype.number({ min: 0, max: 3 }),
+        Best_player: faker.datatype.number(),
+        Id_user: userId,
+        Id_match: faker.datatype.number(),
+        Id_Winner: faker.datatype.number()
+    }
 }
 
 export function generateTeamWithPlayers(team: Team) {
