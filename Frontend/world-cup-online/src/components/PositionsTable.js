@@ -12,6 +12,7 @@ const ViewPositions = props => {
     const [rankingData, setRankingData] = useState([])
     const [groupCode, setGroupCode] = useState({})
     const [tournament, setTournament] = useState({})
+    const [isGroup, setIsGroup] = useState(false);
 
     const client = axios.create({
         baseURL: "http://localhost:5000/api/v1/"
@@ -78,33 +79,40 @@ const ViewPositions = props => {
         }
     )
 
-
-    const myPosition = "Posición: " + currentPos + " ," + "Nickname: " + props.user.NickName + " ," + "Puntaje: " + currentPoints
     return (
         <div>
             <h2>Tabla de posiciones</h2>
             <br /><br />
             <h4>Mi posición en el ranking: </h4>
-            <div className='row'><div className='col'>
-                <h5>Posición: {currentPos}</h5>
-                
+            {isGroup ? <>
+                <div className='row'><div className='col'>
+                    <h5>Codigo de invitacion del grupo: {groupCode.Code}</h5>
+                </div>
+                <div className='col'>
+                <button id="btn" className="btn btn-warning" type="submit"> Abandonar Grupo</button>
+                </div>
             </div>
-            <div className='col'>
-                <h5>Nickname: {props.user.NickName}</h5>
-                
-            </div>
-            <div className='col'>
-                <h5>Puntaje: {currentPoints}</h5>
+            </>:<>
+                <div className='row'><div className='col'>
+                    <h5>Posición: {currentPos}</h5>
+                    </div>
+                    <div className='col'>
+                        <h5>Nickname: {props.user.NickName}</h5>
+                        
+                    </div>
+                    <div className='col'>
+                        <h5>Puntaje: {currentPoints}</h5>
 
-            </div>
-            </div>
+                    </div>
+                </div>
+            </>}
             <br /><br />
             <ul class="nav nav-tabs">
                 <li class="nav-item" role="presentation">
-                    <button onClick={(e) => { getGlobal(e) }} role="tab" aria-controls="Global" aria-selected="true" data-bs-toggle="tab" data-bs-target="#Global" id="global-tab" class="nav-link active">Global</button>
+                    <button onClick={(e) => { getGlobal(e); setIsGroup(false)}} role="tab" aria-controls="Global" aria-selected="true" data-bs-toggle="tab" data-bs-target="#Global" id="global-tab" class="nav-link active">Global</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button onClick={(e) => { getGroups(e) }} role="tab" aria-controls="Grupos" aria-selected="false" data-bs-toggle="tab" data-bs-target="#Grupos" id="grupos-tab" class="nav-link">Grupo</button>
+                    <button onClick={(e) => { getGroups(e); setIsGroup(true)}} role="tab" aria-controls="Grupos" aria-selected="false" data-bs-toggle="tab" data-bs-target="#Grupos" id="grupos-tab" class="nav-link">Grupo</button>
                 </li>
             </ul>
             <div class="tab-content" id="myTabContent">
