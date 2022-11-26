@@ -38,6 +38,14 @@ export class GroupRepository {
         return result.recordset[0];
     }
 
+    public async getOutOfGroup(User_ID: number, Group_code: string) {
+        const result = await new sql.Request()
+            .input('User_ID', sql.Int, User_ID)
+            .input('Group_code', sql.VarChar, Group_code)
+            .query('DELETE FROM [USER_GROUP] WHERE [User_ID] = @User_ID AND Group_code = @Group_code');
+        return result.rowsAffected[0];
+    }
+
 
     public async createGroup(User_ID: number, Name: string, Tournament_code: string): Promise<string> {
         const groupSingleCode = generateRandomCode(6);

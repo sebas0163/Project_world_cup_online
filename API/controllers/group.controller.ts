@@ -76,4 +76,18 @@ export default class GroupController {
         }
     }
 
+    static async getOutOfGroup(req: Request, res: Response) {
+        try {
+            const code = req.params.code;
+            const user_id = req.params.id;
+            const rowsAffected = await groupRepository.getOutOfGroup(+user_id, code);
+            if (rowsAffected == 1) {
+                res.status(200).json({ message: 'Left group' });
+            }
+        } catch (error) {
+            res.status(500).json(error);
+            console.log(error);
+        }
+    }
+
 }
