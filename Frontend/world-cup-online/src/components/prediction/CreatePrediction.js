@@ -190,6 +190,8 @@ const CreatePrediction = props => {
                                 type="number"
                                 onChange={(e) => handlePlayer(e)}
                                 style={inputStyle}
+                                min={0}
+                                max={99}
 
                             />
                         </td>
@@ -200,6 +202,8 @@ const CreatePrediction = props => {
                                 type="number"
                                 onChange={(e) => handlePlayer(e)}
                                 style={inputStyle}
+                                min={0}
+                                max={99}
 
                             />
                         </td>
@@ -229,6 +233,8 @@ const CreatePrediction = props => {
                                 type="number"
                                 onChange={(e) => handlePlayer(e)}
                                 style={inputStyle}
+                                min={0}
+                                max={99}
 
                             />
                         </td>
@@ -239,6 +245,8 @@ const CreatePrediction = props => {
                                 type="number"
                                 onChange={(e) => handlePlayer(e)}
                                 style={inputStyle}
+                                min={0}
+                                max={99}
 
                             />
                         </td>
@@ -579,8 +587,8 @@ const CreatePrediction = props => {
 
                         </div>
                         <br />
-                        <div className="col-auto">
-                            <button id="goldBtn" className="btn btn-warning" type="submit"> {setupLabels.Button_Text}</button>
+                        <div data-testid = "button-prediction" className="col-auto">
+                            <button  id="goldBtn" className="btn btn-warning" type="submit"> {setupLabels.Button_Text}</button>
                         </div>
                     </form>
                 </div>

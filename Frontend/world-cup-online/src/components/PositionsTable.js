@@ -6,6 +6,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 const ViewPositions = props => {
 
     const n = 1;
+    let currentPos = 0
+    let currentPoints = ""
 
     const [rankingData, setRankingData] = useState([])
     const [groupCode, setGroupCode] = useState({})
@@ -53,8 +55,19 @@ const ViewPositions = props => {
         console.log(rankingData);
     }
 
+    function selectedPosition(element,key){
+        if(element.NickName == props.user.NickName){
+            console.log("hello")
+            currentPoints = element.Point
+            currentPos = n + key;
+        }
+    }
+
     const tableRows = rankingData.map(
         (element, key) => {
+            console.log("Nickname de la tabla", element.NickName)
+            console.log("Nickname del user", props.user.NickName)
+            selectedPosition(element, key)
             return (
                 <tr>
                     <td>{n + key}</td>
@@ -65,9 +78,26 @@ const ViewPositions = props => {
         }
     )
 
+
+    const myPosition = "Posición: " + currentPos + " ," + "Nickname: " + props.user.NickName + " ," + "Puntaje: " + currentPoints
     return (
         <div>
-            <h3>Tabla de posiciones</h3>
+            <h2>Tabla de posiciones</h2>
+            <br /><br />
+            <h4>Mi posición en el ranking: </h4>
+            <div className='row'><div className='col'>
+                <h5>Posición: {currentPos}</h5>
+                
+            </div>
+            <div className='col'>
+                <h5>Nickname: {props.user.NickName}</h5>
+                
+            </div>
+            <div className='col'>
+                <h5>Puntaje: {currentPoints}</h5>
+
+            </div>
+            </div>
             <br /><br />
             <ul class="nav nav-tabs">
                 <li class="nav-item" role="presentation">
