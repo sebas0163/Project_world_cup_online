@@ -38,11 +38,22 @@
   }
 }
 
-.navbar,
-.navbar-default {
+#adminNavbar,
+#adminNavbar-default {
+  /* background-color: #56042C !important; */
+  background-color: #000000 !important;
+  /* override background image gradient w/ flat color */
+}
+
+#navbar,
+#navbar-default {
   background-color: #56042C !important;
   /* override background image gradient w/ flat color */
 }
+
+/* #adminContainer {
+  background-color: rgb(228, 227, 227);
+} */
 
 body {
   background-color: #56042C;

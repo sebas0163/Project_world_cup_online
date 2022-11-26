@@ -1,6 +1,8 @@
-import { poolPromise } from '../loaders/db';
 import { IMatchRepository } from '../repositories/interfaces/match.interface';
 import { MatchRepository } from '../repositories/match.repository';
+import { validateBody } from '../utils';
+
+const matchRepository: IMatchRepository = new MatchRepository();
 
 class MatchController {
 
@@ -11,8 +13,6 @@ class MatchController {
      */
     static async getMatches(req: any, res: any) {
         try {
-            const pool = await poolPromise;
-            const matchRepository: IMatchRepository = new MatchRepository(pool);
             const matches = await matchRepository.getMatches();
             res.status(200).json(matches);
             return matches;
@@ -31,9 +31,10 @@ class MatchController {
     static async getMatchById(req: any, res: any) {
         try {
             let id = req.params.id || {}
-            const pool = await poolPromise;
-            const matchRepository: IMatchRepository = new MatchRepository(pool);
             const match = await matchRepository.getMatchById(+id);
+            if (match == null) {
+                res.status(404).json("Match not found");
+            }
             res.status(200).json(match);
             return match;
         } catch (error) {
@@ -52,8 +53,6 @@ class MatchController {
     static async getMatchesByTournamentCode(req: any, res: any) {
         try {
             let code = req.params.id || {}
-            const pool = await poolPromise;
-            const matchRepository: IMatchRepository = new MatchRepository(pool);
             const matches = await matchRepository.getMatchesByTournamentCode(code);
             res.status(200).json(matches);
             return matches;
@@ -72,8 +71,6 @@ class MatchController {
     static async getMatchesByStageId(req: any, res: any) {
         try {
             let id = req.params.id || {}
-            const pool = await poolPromise;
-            const matchRepository: IMatchRepository = new MatchRepository(pool);
             const matches = await matchRepository.getMatchesByStageId(+id);
             res.status(200).json(matches);
             return matches;
@@ -92,11 +89,8 @@ class MatchController {
         try {
             const { Stadium, StartDateTime,
                 State, Score, Tournament_ID, Stage_ID, HomeId, VisitId } = req.body;
-            const pool = await poolPromise;
-            const matchRepository: IMatchRepository = new MatchRepository(pool);
 
-            if (Stadium == null || StartDateTime == null ||
-                State == null || HomeId == null || VisitId == null || Score == null || Tournament_ID == null || Stage_ID == null) {
+            if (!validateBody(req.body, ['Stadium', 'StartDateTime', 'State', 'Score', 'Tournament_ID', 'Stage_ID', 'HomeId', 'VisitId'])) {
                 res.status(400).send("Please fill all the fields");
             } else {
                 const match_id = await matchRepository.createMatch(Stadium, StartDateTime,
@@ -122,9 +116,7 @@ class MatchController {
     static async addTeamToMatch(req: any, res: any) {
         try {
             const { Id_Team, Id_Match } = req.body;
-            const pool = await poolPromise;
-            const matchRepository: IMatchRepository = new MatchRepository(pool);
-            if (Id_Team == null || Id_Match == null) {
+            if (!validateBody(req.body, ['Id_Team', 'Id_Match'])) {
                 res.status(400).send("Please fill all the fields");
             } else {
                 const result = await matchRepository.addTeamToMatch(Id_Team, Id_Match);

@@ -64,15 +64,15 @@ function ViewMatches() {
             return (
 
                 <tr>
-                    <td>{element.Id}</td>
-                    <td>{element.Stadium}</td>
-                    <td>{element.HomeId}</td>
-                    <td>{element.VisitId}</td>
-                    <td>{element.StartDateTime}</td>
-                    <td>{element.Tournament_ID}</td>
-                    <td>{element.Stage_ID}</td>
-                    <td>{element.State}</td>
-                    <td>{element.Score}</td>
+                    <td style={{ color: "black", backgroundColor: "white" }}>{element.Id}</td>
+                    <td style={{ color: "black", backgroundColor: "white" }}>{element.Stadium}</td>
+                    <td style={{ color: "black", backgroundColor: "white" }}>{element.HomeId}</td>
+                    <td style={{ color: "black", backgroundColor: "white" }}>{element.VisitId}</td>
+                    <td style={{ color: "black", backgroundColor: "white" }}>{element.StartDateTime}</td>
+                    <td style={{ color: "black", backgroundColor: "white" }}>{element.Tournament_ID}</td>
+                    <td style={{ color: "black", backgroundColor: "white" }}>{element.Stage_ID}</td>
+                    <td style={{ color: "black", backgroundColor: "white" }}>{element.State}</td>
+                    <td style={{ color: "black", backgroundColor: "white" }}>{element.Score}</td>
                 </tr>
 
             )

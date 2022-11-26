@@ -3,7 +3,7 @@ import { createResponse, createRequest, MockRequest, MockResponse } from 'node-m
 import UserController from '../controllers/user.controller';
 import { UserRepository } from '../repositories/user.repository';
 import { User } from '../models/user';
-import { generateUsersData } from './utils/generate';
+import { createWrongPassword, generateUsersData } from './utils/generate';
 
 afterEach(() => {
     jest.clearAllMocks();
@@ -59,6 +59,45 @@ describe('UserController', () => {
         );
     });
 
+    describe('getUserById', () => {
+        test('should return a user', async () => {
+            const user: User = generateUsersData(1)[0];
+            const spy = jest.spyOn(UserRepository.prototype, 'getUserById')
+                .mockResolvedValueOnce(user);
+            res = createResponse();
+            req = createRequest({
+                method: 'GET',
+                url: 'api/v1/user/' + user.Id,
+                params: {
+                    userId: user.Id,
+                },
+            });
+            const result = await UserController.getUserById(req, res);
+            expect(result).toEqual(user);
+            expect(spy).toHaveBeenCalledTimes(1);
+        });
+
+        test('should return 404', async () => {
+            const missingUser: User = generateUsersData(1)[0];
+            const spy = jest.spyOn(UserRepository.prototype, 'getUserById')
+                .mockRejectedValueOnce(missingUser);
+            // console.log(missingUser);
+            res = createResponse();
+            req = createRequest({
+                method: 'GET',
+                url: 'api/v1/user/' + missingUser.Id,
+            });
+            try {
+                await UserController.getUserById(req, res);
+            } catch (error) {
+                console.log(error);
+                expect(res.statusCode).toEqual(404);
+            }
+            expect(spy).toHaveBeenCalledTimes(1);
+        });
+    });
+
+
     describe('createUser', () => {
         test('should create a user', async () => {
             const usersData: User[] = generateUsersData(1);
@@ -73,6 +112,26 @@ describe('UserController', () => {
             expect(res.statusCode).toEqual(200);
             expect(spy).toHaveBeenCalledTimes(1);
         });
+
+        test('should return missing parameters(400)', async () => {
+            const usersData: User[] = generateUsersData(1);
+            const spy = jest.spyOn(UserRepository.prototype, 'createUser').mockRejectedValue(usersData);
+            res = createResponse();
+            req = createRequest({
+                method: 'POST',
+                url: 'api/v1/user',
+                body: {
+                    Name: usersData[0].Name,
+                },
+            });
+            try {
+                await UserController.createUser(req, res);
+            } catch (error) {
+                expect(res.statusCode).toEqual(400);
+            }
+            expect(spy).toHaveBeenCalledTimes(1);
+        });
+
     });
 
     describe('loginUser', () => {
@@ -90,6 +149,45 @@ describe('UserController', () => {
             });
             await UserController.login(req, res);
             expect(res.statusCode).toEqual(200);
+            expect(spy).toHaveBeenCalledTimes(1);
+        });
+
+        test('should return missing parameters(400)', async () => {
+            const usersData: User[] = generateUsersData(1);
+            const spy = jest.spyOn(UserRepository.prototype, 'login').mockResolvedValue(usersData[0]);
+            res = createResponse();
+            req = createRequest({
+                method: 'POST',
+                url: 'api/v1/user/login',
+                body: {
+                    Email: usersData[0].Email,
+                },
+            });
+            try {
+                await UserController.login(req, res);
+            } catch (error) {
+                expect(res.statusCode).toEqual(400);
+            }
+            expect(spy).toHaveBeenCalledTimes(1);
+        });
+
+        test('should return invalid credentials', async () => {
+            const wrongUser = generateUsersData(1)[0];
+            const spy = jest.spyOn(UserRepository.prototype, 'login').mockRejectedValueOnce(wrongUser);
+            res = createResponse();
+            req = createRequest({
+                method: 'POST',
+                url: 'api/v1/user/login',
+                body: {
+                    Email: wrongUser.Email,
+                    Password: wrongUser.Password
+                },
+            });
+            try {
+                await UserController.login(req, res);
+            } catch (error) {
+                expect(res.statusCode).toEqual(500);
+            }
             expect(spy).toHaveBeenCalledTimes(1);
         });
     });

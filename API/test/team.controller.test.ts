@@ -1,10 +1,11 @@
 import TeamController from "../controllers/team.controller";
 import { TeamRepository } from "../repositories/team.repository";
-import { generateTeamsData } from "./utils/generate";
+import { addTeamsToRandomTournament, createRandomTournament, generateTeamsData } from "./utils/generate";
 import { Request, Response } from "express";
 import {
     createRequest, createResponse, MockRequest, MockResponse,
 } from 'node-mocks-http';
+import { Team } from "../models/team";
 
 
 afterEach(() => {
@@ -45,6 +46,9 @@ describe("TeamController", () => {
             expect(spy).toHaveBeenCalledWith();
             expect(spy).toHaveBeenCalledTimes(1);
         });
+    });
+
+    describe("getTeamById", () => {
 
         test("should return team", async () => {
             const teamsData = generateTeamsData(1);
@@ -65,6 +69,29 @@ describe("TeamController", () => {
             expect(spy).toHaveBeenCalledTimes(1);
         });
 
+        test("should return 404", async () => {
+            const missingTeam: Team = generateTeamsData(1)[0];
+            const spy = jest.spyOn(TeamRepository.prototype, "getTeamById")
+                .mockRejectedValueOnce(missingTeam);
+            response = createResponse();
+            request = createRequest({
+                method: 'GET',
+                url: 'api/v1/team/' + missingTeam.Id,
+                params: {
+                    teamId: missingTeam.Id,
+                },
+            });
+            try {
+                await TeamController.getTeamById(request, response);
+            } catch (error) {
+                expect(response.statusCode).toBe(404);
+            }
+            expect(spy).toHaveBeenCalledTimes(1);
+        });
+    });
+
+    describe('getTeamsByType', () => {
+
         test('should return team list by type', async () => {
             const teamsData = generateTeamsData(2);
             const spy = jest
@@ -79,6 +106,24 @@ describe("TeamController", () => {
             expect(teams).toEqual(teamsData);
             expect(spy).toHaveBeenCalledTimes(1);
         });
+
+        test('should return empty array', async () => {
+            const teamData = generateTeamsData(1)[0];
+            const spy = jest
+                .spyOn(TeamRepository.prototype, "getTeamsByType")
+                .mockResolvedValueOnce([]);
+            response = createResponse();
+            request = createRequest({
+                method: 'GET',
+                url: 'api/v1/team/type/' + teamData.Type,
+            });
+            const teams = await TeamController.getTeamsByType(request, response);
+            expect(teams).toEqual([]);
+            expect(spy).toHaveBeenCalledTimes(1);
+        });
+    });
+
+    describe('createTeam', () => {
 
         test('should return status code 200', async () => {
             const teamsData = generateTeamsData(1);
@@ -96,19 +141,55 @@ describe("TeamController", () => {
             expect(spy).toHaveBeenCalledTimes(1);
         });
 
+        test('should return status code 400', async () => {
+            const teamsData = generateTeamsData(1);
+            const spy = jest.spyOn(TeamRepository.prototype, "createTeam")
+                .mockRejectedValueOnce(teamsData);
+            response = createResponse();
+            request = createRequest({
+                method: 'POST',
+                url: 'api/v1/team',
+                body: { Name: teamsData[0].Name },
+            });
+            try {
+                await TeamController.createTeam(request, response);
+            } catch (error) {
+                expect(response.statusCode).toBe(400);
+            }
+            expect(spy).toHaveBeenCalledTimes(1);
+        });
+    });
+
+    describe('getTeamsByTournamentCode', () => {
+
         test('should return a team list by tournament', async () => {
-            const teamsData = generateTeamsData(2);
+            const tournament = createRandomTournament();
+            const teamsData = addTeamsToRandomTournament(tournament, 4);
             const spy = jest
                 .spyOn(TeamRepository.prototype, "getTeamsByTournamentCode")
                 .mockResolvedValueOnce(teamsData);
-            const tournamentCode = "TR0001";
             response = createResponse();
             request = createRequest({
                 method: 'GET',
-                url: 'api/v1/team/tournament/' + tournamentCode,
+                url: 'api/v1/team/tournament/' + tournament.CodeTournament,
             });
             const teams = await TeamController.getTeamsByTournamentCode(request, response);
             expect(teams).toEqual(teamsData);
+            expect(spy).toHaveBeenCalledTimes(1);
+        });
+
+        test('should return empty list', async () => {
+            const tournament = createRandomTournament();
+            const spy = jest
+                .spyOn(TeamRepository.prototype, "getTeamsByTournamentCode")
+                .mockResolvedValueOnce([]);
+            response = createResponse();
+            request = createRequest({
+                method: 'GET',
+                url: 'api/v1/team/tournament/' + tournament.CodeTournament,
+            });
+            const teams = await TeamController.getTeamsByTournamentCode(request, response);
+            expect(teams).toEqual([]);
             expect(spy).toHaveBeenCalledTimes(1);
         });
     });
