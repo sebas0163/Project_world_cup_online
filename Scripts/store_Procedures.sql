@@ -128,8 +128,8 @@ BEGIN TRAN
 	 END;
 	 ELSE
 	 BEGIN
-	  INSERT INTO USER_GROUP VALUES (@userId, @groupId)
+	  INSERT INTO USER_GROUP VALUES  (@groupId, @userId)
 	 END;
 
-
+--EXEC InsertGroup 3, 'em0vAAekPMX'
 --EXEC assignResults 7, 'xb2Yxh'
